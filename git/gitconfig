@@ -1,0 +1,7 @@
+[user]
+	name = becktor
+	email = Jonathan@Becktor.org
+[init]
+	defaultBranch = master
+[core]
+  editor = nvim
