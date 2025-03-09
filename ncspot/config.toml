@@ -1,0 +1,16 @@
+[theme]
+background = "black"
+primary = "#c0caf5"         # Light blue (TokyoNight Foreground)
+secondary = "#a9b1d6"       # Soft blue-gray
+title = "#7aa2f7"          # Blue (TokyoNight Blue)
+playing = "#7dcfff"        # Cyan (TokyoNight Cyan)
+playing_bg = "black"
+highlight = "#c0caf5"      # Light blue
+highlight_bg = "#3b4261"   # Dark blue-gray (similar to TokyoNight visuals)
+error = "#c0caf5"
+error_bg = "#f7768e"       # Red (TokyoNight Red)
+statusbar = "black"
+statusbar_progress = "#7aa2f7" # Blue
+statusbar_bg = "#3b4261"       # Darker blue
+cmdline = "#c0caf5"
+cmdline_bg = "black"
