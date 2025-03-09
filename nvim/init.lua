@@ -231,7 +231,7 @@ require('lazy').setup({
   -- Kickstart plugins
   'tpope/vim-sleuth', -- Detect tabstop and shiftwidth automatically
   require 'kickstart.plugins.gitsigns',
-  require 'kickstart.plugins.neo-tree',
+  --require 'kickstart.plugins.neo-tree',
   require 'kickstart.plugins.which-key',
   require 'kickstart.plugins.telescope',
   require 'kickstart.plugins.lazydev',
@@ -249,8 +249,9 @@ require('lazy').setup({
   -- Custom plugins
   require 'custom.plugins.tmux-navigator',
   require 'custom.plugins.distant',
+  require 'custom.plugins.oil',
   'tpope/vim-fugitive',
-
+  --'miversen33/netman.nvim',
   -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
   --    This is the easiest way to modularize your config.
   --

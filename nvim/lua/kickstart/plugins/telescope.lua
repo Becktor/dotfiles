@@ -60,23 +60,18 @@ return { -- Fuzzy Finder (files, lsp, etc)
       -- },
 
       defaults = {
-        vimgrep_arguments = {
-          'rg',
-          '--color=never',
-          '--no-heading',
-          '--with-filename',
-          '--line-number',
-          '--column',
-          '--smart-case',
-          '--hidden',
-        },
-        file_ignore_patterns = { '.git/' }, -- Optional: Ignore .git directory
+        file_ignore_patterns = {
+          '.git/',
+          'Library/',
+          'Pictures/',
+          'Desktop/',
+          'venv/',
+          '.venv/',
+          'Zotero/',
+        }, -- Optional: Ignore .git directory
       },
       pickers = {
-        find_files = {
-          hidden = true, -- Enables finding hidden files
-          no_ignore = true, -- Prevents ignoring files from .gitignore
-        },
+        find_files = {},
       },
       extensions = {
         ['ui-select'] = {

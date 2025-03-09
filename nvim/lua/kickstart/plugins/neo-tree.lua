@@ -6,6 +6,7 @@ local function sources()
     'buffers',
     'git_status',
     'document_symbols',
+    'netman.ui.neo-tree', -- The one you really care about 😉
   }
 end
 
@@ -16,6 +17,7 @@ return {
     'nvim-lua/plenary.nvim',
     'nvim-tree/nvim-web-devicons', -- not strictly required, but recommended
     'MunifTanjim/nui.nvim',
+    'miversen33/netman.nvim',
   },
 
   cmd = 'Neotree',
@@ -31,7 +33,7 @@ return {
         { source = 'filesystem', display_name = ' 󰉓 File ' },
         { source = 'git_status', display_name = ' 󰊢 Git ' },
         { source = 'buffers', display_name = ' 󰓩 Buf ' },
-        { source = 'document_symbols', display_name = '  Sym ' },
+        { source = 'netman.ui.neo-tree', display_name = ' 󰉓 Remote ' },
       },
       content_layout = 'center',
     },
