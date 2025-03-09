@@ -58,7 +58,26 @@ return { -- Fuzzy Finder (files, lsp, etc)
       --     i = { ['<c-enter>'] = 'to_fuzzy_refine' },
       --   },
       -- },
-      -- pickers = {}
+
+      defaults = {
+        vimgrep_arguments = {
+          'rg',
+          '--color=never',
+          '--no-heading',
+          '--with-filename',
+          '--line-number',
+          '--column',
+          '--smart-case',
+          '--hidden',
+        },
+        file_ignore_patterns = { '.git/' }, -- Optional: Ignore .git directory
+      },
+      pickers = {
+        find_files = {
+          hidden = true, -- Enables finding hidden files
+          no_ignore = true, -- Prevents ignoring files from .gitignore
+        },
+      },
       extensions = {
         ['ui-select'] = {
           require('telescope.themes').get_dropdown(),

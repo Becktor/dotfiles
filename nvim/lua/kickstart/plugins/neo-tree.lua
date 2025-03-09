@@ -1,11 +1,12 @@
 -- Neo-tree is a Neovim plugin to browse the file system
 -- https://github.com/nvim-neo-tree/neo-tree.nvim
 local function sources()
-    return {
-      'filesystem',
-      'buffers',
-      'git_status',
-    }
+  return {
+    'filesystem',
+    'buffers',
+    'git_status',
+    'document_symbols',
+  }
 end
 
 return {
