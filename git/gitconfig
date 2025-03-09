@@ -2,6 +2,12 @@
 	name = becktor
 	email = Jonathan@Becktor.org
 [init]
-	defaultBranch = master
+	defaultBranch = main
 [core]
   editor = nvim
+
+[alias]
+	co = checkout
+	ci = commit
+	st = status
+	unstage = reset HEAD --
