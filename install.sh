@@ -1,11 +1,10 @@
  #!/bin/bash
-
 set -e  # Exit immediately if a command exits with a non-zero status
 
 # Install prerequisites
 echo "Installing prerequisites..."
-sudo apt-get update
-sudo apt-get install -y ninja-build gettext cmake curl build-essential tmux
+#sudo apt-get update
+#sudo apt-get install -y ninja-build gettext cmake curl build-essential tmux
 
 # Clone Neovim into home directory
 NEOVIM_DIR="$HOME/neovim"
