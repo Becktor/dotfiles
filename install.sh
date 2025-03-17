@@ -112,7 +112,7 @@ install_fonts() {
     unzip -o "/tmp/devicons.zip" -d "$FONT_DIR"
 
     echo "Downloading Nerd Fonts..."
-    curl -L -o "/tmp/nerdfonts.zip" "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.3.0/3270.zip"
+    curl -L -o "/tmp/nerdfonts.zip" "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.3.0/0xProto.zip"
     unzip -o "/tmp/nerdfonts.zip" -d "$FONT_DIR"
 
     echo "Updating font cache..."
