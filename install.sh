@@ -11,7 +11,7 @@ install_packages() {
         Linux)
             echo "Detected Linux. Installing prerequisites..."
             sudo apt-get update
-            sudo apt-get install -y zsh ninja-build gettext cmake curl build-essential tmux
+            sudo apt-get install -y zsh ninja-build gettext cmake curl build-essential tmux unzip
 
             # Install Neovim if not installed
             if ! command -v nvim &>/dev/null; then
@@ -28,7 +28,7 @@ install_packages() {
                 echo "Homebrew not found. Installing Homebrew..."
                 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
             fi
-            brew install zsh ninja gettext cmake curl tmux
+            brew install zsh ninja gettext cmake curl tmux unzip
 
             # Install Neovim if not installed
             if ! command -v nvim &>/dev/null; then
@@ -49,11 +49,13 @@ install_packages() {
 install_neovim_from_source() {
     NEOVIM_DIR="$HOME/neovim"
     if [ -d "$NEOVIM_DIR" ]; then
-        echo "Neovim directory already exists. Pulling latest changes..."
-        git -C "$NEOVIM_DIR" pull origin master
+        echo "Neovim directory already exists. Pulling latest changes from v0.10.4 branch..."
+        git -C "$NEOVIM_DIR" fetch
+        git -C "$NEOVIM_DIR" checkout v0.10.4
+        git -C "$NEOVIM_DIR" pull origin v0.10.4
     else
-        echo "Cloning Neovim repository..."
-        git clone https://github.com/neovim/neovim.git "$NEOVIM_DIR"
+        echo "Cloning Neovim v0.10.4 branch..."
+        git clone --branch v0.10.4 https://github.com/neovim/neovim.git "$NEOVIM_DIR"
     fi
 
     # Build and install Neovim
@@ -90,6 +92,37 @@ set_zsh_as_default() {
     fi
 }
 
+install_tpm() {
+    TPM_DIR="$HOME/.tmux/plugins/tpm"
+    if [ -d "$TPM_DIR" ]; then
+        echo "TPM (Tmux Plugin Manager) is already installed. Updating..."
+        git -C "$TPM_DIR" pull
+    else
+        echo "Installing TPM..."
+        git clone https://github.com/tmux-plugins/tpm "$TPM_DIR"
+    fi
+}
+
+install_fonts() {
+    FONT_DIR="$HOME/.local/share/fonts"
+    mkdir -p "$FONT_DIR"
+
+    echo "Downloading DevIcons font..."
+    curl -L -o "/tmp/devicons.zip" "https://github.com/vorillaz/devicons/archive/master.zip"
+    unzip -o "/tmp/devicons.zip" -d "$FONT_DIR"
+
+    echo "Downloading Nerd Fonts..."
+    curl -L -o "/tmp/nerdfonts.zip" "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.3.0/3270.zip"
+    unzip -o "/tmp/nerdfonts.zip" -d "$FONT_DIR"
+
+    echo "Updating font cache..."
+    if command -v fc-cache &>/dev/null; then
+        fc-cache -fv
+    else
+        echo "fc-cache not found. Please restart your system for font updates to take effect."
+    fi
+}
+
 # Install necessary packages
 install_packages
 
@@ -104,6 +137,12 @@ install_oh_my_zsh
 
 # Set Zsh as the default shell
 set_zsh_as_default
+
+# Install Tmux Plugin Manager (TPM)
+install_tpm
+
+# Install Nerd Fonts and DevIcons
+install_fonts
 
 # Symlink configuration files, removing existing ones first
 echo "Symlinking configuration files..."
