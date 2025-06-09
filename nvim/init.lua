@@ -250,6 +250,9 @@ require('lazy').setup({
   require 'custom.plugins.tmux-navigator',
   require 'custom.plugins.distant',
   require 'custom.plugins.oil',
+  require 'custom.plugins.local-highlight',
+  require 'custom.plugins.gp',
+  require 'custom.plugins.which-key',
   'tpope/vim-fugitive',
   --'miversen33/netman.nvim',
   -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`

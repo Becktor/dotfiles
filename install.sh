@@ -1,26 +1,59 @@
 #!/bin/bash
-set -e  # Exit immediately if a command fails
+set -e
 
 echo "Starting installation..."
 
-# Detect OS (Linux or macOS)
+# Parse flags
+UPDATE_ALL=false
+UPDATE_NVIM=false
+UPDATE_TPM=false
+UPDATE_FONTS=false
+
+for arg in "$@"; do
+    case "$arg" in
+        --update-all)
+            UPDATE_ALL=true
+            ;;
+        --update-neovim)
+            UPDATE_NVIM=true
+            ;;
+        --update-tpm)
+            UPDATE_TPM=true
+            ;;
+        --update-fonts)
+            UPDATE_FONTS=true
+            ;;
+    esac
+done
+
 OS="$(uname -s)"
 
 install_packages() {
     case "$OS" in
         Linux)
-            echo "Detected Linux. Installing prerequisites..."
-            sudo apt-get update
-            sudo apt-get install -y zsh ninja-build gettext cmake curl build-essential tmux unzip
+            echo "Detected Linux. Checking for recent apt update..."
 
-            # Install Neovim if not installed
-            if ! command -v nvim &>/dev/null; then
-                echo "Neovim not found. Installing via package manager..."
-                sudo apt-get install -y neovim || {
-                    echo "Neovim not found in package manager. Cloning and building from source..."
-                    install_neovim_from_source
-                }
+            # Only update if last update was more than 6 hours ago
+            UPDATE_STAMP="/var/lib/apt/periodic/update-success-stamp"
+            NEED_UPDATE=true
+            if [ -f "$UPDATE_STAMP" ]; then
+                LAST_UPDATE=$(stat -c %Y "$UPDATE_STAMP")
+                NOW=$(date +%s)
+                SIX_HOURS_AGO=$((NOW - 6 * 3600))
+
+                if [ "$LAST_UPDATE" -gt "$SIX_HOURS_AGO" ]; then
+                    echo "apt-get update was run recently. Skipping."
+                    NEED_UPDATE=false
+                fi
             fi
+
+            if [ "$NEED_UPDATE" = true ]; then
+                echo "Running apt-get update..."
+                sudo apt-get update
+            fi
+
+            echo "Installing prerequisites..."
+            sudo apt-get install -y zsh ninja-build gettext cmake curl build-essential tmux unzip jq
             ;;
         Darwin)
             echo "Detected macOS. Installing prerequisites..."
@@ -28,16 +61,7 @@ install_packages() {
                 echo "Homebrew not found. Installing Homebrew..."
                 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
             fi
-            brew install zsh ninja gettext cmake curl tmux unzip
-
-            # Install Neovim if not installed
-            if ! command -v nvim &>/dev/null; then
-                echo "Neovim not found. Installing via Homebrew..."
-                brew install neovim || {
-                    echo "Neovim installation failed. Cloning and building from source..."
-                    install_neovim_from_source
-                }
-            fi
+            brew install zsh ninja gettext cmake curl tmux unzip jq
             ;;
         *)
             echo "Unsupported OS: $OS"
@@ -46,27 +70,78 @@ install_packages() {
     esac
 }
 
-install_neovim_from_source() {
-    NEOVIM_DIR="$HOME/neovim"
-    if [ -d "$NEOVIM_DIR" ]; then
-        echo "Neovim directory already exists. Pulling latest changes from v0.10.4 branch..."
-        git -C "$NEOVIM_DIR" fetch
-        git -C "$NEOVIM_DIR" checkout v0.10.4
-        git -C "$NEOVIM_DIR" pull origin v0.10.4
-    else
-        echo "Cloning Neovim v0.10.4 branch..."
-        git clone --branch v0.10.4 https://github.com/neovim/neovim.git "$NEOVIM_DIR"
+install_neovim_from_github_release() {
+    if command -v nvim &>/dev/null && [ "$UPDATE_ALL" = false ] && [ "$UPDATE_NVIM" = false ]; then
+        echo "Neovim already installed. Skipping."
+        return
     fi
 
-    # Build and install Neovim
-    cd "$NEOVIM_DIR"
-    make CMAKE_BUILD_TYPE=Release
-    sudo make install
+    echo "Fetching latest Neovim release from GitHub..."
+
+    ARCH=$(uname -m)
+    OS=$(uname -s)
+
+    case "$OS" in
+        Linux)
+            if [[ "$ARCH" == "x86_64" ]]; then
+                PLATFORM="linux-x86_64"
+            elif [[ "$ARCH" == "arm64" || "$ARCH" == "aarch64" ]]; then
+                PLATFORM="linux-arm64"
+            else
+                echo "Unsupported Linux arch: $ARCH"
+                exit 1
+            fi
+            ;;
+        Darwin)
+            if [[ "$ARCH" == "x86_64" ]]; then
+                PLATFORM="macos-x86_64"
+            elif [[ "$ARCH" == "arm64" || "$ARCH" == "aarch64" ]]; then
+                PLATFORM="macos-arm64"
+            else
+                echo "Unsupported macOS arch: $ARCH"
+                exit 1
+            fi
+            ;;
+        *)
+            echo "Unsupported OS: $OS"
+            exit 1
+            ;;
+    esac
+
+    TMP_DIR=$(mktemp -d)
+    pushd "$TMP_DIR" > /dev/null
+
+    echo "Resolving latest release asset for platform: $PLATFORM"
+
+    # Query latest release info
+    RELEASE_API="https://api.github.com/repos/neovim/neovim/releases/latest"
+    ASSET_URL=$(curl -s "$RELEASE_API" | jq -r '.assets[] | select(.name | test("nvim-'"$PLATFORM"'\\.tar\\.gz")) | .browser_download_url')
+
+    if [[ -z "$ASSET_URL" ]]; then
+        echo "❌ Could not find Neovim release asset for platform: $PLATFORM"
+        echo "Debug: Listing all asset names from latest release:"
+        curl -s "$RELEASE_API" | jq -r ".assets[].name"
+        exit 1
+    fi
+
+    echo "Downloading from: $ASSET_URL"
+    curl -LO "$ASSET_URL"
+    tar xzf "nvim-${PLATFORM}.tar.gz"
+    echo "Installing Neovim to /usr/local/nvim"
+    sudo rm -rf /usr/local/nvim
+    sudo mkdir -p /usr/local/nvim
+
+    EXTRACTED_DIR=$(find . -maxdepth 1 -type d -name "nvim-*" | head -n 1)
+    cd "$EXTRACTED_DIR"
+
+    sudo cp -r ./* /usr/local/nvim/
+    cd ..
+    sudo ln -sf /usr/local/nvim/bin/nvim /usr/local/bin/nvim
 }
 
 install_oh_my_zsh() {
     if [ -d "$HOME/.oh-my-zsh" ]; then
-        echo "Oh My Zsh is already installed. Skipping..."
+        echo "Oh My Zsh already installed. Skipping."
     else
         echo "Installing Oh My Zsh..."
         sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
@@ -75,28 +150,40 @@ install_oh_my_zsh() {
 
 set_zsh_as_default() {
     ZSH_PATH="$(command -v zsh)"
-
     if [ "$SHELL" != "$ZSH_PATH" ]; then
         echo "Setting Zsh as the default shell..."
-        
-        # Ensure the Zsh path is in /etc/shells
         if ! grep -qx "$ZSH_PATH" /etc/shells; then
-            echo "Adding $ZSH_PATH to /etc/shells"
             echo "$ZSH_PATH" | sudo tee -a /etc/shells
         fi
-
-        # Change the default shell
         chsh -s "$ZSH_PATH"
     else
         echo "Zsh is already the default shell."
     fi
 }
 
+install_nodejs() {
+    if command -v node &>/dev/null && command -v npm &>/dev/null; then
+        echo "Node.js and npm are already installed. Skipping."
+        return
+    fi
+
+    echo "Installing Node.js via NodeSource..."
+    curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
+    sudo apt-get install -y nodejs
+
+    echo "Installed Node.js version: $(node -v)"
+    echo "Installed npm version: $(npm -v)"
+}
+
 install_tpm() {
     TPM_DIR="$HOME/.tmux/plugins/tpm"
     if [ -d "$TPM_DIR" ]; then
-        echo "TPM (Tmux Plugin Manager) is already installed. Updating..."
-        git -C "$TPM_DIR" pull
+        if [ "$UPDATE_ALL" = true ] || [ "$UPDATE_TPM" = true ]; then
+            echo "Updating TPM..."
+            git -C "$TPM_DIR" pull
+        else
+            echo "TPM already installed. Skipping."
+        fi
     else
         echo "Installing TPM..."
         git clone https://github.com/tmux-plugins/tpm "$TPM_DIR"
@@ -107,64 +194,82 @@ install_fonts() {
     FONT_DIR="$HOME/.local/share/fonts"
     mkdir -p "$FONT_DIR"
 
-    echo "Downloading DevIcons font..."
+    if [ "$UPDATE_ALL" = false ] && [ "$UPDATE_FONTS" = false ] && [ -f "$FONT_DIR/0xProto Nerd Font Complete.ttf" ]; then
+        echo "Fonts already installed. Skipping."
+        return
+    fi
+
+    echo "Installing Nerd Fonts and DevIcons..."
     curl -L -o "/tmp/devicons.zip" "https://github.com/vorillaz/devicons/archive/master.zip"
     unzip -o "/tmp/devicons.zip" -d "$FONT_DIR"
 
-    echo "Downloading Nerd Fonts..."
     curl -L -o "/tmp/nerdfonts.zip" "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.3.0/0xProto.zip"
     unzip -o "/tmp/nerdfonts.zip" -d "$FONT_DIR"
 
-    echo "Updating font cache..."
     if command -v fc-cache &>/dev/null; then
         fc-cache -fv
-    else
-        echo "fc-cache not found. Please restart your system for font updates to take effect."
     fi
 }
 
-# Install necessary packages
-install_packages
+create_api_config() {
+    CONFIG_FILE="$HOME/.api_keys"
+    ZSHRC="$HOME/.zshrc"
 
-# Ensure Neovim is installed after package installation
-if ! command -v nvim &>/dev/null; then
-    echo "Neovim installation failed. Cloning and building from source..."
-    install_neovim_from_source
-fi
+    echo "Creating API key config file at $CONFIG_FILE..."
 
-# Install Oh My Zsh
-install_oh_my_zsh
-
-# Set Zsh as the default shell
-set_zsh_as_default
-
-# Install Tmux Plugin Manager (TPM)
-install_tpm
-
-# Install Nerd Fonts and DevIcons
-install_fonts
-
-# Symlink configuration files, removing existing ones first
-echo "Symlinking configuration files..."
-DOTFILES_DIR="$(pwd)"  # Assuming script is run from dotfiles repo
-
-CONFIG_FILES=("nvim" "tmux" "wezterm" "ncspot")
-
-for dir in "${CONFIG_FILES[@]}"; do
-    TARGET="$HOME/.config/$dir"
-    
-    # Remove existing symlink or directory
-    if [ -L "$TARGET" ] || [ -d "$TARGET" ]; then
-        echo "Removing existing symlink or directory: $TARGET"
-        rm -rf "$TARGET"
+    # Create file if it doesn't exist
+    if [ ! -f "$CONFIG_FILE" ]; then
+        cat <<EOF > "$CONFIG_FILE"
+# API keys (edit these)
+export OPENAI_API_KEY=""
+export GEMINI_API_KEY=""
+export ANTHROPIC_API_KEY=""
+EOF
+        chmod 600 "$CONFIG_FILE"
+        echo "Created template API key file at $CONFIG_FILE."
+    else
+        echo "API key config file already exists. Skipping creation."
     fi
 
-    # Create new symlink
-    ln -s "$DOTFILES_DIR/$dir" "$TARGET"
-    echo "Symlinked $dir → $TARGET"
-done
+    # Ensure it's sourced in .zshrc
+    if ! grep -q "source \$HOME/.api_keys" "$ZSHRC"; then
+        echo "source \$HOME/.api_keys" >> "$ZSHRC"
+        echo "Added API config sourcing to .zshrc."
+    else
+        echo "API config already sourced in .zshrc."
+    fi
+}
+
+
+symlink_dotfiles() {
+    echo "Symlinking configuration files..."
+    DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+    CONFIG_FILES=("nvim" "tmux" "wezterm" "ncspot")
+
+    for dir in "${CONFIG_FILES[@]}"; do
+        TARGET="$HOME/.config/$dir"
+        if [ -L "$TARGET" ] || [ -d "$TARGET" ]; then
+            echo "Removing existing $TARGET"
+            rm -rf "$TARGET"
+        fi
+        if [ -d "$DOTFILES_DIR/$dir" ]; then
+            ln -s "$DOTFILES_DIR/$dir" "$TARGET"
+            echo "Symlinked $dir → $TARGET"
+        else
+            echo "⚠️  Skipping: $DOTFILES_DIR/$dir does not exist"
+        fi
+    done
+}
+
+# Execute
+install_packages
+install_neovim_from_github_release
+install_oh_my_zsh
+set_zsh_as_default
+#install_npm
+install_tpm
+install_fonts
+create_api_config
+symlink_dotfiles
 
 echo "Installation and setup complete. Please restart your terminal or log out and back in."
-
-echo "Installation and setup complete."
-
