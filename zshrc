@@ -77,13 +77,27 @@ ZSH_THEME=""
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git ssh)
+plugins=(git ssh wd)
 
-alias tailscale="/Applications/Tailscale.app/Contents/MacOS/Tailscale"
+# macOS-specific aliases
+if [[ "$OSTYPE" == "darwin"* ]]; then
+    alias tailscale="/Applications/Tailscale.app/Contents/MacOS/Tailscale"
+fi
 
 source $ZSH/oh-my-zsh.sh
 
 # User configuration
+
+# History settings
+HISTSIZE=10000
+SAVEHIST=10000
+setopt HIST_EXPIRE_DUPS_FIRST
+setopt HIST_IGNORE_DUPS
+setopt HIST_IGNORE_ALL_DUPS
+setopt HIST_IGNORE_SPACE
+setopt HIST_FIND_NO_DUPS
+setopt HIST_SAVE_NO_DUPS
+setopt HIST_BEEP
 
 # export MANPATH="/usr/local/man:$MANPATH"
 
@@ -108,11 +122,35 @@ source $ZSH/oh-my-zsh.sh
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
+
+# Development aliases
 alias python=python3
+alias ll="ls -la"
+alias la="ls -A"
+alias l="ls -CF"
+alias ..="cd .."
+alias ...="cd ../.."
+alias ....="cd ../../.."
 #ssh-add ~/.ssh/id_ed25519 > /dev/null 2>&1
-export PATH=/Users/jobe/.local/bin:$PATH
-alias dt="zsh $HOME/.config/tmux/default-session.sh"
-source ~/powerlevel10k/powerlevel10k.zsh-theme
+export PATH=$HOME/.local/bin:$PATH
+alias dt="zsh $HOME/.config/tmux/scripts/default-session.sh"
+
+# Source powerlevel10k theme if it exists
+if [[ -f ~/powerlevel10k/powerlevel10k.zsh-theme ]]; then
+    source ~/powerlevel10k/powerlevel10k.zsh-theme
+fi
+
+# Source API keys if file exists
+if [[ -f ~/.api_keys ]]; then
+    source ~/.api_keys
+fi
+
+# Docker/Buildx configuration
+export BUILDX_BAKE_ENTITLEMENTS_FS=0
+export COMPOSE_BAKE=true
+
+# Disable beep
+unsetopt BEEP
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh

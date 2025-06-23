@@ -7,7 +7,7 @@ return {
   },
   config = function()
     local parrot = require 'parrot'
-    local hook = require 'custom.plugins.hooks.parrot_hooks'
+    local hook = require 'plugins.ai.hooks.parrot_hooks'
 
     parrot.setup {
       providers = {

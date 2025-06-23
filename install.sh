@@ -167,9 +167,21 @@ install_nodejs() {
         return
     fi
 
-    echo "Installing Node.js via NodeSource..."
-    curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
-    sudo apt-get install -y nodejs
+    case "$OS" in
+        Linux)
+            echo "Installing Node.js via NodeSource..."
+            curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
+            sudo apt-get install -y nodejs
+            ;;
+        Darwin)
+            echo "Installing Node.js via Homebrew..."
+            brew install node
+            ;;
+        *)
+            echo "Unsupported OS for Node.js installation: $OS"
+            exit 1
+            ;;
+    esac
 
     echo "Installed Node.js version: $(node -v)"
     echo "Installed npm version: $(npm -v)"
@@ -259,6 +271,19 @@ symlink_dotfiles() {
             echo "⚠️  Skipping: $DOTFILES_DIR/$dir does not exist"
         fi
     done
+
+    # Symlink zshrc
+    ZSHRC_TARGET="$HOME/.zshrc"
+    if [ -f "$DOTFILES_DIR/zshrc" ]; then
+        if [ -L "$ZSHRC_TARGET" ] || [ -f "$ZSHRC_TARGET" ]; then
+            echo "Backing up existing $ZSHRC_TARGET to $ZSHRC_TARGET.backup"
+            mv "$ZSHRC_TARGET" "$ZSHRC_TARGET.backup"
+        fi
+        ln -s "$DOTFILES_DIR/zshrc" "$ZSHRC_TARGET"
+        echo "Symlinked zshrc → $ZSHRC_TARGET"
+    else
+        echo "⚠️  Skipping: $DOTFILES_DIR/zshrc does not exist"
+    fi
 }
 
 # Execute
@@ -266,7 +291,7 @@ install_packages
 install_neovim_from_github_release
 install_oh_my_zsh
 set_zsh_as_default
-#install_npm
+install_nodejs
 install_tpm
 install_fonts
 create_api_config

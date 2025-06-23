@@ -119,5 +119,10 @@ return { -- Fuzzy Finder (files, lsp, etc)
     vim.keymap.set('n', '<leader>sn', function()
       builtin.find_files { cwd = vim.fn.stdpath 'config' }
     end, { desc = '[S]earch [N]eovim files' })
+
+    -- Search files in dotfiles repository
+    vim.keymap.set('n', '<leader>sd', function()
+      builtin.find_files { cwd = vim.fn.expand('~/git/dotfiles') }
+    end, { desc = '[S]earch [D]ot files' })
   end,
 }
