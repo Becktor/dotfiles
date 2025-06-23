@@ -253,7 +253,9 @@ require('lazy').setup({
   require 'custom.plugins.local-highlight',
   --require 'custom.plugins.gp',
   require 'custom.plugins.parrot',
+  require 'custom.plugins.claude',
   require 'custom.plugins.which-key',
+  require 'custom.plugins.dadbod-ui',
   'tpope/vim-fugitive',
   --'miversen33/netman.nvim',
   -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
@@ -290,3 +292,6 @@ require('lazy').setup({
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
+require 'custom.autocmds'
+require 'custom.keymaps'
+require 'custom.diagnostic'
