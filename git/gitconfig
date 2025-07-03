@@ -11,3 +11,5 @@
 	ci = commit
 	st = status
 	unstage = reset HEAD --
+        myb = for-each-ref --format=' %(authorname) %09 %(refname)' --sort=authorname
+	lb = for-each-ref --sort=-committerdate refs/heads/
