@@ -10,6 +10,8 @@ config.window_decorations = "NONE"
 config.native_macos_fullscreen_mode = true
 
 -- Font & appearance
+config.font = wezterm.font("JetBrains Mono Nerd Font", {weight="Regular"})
+config.font_size = 12.0
 config.line_height = 1.2
 config.window_padding = {left = 8, right = 8, top = 8, bottom = 8}
 

@@ -31,29 +31,54 @@ OS="$(uname -s)"
 install_packages() {
     case "$OS" in
         Linux)
-            echo "Detected Linux. Checking for recent apt update..."
-
-            # Only update if last update was more than 6 hours ago
-            UPDATE_STAMP="/var/lib/apt/periodic/update-success-stamp"
-            NEED_UPDATE=true
-            if [ -f "$UPDATE_STAMP" ]; then
-                LAST_UPDATE=$(stat -c %Y "$UPDATE_STAMP")
-                NOW=$(date +%s)
-                SIX_HOURS_AGO=$((NOW - 6 * 3600))
-
-                if [ "$LAST_UPDATE" -gt "$SIX_HOURS_AGO" ]; then
-                    echo "apt-get update was run recently. Skipping."
-                    NEED_UPDATE=false
-                fi
+            # Detect Linux distribution
+            if [ -f /etc/os-release ]; then
+                . /etc/os-release
+                DISTRO=$ID
+            elif [ -f /etc/debian_version ]; then
+                DISTRO="debian"
+            elif [ -f /etc/arch-release ]; then
+                DISTRO="arch"
+            else
+                echo "Unable to detect Linux distribution"
+                exit 1
             fi
 
-            if [ "$NEED_UPDATE" = true ]; then
-                echo "Running apt-get update..."
-                sudo apt-get update
-            fi
+            case "$DISTRO" in
+                debian|ubuntu)
+                    echo "Detected Debian/Ubuntu. Checking for recent apt update..."
 
-            echo "Installing prerequisites..."
-            sudo apt-get install -y zsh ninja-build gettext cmake curl build-essential tmux unzip jq
+                    # Only update if last update was more than 6 hours ago
+                    UPDATE_STAMP="/var/lib/apt/periodic/update-success-stamp"
+                    NEED_UPDATE=true
+                    if [ -f "$UPDATE_STAMP" ]; then
+                        LAST_UPDATE=$(stat -c %Y "$UPDATE_STAMP")
+                        NOW=$(date +%s)
+                        SIX_HOURS_AGO=$((NOW - 6 * 3600))
+
+                        if [ "$LAST_UPDATE" -gt "$SIX_HOURS_AGO" ]; then
+                            echo "apt-get update was run recently. Skipping."
+                            NEED_UPDATE=false
+                        fi
+                    fi
+
+                    if [ "$NEED_UPDATE" = true ]; then
+                        echo "Running apt-get update..."
+                        sudo apt-get update
+                    fi
+
+                    echo "Installing prerequisites..."
+                    sudo apt-get install -y zsh ninja-build gettext cmake curl build-essential tmux unzip jq
+                    ;;
+                arch)
+                    echo "Detected Arch Linux. Installing prerequisites..."
+                    sudo pacman -Sy --needed --noconfirm zsh ninja gettext cmake curl base-devel tmux unzip jq
+                    ;;
+                *)
+                    echo "Unsupported Linux distribution: $DISTRO"
+                    exit 1
+                    ;;
+            esac
             ;;
         Darwin)
             echo "Detected macOS. Installing prerequisites..."
@@ -169,9 +194,34 @@ install_nodejs() {
 
     case "$OS" in
         Linux)
-            echo "Installing Node.js via NodeSource..."
-            curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
-            sudo apt-get install -y nodejs
+            # Detect Linux distribution
+            if [ -f /etc/os-release ]; then
+                . /etc/os-release
+                DISTRO=$ID
+            elif [ -f /etc/debian_version ]; then
+                DISTRO="debian"
+            elif [ -f /etc/arch-release ]; then
+                DISTRO="arch"
+            else
+                echo "Unable to detect Linux distribution"
+                exit 1
+            fi
+
+            case "$DISTRO" in
+                debian|ubuntu)
+                    echo "Installing Node.js via NodeSource..."
+                    curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
+                    sudo apt-get install -y nodejs
+                    ;;
+                arch)
+                    echo "Installing Node.js via pacman..."
+                    sudo pacman -S --needed --noconfirm nodejs npm
+                    ;;
+                *)
+                    echo "Unsupported Linux distribution for Node.js installation: $DISTRO"
+                    exit 1
+                    ;;
+            esac
             ;;
         Darwin)
             echo "Installing Node.js via Homebrew..."
