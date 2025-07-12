@@ -1,0 +1,135 @@
+/**
+ * Tokyo Night rofi theme
+ * Adapted for Tokyo Night color scheme
+ *
+ * Tokyo Night Color palette
+ *
+ */
+
+
+* {
+	bg0: #1a1b26;
+	bg1: #24283b;
+	bg2: #414868;
+	bg3: #565f89;
+
+	fg0: #c0caf5;
+	fg1: #a9b1d6;
+	fg2: #9aa5ce;
+
+	blue: #7aa2f7;
+	cyan: #7dcfff;
+	green: #9ece6a;
+	orange: #ff9e64;
+	purple: #bb9af7;
+	red: #f7768e;
+	yellow: #e0af68;
+	magenta: #ad8ee6;
+
+    foreground:  @blue;
+    backlight:   #ccffeedd;
+    background-color:  transparent;
+    
+    highlight:     underline bold #c0caf5;
+
+    transparent: rgba(26,27,38,0);
+}
+
+window {
+    location: center;
+    anchor:   center;
+    transparency: "screenshot";
+    padding: 10px;
+    border:  0px;
+    border-radius: 6px;
+
+    background-color: @transparent;
+    spacing: 0;
+    children:  [mainbox];
+    orientation: horizontal;
+}
+
+mainbox {
+    spacing: 0;
+    children: [ inputbar, message, listview ];
+}
+
+message {
+    color: @bg0;
+    padding: 5;
+    border-color: @foreground;
+    border:  0px 2px 2px 2px;
+    background-color: @cyan;
+}
+
+inputbar {
+    color: @fg0;
+    padding: 11px;
+    background-color: @bg1;
+
+    border: 1px;
+    border-radius:  6px 6px 0px 0px;
+    border-color: @blue;
+}
+
+entry, prompt, case-indicator {
+    text-font: inherit;
+    text-color:inherit;
+}
+
+prompt {
+    margin: 0px 1em 0em 0em ;
+}
+
+listview {
+    padding: 8px;
+    border-radius: 0px 0px 6px 6px;
+    border-color: @blue;
+    border: 0px 1px 1px 1px;
+    background-color: rgba(26,27,38,0.9);
+    dynamic: false;
+}
+
+element {
+    padding: 3px;
+    vertical-align: 0.5;
+    border-radius: 4px;
+    background-color: transparent;
+    color: @foreground;
+    text-color: @fg1;
+}
+
+element selected.normal {
+	background-color: @purple;
+	text-color: @bg0;
+}
+
+element-text, element-icon {
+    background-color: inherit;
+    text-color:       inherit;
+}
+
+button {
+    padding: 6px;
+    color: @foreground;
+    horizontal-align: 0.5;
+
+    border: 2px 0px 2px 2px;
+    border-radius: 4px 0px 0px 4px;
+    border-color: @foreground;
+}
+
+button selected normal {
+    border: 2px 0px 2px 2px;
+    border-color: @foreground;
+}
+
+textbox {
+    padding: 8px;
+    border-radius: 6px 6px 6px 6px;
+    border-color: @blue;
+    border: 1px 1px 1px 1px;
+    background-color: rgba(26,27,38,0.9);
+    dynamic: true;
+    text-color: @backlight;
+}
