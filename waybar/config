@@ -6,7 +6,7 @@
     "margin": 0,
     "modules-left": ["hyprland/workspaces"],
     "modules-center": ["clock"],
-    "modules-right": ["pulseaudio", "backlight", "network", "cpu", "memory", "temperature", "battery"],
+    "modules-right": ["hyprland/language", "pulseaudio", "backlight", "bluetooth", "network", "cpu", "memory", "temperature", "battery"],
     
     "hyprland/workspaces": {
         "format": "{icon}",
@@ -51,6 +51,11 @@
         "format-alt": "{:%Y-%m-%d %H:%M:%S}",
         "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
         "on-click": "gnome-calendar"
+    },
+
+    "hyprland/language": {
+        "format": "  {short}",
+        "on-click": "hyprctl switchxkblayout at-translated-set-2-keyboard next"
     },
 
     "cpu": {
@@ -101,9 +106,20 @@
         "on-click": "nm-connection-editor"
     },
 
+    "bluetooth": {
+        "format": " {status}",
+        "format-connected": " {device_alias}",
+        "format-connected-battery": " {device_alias} {device_battery_percentage}%",
+        "tooltip-format": "{controller_alias}\t{controller_address}\n\n{num_connections} connected",
+        "tooltip-format-connected": "{controller_alias}\t{controller_address}\n\n{num_connections} connected\n\n{device_enumerate}",
+        "tooltip-format-enumerate-connected": "{device_alias}\t{device_address}",
+        "tooltip-format-enumerate-connected-battery": "{device_alias}\t{device_address}\t{device_battery_percentage}%",
+        "on-click": "blueman-manager"
+    },
+
     "pulseaudio": {
         "format": "  {volume}%",
-        "format-bluetooth": " {volume}%",
+        "format-bluetooth": "   {volume}%",
         "format-bluetooth-muted": " ",
         "format-muted": "",
         "format-icons": {

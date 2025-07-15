@@ -8,7 +8,7 @@
 }
 
 /* Center text vertically in all modules */
-#pulseaudio, #backlight, #battery, #network, #cpu, #memory, #temperature {
+#language, #bluetooth, #pulseaudio, #backlight, #battery, #network, #cpu, #memory, #temperature {
     padding-top: 2px;
     padding-bottom: 2px;
 }
@@ -93,6 +93,26 @@ window#waybar.hidden {
 }
 
 /* Individual modules */
+#language {
+    margin: 0;
+    padding: 0 8px;
+    color: #c0caf5;
+    background-color: transparent;
+    border-bottom: 2px solid #7aa2f7;
+}
+
+#bluetooth {
+    margin: 0;
+    padding: 0 8px;
+    color: #c0caf5;
+    background-color: transparent;
+    border-bottom: 2px solid #bb9af7;
+}
+
+#bluetooth.disabled {
+    border-bottom-color: #565f89;
+}
+
 #clock {
     margin: 0;
     padding: 0 8px;
