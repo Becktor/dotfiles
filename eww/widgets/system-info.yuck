@@ -1,12 +1,11 @@
 ;; System info widget
 (defwidget system-info []
   (box :class "system-info" :orientation "v" :space-evenly false :spacing 8
-    (label :class "section-title" :text "SYSTEM")
     
-    ;; Two-column layout for system stats
-    (box :class "system-grid" :orientation "h" :space-evenly false :spacing 6
-      ;; Left column
-      (box :class "system-column" :orientation "v" :space-evenly false :spacing 8
+    ;; 2x2 grid layout for system stats
+    (box :class "system-grid" :orientation "v" :space-evenly false :spacing 4
+      ;; Top row: CPU and RAM side by side
+      (box :class "system-row" :orientation "h" :space-evenly true :spacing 6
         ;; CPU info
         (box :class "info-item compact" :orientation "v" :spacing 3
           (box :class "info-header" :orientation "h" :space-evenly false
@@ -23,27 +22,18 @@
             (label :class "info-value" :text "${memory-usage}%"))
           (label :class "info-detail" :text "${memory-used} / ${memory-total}")))
       
-      ;; Right column
-      (box :class "system-column" :orientation "v" :space-evenly false :spacing 8
-        ;; Disk info
-        (box :class "info-item compact" :orientation "v" :spacing 3
-          (box :class "info-header" :orientation "h" :space-evenly false
-            (label :class "info-icon" :text "")
-            (label :class "info-label" :text "DISK")
-            (label :class "info-value" :text "${disk-usage}%"))
-          (label :class "info-detail" :text "${disk-free} free"))
-        
-        ;; Temperature
-        (box :class "info-item compact" :orientation "v" :spacing 3
-          (box :class "info-header" :orientation "h" :space-evenly false
-            (label :class "info-icon" :text "")
-            (label :class "info-label" :text "TEMP")
-            (label :class "info-value ${temperature > 80 ? 'critical' : ''}" :text "${temperature}°C"))
-          (label :class "info-detail" :text "Core: ${cpu-temp}°C"))))
-    
-    ;; Uptime spans full width
-    (box :class "info-item" :orientation "v" :spacing 3
-      (box :class "info-header" :orientation "h" :space-evenly false
-        (label :class "info-icon" :text "")
-        (label :class "info-label" :text "UPTIME"))
-      (label :class "info-detail" :text "${uptime}"))))
+      ;; Disk info - full width
+      (box :class "info-item compact" :orientation "v" :spacing 3
+        (box :class "info-header" :orientation "h" :space-evenly false
+          (label :class "info-icon" :text "")
+          (label :class "info-label" :text "DISK")
+          (label :class "info-value" :text "${disk-usage}%"))
+        (label :class "info-detail" :text "${disk-free} free"))
+      
+      ;; Temperature - full width
+      (box :class "info-item compact" :orientation "v" :spacing 3
+        (box :class "info-header" :orientation "h" :space-evenly false
+          (label :class "info-icon" :text "")
+          (label :class "info-label" :text "TEMP")
+          (label :class "info-value ${temperature > 80 ? 'critical' : ''}" :text "${temperature}°C"))
+        (label :class "info-detail" :text "Core: ${cpu-temp}°C")))))

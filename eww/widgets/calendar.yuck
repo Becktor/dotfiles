@@ -1,7 +1,6 @@
 ;; Calendar widget
 (defwidget calendar-widget []
   (box :class "calendar-widget" :orientation "v" :space-evenly false :spacing 4
-    (label :class "widget-title" :text "Calendar")
     (calendar :class "calendar"
               :day calendar-day
               :month calendar-month

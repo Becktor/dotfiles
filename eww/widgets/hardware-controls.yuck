@@ -1,7 +1,6 @@
 ;; Hardware controls
 (defwidget hardware-controls []
   (box :class "hardware-controls" :orientation "v" :space-evenly false :spacing 8
-    (label :class "section-title" :text "CONTROLS")
     
     ;; Audio control
     (box :class "control-item" :orientation "v" :spacing 0

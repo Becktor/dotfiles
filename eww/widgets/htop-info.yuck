@@ -1,10 +1,9 @@
 ;; htop widget displaying system processes
 (defwidget htop-info []
   (box :class "htop-info" :orientation "v" :space-evenly false :spacing 4
-    (label :class "widget-title" :text "System Processes")
     (box :class "htop-container"
       (label :text "${htop-output}"))))
 
 ;; Poll for top output (simpler than htop)
 (defpoll htop-output :interval "3s"
-  "ps aux --sort=-%cpu | head -10 | awk '{printf \"%-8s %5s %5s %s\\n\", $1, $3, $4, $11}'")
+  "ps aux --sort=-%cpu | head -6 | awk '{printf \"%-8s %5s %5s %s\\n\", $1, $3, $4, $11}'")

@@ -1,8 +1,5 @@
 ;; Clock and Date widget
 (defwidget clock-section []
-  (box :class "clock-section" :orientation "v" :space-evenly false :spacing 5
-    (button :class "clock-time" 
-            :onclick "show-seconds=${!show-seconds}"
-            :onrightclick "gnome-calendar &"
-      (label :text "${formattime(EWW_TIME, show-seconds ? '%H:%M:%S' : clock-format)}"))
+  (box :class "clock-section" :orientation "v" :space-evenly false :spacing 2
+    (label :class "clock-time" :text "${formattime(EWW_TIME, clock-format)}")
     (label :class "clock-date" :text "${formattime(EWW_TIME, date-format)}")))

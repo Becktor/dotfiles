@@ -3,8 +3,9 @@
   (box :class "panel" :orientation "v" :space-evenly false :spacing 8
     (clock-section)
     (calendar-widget)
+    (box :class "delimiter" :height 1)
     (htop-info)
-    (workspaces)
+    (box :class "delimiter" :height 1)
     (system-info)
     (hardware-controls)
     (network-info)
