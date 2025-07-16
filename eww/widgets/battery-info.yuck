@@ -1,0 +1,12 @@
+;; Battery info
+(defwidget battery-info []
+  (box :class "battery-info" :orientation "v" :space-evenly false :spacing 8
+    (label :class "section-title" :text "BATTERY")
+    (box :class "info-item" :orientation "v" :spacing 3
+      (box :class "info-header" :orientation "h" :space-evenly false
+        (label :class "info-icon ${battery-status == 'Charging' ? 'charging' : ''} ${battery-capacity < 15 ? 'critical' : battery-capacity < 30 ? 'warning' : ''}" 
+               :text "${battery-status == 'Charging' ? '' : battery-capacity < 15 ? '' : battery-capacity < 30 ? '' : ''}")
+        (label :class "info-label" :text "POWER")
+        (label :class "info-value ${battery-status == 'Charging' ? 'charging' : ''} ${battery-capacity < 15 ? 'critical' : battery-capacity < 30 ? 'warning' : ''}" 
+               :text "${battery-capacity}%"))
+      (label :class "info-detail" :text "${battery-status}"))))

@@ -1,0 +1,17 @@
+;; Main eww configuration file
+;; This file imports all the modular components
+
+;; Import variables and polls
+(include "variables.yuck")
+
+;; Import widget modules
+(include "widgets/clock.yuck")
+(include "widgets/workspaces.yuck")
+(include "widgets/window-info.yuck")
+(include "widgets/system-info.yuck")
+(include "widgets/hardware-controls.yuck")
+(include "widgets/network-info.yuck")
+(include "widgets/battery-info.yuck")
+(include "widgets/htop-info.yuck")
+(include "widgets/calendar.yuck")
+(include "widgets/panel.yuck")

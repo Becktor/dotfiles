@@ -1,0 +1,5 @@
+;; Window title widget
+(defwidget window-info []
+  (box :class "window-info" :orientation "v" :space-evenly false :spacing 5
+    (label :class "section-title" :text "WINDOW")
+    (label :class "window-title" :text "${window-title}")))

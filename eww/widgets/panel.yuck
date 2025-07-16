@@ -1,0 +1,24 @@
+;; Main vertical panel
+(defwidget panel []
+  (box :class "panel" :orientation "v" :space-evenly false :spacing 8
+    (clock-section)
+    (calendar-widget)
+    (htop-info)
+    (workspaces)
+    (system-info)
+    (hardware-controls)
+    (network-info)
+    (battery-info)))
+
+;; Main window
+(defwindow panel
+  :monitor 0
+  :geometry (geometry :x "0px"
+                      :y "0px"
+                      :width "370px"
+                      :height "100%"
+                      :anchor "top left")
+  :stacking "fg"
+  :exclusive false
+  :focusable false
+  (panel))

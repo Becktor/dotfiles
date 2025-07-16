@@ -1,0 +1,26 @@
+;; Network and connectivity
+(defwidget network-info []
+  (box :class "network-info" :orientation "v" :space-evenly false :spacing 8
+    (label :class "section-title" :text "NETWORK")
+    
+    ;; Two-column layout for network info
+    (box :class "network-grid" :orientation "h" :space-evenly false :spacing 6
+      ;; WiFi info
+      (box :class "info-item compact" :orientation "v" :spacing 3
+        (button :class "info-button ${network-status == 'disconnected' ? 'disconnected' : ''}"
+                :onclick "nm-connection-editor &"
+          (box :class "info-header" :orientation "h" :space-evenly false
+            (label :class "info-icon" :text "${network-status == 'connected' ? '' : ''}")
+            (label :class "info-label" :text "WiFi")
+            (label :class "info-value" :text "${network-status == 'connected' ? 'ON' : 'OFF'}")))
+        (label :class "info-detail" :text "${network-interface}: ${network-ip}"))
+      
+      ;; Bluetooth info
+      (box :class "info-item compact" :orientation "v" :spacing 3
+        (button :class "info-button ${bluetooth-status == 'off' ? 'disabled' : ''}"
+                :onclick "blueman-manager &"
+          (box :class "info-header" :orientation "h" :space-evenly false
+            (label :class "info-icon" :text "${bluetooth-status == 'on' ? '' : '󰂲'}")
+            (label :class "info-label" :text "Bluetooth")
+            (label :class "info-value" :text "${bluetooth-status == 'on' ? 'ON' : 'OFF'}")))
+        (label :class "info-detail" :text "${bluetooth-connected} devices")))))

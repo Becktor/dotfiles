@@ -3,7 +3,9 @@
     "position": "top",
     "height": 24,
     "spacing": 1,
-    "margin": 0,
+    "margin-top": 4,
+    "margin-left": 8,
+    "margin-right": 8,
     "modules-left": ["hyprland/workspaces"],
     "modules-center": ["clock"],
     "modules-right": ["hyprland/language", "pulseaudio", "backlight", "bluetooth", "network", "cpu", "memory", "temperature", "battery"],
@@ -97,7 +99,7 @@
     },
 
     "network": {
-        "format-wifi": "  {essid}",
+        "format-wifi": " ",
         "format-ethernet": " {ipaddr}/{cidr}",
         "tooltip-format": "{ifname} via {gwaddr}",
         "format-linked": " {ifname} (No IP)",
@@ -107,9 +109,9 @@
     },
 
     "bluetooth": {
-        "format": " {status}",
-        "format-connected": " {device_alias}",
-        "format-connected-battery": " {device_alias} {device_battery_percentage}%",
+        "format": "󰂲",
+        "format-connected": "",
+        "format-connected-battery": "",
         "tooltip-format": "{controller_alias}\t{controller_address}\n\n{num_connections} connected",
         "tooltip-format-connected": "{controller_alias}\t{controller_address}\n\n{num_connections} connected\n\n{device_enumerate}",
         "tooltip-format-enumerate-connected": "{device_alias}\t{device_address}",

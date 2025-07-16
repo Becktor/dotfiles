@@ -1,0 +1,9 @@
+;; Workspace widget
+(defwidget workspaces []
+  (box :class "workspaces" :orientation "v" :space-evenly false :spacing 5
+    (label :class "section-title" :text "WORKSPACES")
+    (box :class "workspace-buttons" :orientation "v" :spacing 3
+      (for workspace in "${workspaces}"
+        (button :class "workspace ${workspace == current-workspace ? 'active' : ''}"
+                :onclick "hyprctl dispatch workspace ${workspace}"
+          workspace)))))

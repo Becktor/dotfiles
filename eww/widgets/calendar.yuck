@@ -1,0 +1,13 @@
+;; Calendar widget
+(defwidget calendar-widget []
+  (box :class "calendar-widget" :orientation "v" :space-evenly false :spacing 4
+    (label :class "widget-title" :text "Calendar")
+    (calendar :class "calendar"
+              :day calendar-day
+              :month calendar-month
+              :year calendar-year)))
+
+;; Calendar variables
+(defpoll calendar-day :interval "60s" "date '+%d'")
+(defpoll calendar-month :interval "60s" "date '+%m'")
+(defpoll calendar-year :interval "60s" "date '+%Y'")

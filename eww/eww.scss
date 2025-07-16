@@ -1,0 +1,440 @@
+/* Modern Glassmorphic Tokyo Night Theme for EWW Vertical Panel */
+* {
+    all: unset;
+    font-family: "JetBrainsMono Nerd Font", "SF Pro Display", -apple-system, sans-serif;
+    font-size: 12px;
+    color: #c0caf5;
+}
+
+.panel {
+    background: linear-gradient(135deg, rgba(26, 27, 38, 0.65) 0%, rgba(36, 40, 59, 0.65) 100%);
+    border: 1px solid rgba(122, 162, 247, 0.15);
+    border-radius: 12px;
+    padding: 12px;
+    margin: 10px;
+    margin-bottom: 20px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2), 
+                0 0 0 1px rgba(255, 255, 255, 0.03) inset;
+}
+
+/* Clock Section */
+.clock-section {
+    padding: 8px 0 12px 0;
+    border-bottom: 1px solid rgba(122, 162, 247, 0.15);
+    margin-bottom: 3px;
+}
+
+.clock-time {
+    font-size: 24px;
+    font-weight: 300;
+    color: #c0caf5;
+    background: linear-gradient(135deg, rgba(122, 162, 247, 0.08) 0%, rgba(199, 146, 234, 0.08) 100%);
+    border: 1px solid rgba(122, 162, 247, 0.15);
+    border-radius: 8px;
+    padding: 8px 12px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.clock-time:hover {
+    background: linear-gradient(135deg, rgba(122, 162, 247, 0.2) 0%, rgba(199, 146, 234, 0.2) 100%);
+    border-color: rgba(122, 162, 247, 0.4);
+    box-shadow: 0 4px 16px rgba(122, 162, 247, 0.3);
+}
+
+.clock-date {
+    font-size: 12px;
+    color: #565f89;
+    margin-top: 4px;
+    font-weight: 500;
+    opacity: 0.8;
+}
+
+/* Section Titles */
+.section-title {
+    font-size: 9px;
+    font-weight: 600;
+    color: #565f89;
+    margin-bottom: 6px;
+    opacity: 0.7;
+}
+
+/* Workspaces */
+.workspaces {
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(122, 162, 247, 0.15);
+    margin-bottom: 3px;
+}
+
+.workspace-buttons {
+}
+
+.workspace {
+    min-width: 32px;
+    min-height: 32px;
+    padding: 0;
+    margin: 2px;
+    background: linear-gradient(135deg, rgba(122, 162, 247, 0.05) 0%, rgba(199, 146, 234, 0.05) 100%);
+    color: #565f89;
+    border: 1px solid rgba(122, 162, 247, 0.15);
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 500;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.workspace:hover {
+    background: linear-gradient(135deg, rgba(122, 162, 247, 0.15) 0%, rgba(199, 146, 234, 0.15) 100%);
+    color: #7aa2f7;
+    border-color: rgba(122, 162, 247, 0.4);
+    box-shadow: 0 4px 12px rgba(122, 162, 247, 0.2);
+}
+
+.workspace.active {
+    background: linear-gradient(135deg, rgba(122, 162, 247, 0.25) 0%, rgba(199, 146, 234, 0.25) 100%);
+    color: #c0caf5;
+    border-color: rgba(122, 162, 247, 0.6);
+    box-shadow: 0 4px 16px rgba(122, 162, 247, 0.3);
+}
+
+/* Window Info */
+.window-info {
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(122, 162, 247, 0.15);
+    margin-bottom: 3px;
+}
+
+.window-title {
+    font-size: 11px;
+    color: #c0caf5;
+    padding: 8px 12px;
+    background: linear-gradient(135deg, rgba(192, 202, 245, 0.08) 0%, rgba(122, 162, 247, 0.08) 100%);
+    border: 1px solid rgba(192, 202, 245, 0.15);
+    border-radius: 8px;
+    font-weight: 400;
+    transition: all 0.3s ease;
+}
+
+.window-title:hover {
+    background: linear-gradient(135deg, rgba(192, 202, 245, 0.12) 0%, rgba(122, 162, 247, 0.12) 100%);
+    border-color: rgba(192, 202, 245, 0.25);
+}
+
+/* System Info */
+.system-info {
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(122, 162, 247, 0.15);
+    margin-bottom: 3px;
+}
+
+.system-grid {
+    margin-bottom: 4px;
+}
+
+.system-column {
+    min-width: 0;
+}
+
+.info-item {
+    margin-bottom: 8px;
+    padding: 8px 12px;
+    background: linear-gradient(135deg, rgba(122, 162, 247, 0.05) 0%, rgba(199, 146, 234, 0.05) 100%);
+    border: 1px solid rgba(122, 162, 247, 0.15);
+    border-radius: 8px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.info-item.compact {
+    margin-bottom: 4px;
+    padding: 6px 8px;
+}
+
+.info-item:hover {
+    background: linear-gradient(135deg, rgba(122, 162, 247, 0.08) 0%, rgba(199, 146, 234, 0.08) 100%);
+    border-color: rgba(122, 162, 247, 0.25);
+    box-shadow: 0 4px 12px rgba(122, 162, 247, 0.15);
+}
+
+.info-header {
+    margin-bottom: 6px;
+}
+
+.info-icon {
+    font-size: 16px;
+    color: #7aa2f7;
+    min-width: 24px;
+    margin-right: 8px;
+}
+
+.info-label {
+    font-size: 10px;
+    font-weight: 600;
+    color: #9aa5ce;
+    opacity: 0.8;
+}
+
+.info-value {
+    font-size: 14px;
+    font-weight: 600;
+    color: #c0caf5;
+    min-width: 60px;
+}
+
+.info-value.critical {
+    color: #f7768e;
+}
+
+.info-detail {
+    font-size: 9px;
+    color: #565f89;
+    margin-right: 12px;
+    opacity: 0.7;
+    font-weight: 500;
+}
+
+.info-details {
+    padding-left: 32px;
+    margin-top: 4px;
+}
+
+/* Hardware Controls */
+.hardware-controls {
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(122, 162, 247, 0.15);
+    margin-bottom: 3px;
+}
+
+.control-item {
+    margin-bottom: 6px;
+}
+
+.control-button {
+    padding: 8px 12px;
+    background: linear-gradient(135deg, rgba(122, 162, 247, 0.05) 0%, rgba(199, 146, 234, 0.05) 100%);
+    border: 1px solid rgba(122, 162, 247, 0.15);
+    border-radius: 8px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.control-button:hover {
+    background: linear-gradient(135deg, rgba(122, 162, 247, 0.12) 0%, rgba(199, 146, 234, 0.12) 100%);
+    border-color: rgba(122, 162, 247, 0.3);
+    box-shadow: 0 4px 12px rgba(122, 162, 247, 0.15);
+}
+
+.control-button.muted {
+    border-color: rgba(247, 118, 142, 0.4);
+    background: linear-gradient(135deg, rgba(247, 118, 142, 0.1) 0%, rgba(247, 118, 142, 0.05) 100%);
+}
+
+.control-button.muted:hover {
+    border-color: rgba(247, 118, 142, 0.6);
+    background: linear-gradient(135deg, rgba(247, 118, 142, 0.15) 0%, rgba(247, 118, 142, 0.1) 100%);
+}
+
+.control-header {
+}
+
+.control-icon {
+    font-size: 16px;
+    color: #7aa2f7;
+    min-width: 24px;
+    margin-right: 8px;
+}
+
+.control-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #9aa5ce;
+    opacity: 0.8;
+}
+
+.control-value {
+    font-size: 15px;
+    font-weight: 600;
+    color: #c0caf5;
+    min-width: 60px;
+}
+
+.discrete-progress {
+    margin-top: 2px;
+    padding: 4px;
+    background: rgba(86, 95, 137, 0.15);
+    border-radius: 4px;
+    min-height: 16px;
+    min-width: 280px;
+    border: 1px solid rgba(86, 95, 137, 0.25);
+}
+
+.discrete-progress.muted {
+    background: rgba(247, 118, 142, 0.15);
+    border-color: rgba(247, 118, 142, 0.3);
+}
+
+.progress-segment {
+    min-width: 26px;
+    min-height: 24px;
+    background: rgba(86, 95, 137, 0.25);
+    border-radius: 2px;
+    border: 1px solid rgba(86, 95, 137, 0.4);
+    transition: all 0.3s ease;
+}
+
+.progress-segment.filled {
+    background: linear-gradient(135deg, rgba(122, 162, 247, 0.8) 0%, rgba(199, 146, 234, 0.8) 100%);
+    border-color: rgba(122, 162, 247, 0.6);
+    box-shadow: 0 0 4px rgba(122, 162, 247, 0.4);
+}
+
+.progress-segment.filled.muted {
+    background: linear-gradient(135deg, rgba(247, 118, 142, 0.8) 0%, rgba(247, 118, 142, 0.6) 100%);
+    border-color: rgba(247, 118, 142, 0.6);
+    box-shadow: 0 0 4px rgba(247, 118, 142, 0.4);
+}
+
+/* Network Info */
+.network-info {
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(122, 162, 247, 0.15);
+    margin-bottom: 3px;
+}
+
+.network-grid {
+    margin-bottom: 4px;
+}
+
+.info-button {
+    padding: 8px 12px;
+    background: linear-gradient(135deg, rgba(122, 162, 247, 0.05) 0%, rgba(199, 146, 234, 0.05) 100%);
+    border: 1px solid rgba(122, 162, 247, 0.15);
+    border-radius: 8px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    margin-bottom: 4px;
+}
+
+.info-button:hover {
+    background: linear-gradient(135deg, rgba(122, 162, 247, 0.12) 0%, rgba(199, 146, 234, 0.12) 100%);
+    border-color: rgba(122, 162, 247, 0.3);
+    box-shadow: 0 4px 12px rgba(122, 162, 247, 0.15);
+}
+
+.info-button.disconnected {
+    border-color: rgba(247, 118, 142, 0.4);
+    background: linear-gradient(135deg, rgba(247, 118, 142, 0.1) 0%, rgba(247, 118, 142, 0.05) 100%);
+}
+
+.info-button.disconnected:hover {
+    border-color: rgba(247, 118, 142, 0.6);
+    background: linear-gradient(135deg, rgba(247, 118, 142, 0.15) 0%, rgba(247, 118, 142, 0.1) 100%);
+}
+
+.info-button.disconnected .info-icon,
+.info-button.disconnected .info-value {
+    color: #f7768e;
+}
+
+.info-button.disabled {
+    border-color: rgba(86, 95, 137, 0.3);
+    background: linear-gradient(135deg, rgba(86, 95, 137, 0.05) 0%, rgba(86, 95, 137, 0.05) 100%);
+}
+
+.info-button.disabled .info-icon,
+.info-button.disabled .info-value {
+    color: #565f89;
+}
+
+/* Battery Info */
+.battery-info {
+    padding: 8px 0;
+}
+
+.info-icon.charging {
+    color: #e0af68;
+}
+
+.info-icon.warning {
+    color: #ff9e64;
+}
+
+.info-icon.critical {
+    color: #f7768e;
+}
+
+.info-value.charging {
+    color: #e0af68;
+}
+
+.info-value.warning {
+    color: #ff9e64;
+}
+
+.info-value.critical {
+    color: #f7768e;
+}
+
+/* Tooltips */
+tooltip {
+    background: linear-gradient(135deg, rgba(26, 27, 38, 0.95) 0%, rgba(36, 40, 59, 0.95) 100%);
+    border: 1px solid rgba(122, 162, 247, 0.3);
+    border-radius: 12px;
+    color: #c0caf5;
+    padding: 12px 16px;
+    font-size: 11px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+}
+
+tooltip label {
+    color: #c0caf5;
+}
+
+/* Additional modern enhancements */
+.panel:hover {
+    box-shadow: 0 12px 48px rgba(0, 0, 0, 0.4), 
+                0 0 0 1px rgba(122, 162, 247, 0.1) inset;
+}
+
+/* Smooth scrolling for overflow content */
+* {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Add subtle glow effects for active elements */
+.workspace.active,
+.control-button:active,
+.info-button:active {
+    box-shadow: 0 0 20px rgba(122, 162, 247, 0.5);
+}
+
+/* Custom scrollbar styling for GTK */
+scrollbar {
+    background: transparent;
+    border: none;
+    border-radius: 6px;
+    margin: 0;
+    padding: 0;
+    opacity: 0.7;
+}
+
+scrollbar slider {
+    background: rgba(122, 162, 247, 0.3);
+    border: none;
+    border-radius: 6px;
+    min-width: 6px;
+    min-height: 6px;
+    margin: 0;
+}
+
+scrollbar slider:hover {
+    background: rgba(122, 162, 247, 0.5);
+}
+
+scrollbar slider:active {
+    background: rgba(122, 162, 247, 0.7);
+}
+
+scrollbar.vertical {
+    margin: 0 2px 0 0;
+}
+
+scrollbar.vertical slider {
+    min-width: 4px;
+}
