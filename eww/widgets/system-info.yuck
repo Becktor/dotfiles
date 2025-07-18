@@ -23,6 +23,7 @@
       ;; Temperature - full width bar
       (box :class "control-item" :orientation "v" :spacing 0
         (box :class "control-header" :orientation "h" :space-evenly false
+          (label :class "control-icon" :text "🌡")
           (label :class "control-label" :text "TEMP ${temperature}°C"))
         (box :class "discrete-progress temp-progress" :orientation "h" :space-evenly true :spacing 1
           (button :class "progress-segment temp-segment ${temperature >= 30 ? 'filled' : ''} temp-1")
@@ -49,6 +50,7 @@
       ;; Memory info - full width bar
       (box :class "control-item" :orientation "v" :spacing 0
         (box :class "control-header" :orientation "h" :space-evenly false
+          (label :class "control-icon" :text "🧠")
           (label :class "control-label" :text "RAM ${memory-usage}%"))
         (box :class "discrete-progress mem-progress" :orientation "h" :space-evenly true :spacing 1
           (button :class "progress-segment mem-segment ${memory-usage >= 5 ? 'filled' : ''} mem-1")
@@ -75,6 +77,7 @@
       ;; Disk info - full width bar
       (box :class "control-item" :orientation "v" :spacing 0
         (box :class "control-header" :orientation "h" :space-evenly false
+          (label :class "control-icon" :text "💾")
           (label :class "control-label" :text "DISK ${disk-usage}%"))
         (box :class "discrete-progress disk-progress" :orientation "h" :space-evenly true :spacing 1
           (button :class "progress-segment disk-segment ${disk-usage >= 5 ? 'filled' : ''} disk-1")

@@ -5,6 +5,7 @@
     ;; Audio control
     (box :class "control-item" :orientation "v" :spacing 0
       (box :class "control-header" :orientation "h" :space-evenly false
+        (label :class "control-icon" :text "${volume-muted == 'true' ? '🔇' : '🔊'}")
         (label :class "control-label" :text "${volume-muted == 'true' ? 'AUDIO MUTED' : 'AUDIO'}"))
       (eventbox :onscroll "[ '{}' = 'up' ] && pactl set-sink-volume @DEFAULT_SINK@ +2% || pactl set-sink-volume @DEFAULT_SINK@ -2%"
         (box :class "discrete-progress ${volume-muted == 'true' ? 'muted' : ''}" :orientation "h" :space-evenly true :spacing 2
@@ -32,6 +33,7 @@
     ;; Brightness control
     (box :class "control-item" :orientation "v" :spacing 0
       (box :class "control-header" :orientation "h" :space-evenly false
+        (label :class "control-icon" :text "☀️")
         (label :class "control-label" :text "BRIGHTNESS"))
       (eventbox :onscroll "[ '{}' = 'up' ] && brightnessctl set +2% || brightnessctl set 2%-"
         (box :class "discrete-progress" :orientation "h" :space-evenly true :spacing 2

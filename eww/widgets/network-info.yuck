@@ -10,7 +10,7 @@
         (button :class "info-button ${network-status == 'disconnected' ? 'disconnected' : ''}"
                 :onclick "nm-connection-editor &"
           (box :class "info-header" :orientation "h" :space-evenly false
-            (label :class "info-icon" :text "${network-status == 'connected' ? '' : ''}")
+            (label :class "info-icon" :text "${network-status == 'connected' ? '📶' : '📶'}")
             (label :class "info-label" :text "WiFi")
             (label :class "info-value" :text "${network-status == 'connected' ? 'ON' : 'OFF'}")))
         (label :class "info-detail" :text "${network-interface}: ${network-ip}"))
@@ -20,7 +20,7 @@
         (button :class "info-button ${bluetooth-status == 'off' ? 'disabled' : ''}"
                 :onclick "blueman-manager &"
           (box :class "info-header" :orientation "h" :space-evenly false
-            (label :class "info-icon" :text "${bluetooth-status == 'on' ? '' : '󰂲'}")
+            (label :class "info-icon" :text "${bluetooth-status == 'on' ? '🔵' : '🔴'}")
             (label :class "info-label" :text "Bluetooth")
             (label :class "info-value" :text "${bluetooth-status == 'on' ? 'ON' : 'OFF'}")))
         (label :class "info-detail" :text "${bluetooth-connected} devices")))))
