@@ -1,6 +1,6 @@
 ;; Main vertical panel
 (defwidget panel []
-  (box :class "panel" :orientation "v" :space-evenly false :spacing 8
+  (box :class "panel" :orientation "v" :space-evenly false :spacing 4
     (clock-section)
     (calendar-widget)
     (box :class "delimiter" :height 1)

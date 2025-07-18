@@ -5,55 +5,53 @@
     ;; Audio control
     (box :class "control-item" :orientation "v" :spacing 0
       (box :class "control-header" :orientation "h" :space-evenly false
-        (label :class "control-icon" :text "${volume-muted == 'true' ? '' : ''}")
         (label :class "control-label" :text "${volume-muted == 'true' ? 'AUDIO MUTED' : 'AUDIO'}"))
       (eventbox :onscroll "[ '{}' = 'up' ] && pactl set-sink-volume @DEFAULT_SINK@ +2% || pactl set-sink-volume @DEFAULT_SINK@ -2%"
         (box :class "discrete-progress ${volume-muted == 'true' ? 'muted' : ''}" :orientation "h" :space-evenly true :spacing 2
-        (button :class "progress-segment ${volume >= 5 ? 'filled' : ''} ${volume-muted == 'true' ? 'muted' : ''}"
+        (button :class "progress-segment ${volume >= 5 ? 'filled' : ''} ${volume-muted == 'true' ? 'muted' : ''} vol-1"
                 :onclick "pactl set-sink-volume @DEFAULT_SINK@ 10%")
-        (button :class "progress-segment ${volume >= 15 ? 'filled' : ''} ${volume-muted == 'true' ? 'muted' : ''}"
+        (button :class "progress-segment ${volume >= 15 ? 'filled' : ''} ${volume-muted == 'true' ? 'muted' : ''} vol-4"
                 :onclick "pactl set-sink-volume @DEFAULT_SINK@ 20%")
-        (button :class "progress-segment ${volume >= 25 ? 'filled' : ''} ${volume-muted == 'true' ? 'muted' : ''}"
+        (button :class "progress-segment ${volume >= 25 ? 'filled' : ''} ${volume-muted == 'true' ? 'muted' : ''} vol-6"
                 :onclick "pactl set-sink-volume @DEFAULT_SINK@ 30%")
-        (button :class "progress-segment ${volume >= 35 ? 'filled' : ''} ${volume-muted == 'true' ? 'muted' : ''}"
+        (button :class "progress-segment ${volume >= 35 ? 'filled' : ''} ${volume-muted == 'true' ? 'muted' : ''} vol-8"
                 :onclick "pactl set-sink-volume @DEFAULT_SINK@ 40%")
-        (button :class "progress-segment ${volume >= 45 ? 'filled' : ''} ${volume-muted == 'true' ? 'muted' : ''}"
+        (button :class "progress-segment ${volume >= 45 ? 'filled' : ''} ${volume-muted == 'true' ? 'muted' : ''} vol-10"
                 :onclick "pactl set-sink-volume @DEFAULT_SINK@ 50%")
-        (button :class "progress-segment ${volume >= 55 ? 'filled' : ''} ${volume-muted == 'true' ? 'muted' : ''}"
+        (button :class "progress-segment ${volume >= 55 ? 'filled' : ''} ${volume-muted == 'true' ? 'muted' : ''} vol-12"
                 :onclick "pactl set-sink-volume @DEFAULT_SINK@ 60%")
-        (button :class "progress-segment ${volume >= 65 ? 'filled' : ''} ${volume-muted == 'true' ? 'muted' : ''}"
+        (button :class "progress-segment ${volume >= 65 ? 'filled' : ''} ${volume-muted == 'true' ? 'muted' : ''} vol-14"
                 :onclick "pactl set-sink-volume @DEFAULT_SINK@ 70%")
-        (button :class "progress-segment ${volume >= 75 ? 'filled' : ''} ${volume-muted == 'true' ? 'muted' : ''}"
+        (button :class "progress-segment ${volume >= 75 ? 'filled' : ''} ${volume-muted == 'true' ? 'muted' : ''} vol-16"
                 :onclick "pactl set-sink-volume @DEFAULT_SINK@ 80%")
-        (button :class "progress-segment ${volume >= 85 ? 'filled' : ''} ${volume-muted == 'true' ? 'muted' : ''}"
+        (button :class "progress-segment ${volume >= 85 ? 'filled' : ''} ${volume-muted == 'true' ? 'muted' : ''} vol-18"
                 :onclick "pactl set-sink-volume @DEFAULT_SINK@ 90%")
-        (button :class "progress-segment ${volume >= 95 ? 'filled' : ''} ${volume-muted == 'true' ? 'muted' : ''}"
+        (button :class "progress-segment ${volume >= 95 ? 'filled' : ''} ${volume-muted == 'true' ? 'muted' : ''} vol-20"
                 :onclick "pactl set-sink-volume @DEFAULT_SINK@ 100%"))))
     
     ;; Brightness control
     (box :class "control-item" :orientation "v" :spacing 0
       (box :class "control-header" :orientation "h" :space-evenly false
-        (label :class "control-icon" :text "")
         (label :class "control-label" :text "BRIGHTNESS"))
       (eventbox :onscroll "[ '{}' = 'up' ] && brightnessctl set +2% || brightnessctl set 2%-"
         (box :class "discrete-progress" :orientation "h" :space-evenly true :spacing 2
-        (button :class "progress-segment ${brightness >= 5 ? 'filled' : ''}"
+        (button :class "progress-segment ${brightness >= 5 ? 'filled' : ''} bright-1"
                 :onclick "brightnessctl set 10%")
-        (button :class "progress-segment ${brightness >= 15 ? 'filled' : ''}"
+        (button :class "progress-segment ${brightness >= 15 ? 'filled' : ''} bright-4"
                 :onclick "brightnessctl set 20%")
-        (button :class "progress-segment ${brightness >= 25 ? 'filled' : ''}"
+        (button :class "progress-segment ${brightness >= 25 ? 'filled' : ''} bright-6"
                 :onclick "brightnessctl set 30%")
-        (button :class "progress-segment ${brightness >= 35 ? 'filled' : ''}"
+        (button :class "progress-segment ${brightness >= 35 ? 'filled' : ''} bright-8"
                 :onclick "brightnessctl set 40%")
-        (button :class "progress-segment ${brightness >= 45 ? 'filled' : ''}"
+        (button :class "progress-segment ${brightness >= 45 ? 'filled' : ''} bright-10"
                 :onclick "brightnessctl set 50%")
-        (button :class "progress-segment ${brightness >= 55 ? 'filled' : ''}"
+        (button :class "progress-segment ${brightness >= 55 ? 'filled' : ''} bright-12"
                 :onclick "brightnessctl set 60%")
-        (button :class "progress-segment ${brightness >= 65 ? 'filled' : ''}"
+        (button :class "progress-segment ${brightness >= 65 ? 'filled' : ''} bright-14"
                 :onclick "brightnessctl set 70%")
-        (button :class "progress-segment ${brightness >= 75 ? 'filled' : ''}"
+        (button :class "progress-segment ${brightness >= 75 ? 'filled' : ''} bright-16"
                 :onclick "brightnessctl set 80%")
-        (button :class "progress-segment ${brightness >= 85 ? 'filled' : ''}"
+        (button :class "progress-segment ${brightness >= 85 ? 'filled' : ''} bright-18"
                 :onclick "brightnessctl set 90%")
-        (button :class "progress-segment ${brightness >= 95 ? 'filled' : ''}"
+        (button :class "progress-segment ${brightness >= 95 ? 'filled' : ''} bright-20"
                 :onclick "brightnessctl set 100%"))))))

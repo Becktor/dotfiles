@@ -10,9 +10,9 @@
     background: linear-gradient(135deg, rgba(26, 27, 38, 0.65) 0%, rgba(36, 40, 59, 0.65) 100%);
     border: 1px solid rgba(122, 162, 247, 0.15);
     border-radius: 12px;
-    padding: 8px;
-    margin: 8px;
-    margin-bottom: 16px;
+    padding: 6px;
+    margin: 6px;
+    margin-bottom: 12px;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2), 
                 0 0 0 1px rgba(255, 255, 255, 0.03) inset;
 }
@@ -280,6 +280,296 @@
     border-color: rgba(247, 118, 142, 0.6);
     box-shadow: 0 0 4px rgba(247, 118, 142, 0.4);
 }
+
+.discrete-progress.critical {
+    background: rgba(247, 118, 142, 0.15);
+    border-color: rgba(247, 118, 142, 0.3);
+}
+
+.progress-segment.filled.critical {
+    background: linear-gradient(135deg, rgba(247, 118, 142, 0.8) 0%, rgba(247, 118, 142, 0.6) 100%);
+    border-color: rgba(247, 118, 142, 0.6);
+    box-shadow: 0 0 4px rgba(247, 118, 142, 0.4);
+}
+
+/* Temperature bar styling */
+.temp-progress {
+    min-height: 6px;
+    padding: 1px;
+}
+
+.temp-segment {
+    min-width: 6px;
+    min-height: 8px;
+}
+
+/* Memory bar styling */
+.mem-progress {
+    min-height: 6px;
+    padding: 1px;
+}
+
+.mem-segment {
+    min-width: 6px;
+    min-height: 8px;
+}
+
+/* Disk bar styling */
+.disk-progress {
+    min-height: 6px;
+    padding: 1px;
+}
+
+.disk-segment {
+    min-width: 6px;
+    min-height: 8px;
+}
+
+/* CPU Cores Display */
+.cpu-cores-container {
+    padding: 4px;
+    background: rgba(122, 162, 247, 0.05);
+    border: 1px solid rgba(122, 162, 247, 0.15);
+    border-radius: 8px;
+    margin-bottom: 4px;
+}
+
+.core-type-label {
+    font-size: 9px;
+    color: #565f89;
+    font-weight: 600;
+    margin: 2px 0 2px 0;
+}
+
+.cpu-cores-row {
+    margin-bottom: 2px;
+}
+
+.cpu-core-number {
+    min-width: 30px;
+    padding: 2px;
+    background: rgba(86, 95, 137, 0.15);
+    border-radius: 4px;
+    border: 1px solid rgba(86, 95, 137, 0.3);
+}
+
+/* Performance cores - blue styling */
+.cpu-core-number.p-core {
+    background: rgba(122, 162, 247, 0.15);
+    border-color: rgba(122, 162, 247, 0.3);
+}
+
+/* Efficiency cores - green styling */
+.cpu-core-number.e-core {
+    background: rgba(102, 187, 106, 0.15);
+    border-color: rgba(102, 187, 106, 0.3);
+}
+
+.cpu-usage-value {
+    font-size: 11px;
+    font-weight: 600;
+    color: #c0caf5;
+}
+
+.cpu-temp-value {
+    font-size: 9px;
+    font-weight: 500;
+    color: #9aa5ce;
+    margin-top: 2px;
+}
+
+/* CPU Usage Color Gradient (0-100%) - Blue to Red */
+.cpu-core-number.cpu-usage-0 { background: rgba(33, 150, 243, 0.15); border-color: rgba(33, 150, 243, 0.3); }
+.cpu-core-number.cpu-usage-1 { background: rgba(33, 150, 243, 0.15); border-color: rgba(33, 150, 243, 0.3); }
+.cpu-core-number.cpu-usage-2 { background: rgba(33, 150, 243, 0.15); border-color: rgba(33, 150, 243, 0.3); }
+.cpu-core-number.cpu-usage-3 { background: rgba(33, 150, 243, 0.15); border-color: rgba(33, 150, 243, 0.3); }
+.cpu-core-number.cpu-usage-4 { background: rgba(33, 150, 243, 0.15); border-color: rgba(33, 150, 243, 0.3); }
+.cpu-core-number.cpu-usage-5 { background: rgba(41, 156, 235, 0.15); border-color: rgba(41, 156, 235, 0.3); }
+.cpu-core-number.cpu-usage-6 { background: rgba(41, 156, 235, 0.15); border-color: rgba(41, 156, 235, 0.3); }
+.cpu-core-number.cpu-usage-7 { background: rgba(41, 156, 235, 0.15); border-color: rgba(41, 156, 235, 0.3); }
+.cpu-core-number.cpu-usage-8 { background: rgba(41, 156, 235, 0.15); border-color: rgba(41, 156, 235, 0.3); }
+.cpu-core-number.cpu-usage-9 { background: rgba(41, 156, 235, 0.15); border-color: rgba(41, 156, 235, 0.3); }
+.cpu-core-number.cpu-usage-10 { background: rgba(50, 162, 227, 0.15); border-color: rgba(50, 162, 227, 0.3); }
+.cpu-core-number.cpu-usage-11 { background: rgba(50, 162, 227, 0.15); border-color: rgba(50, 162, 227, 0.3); }
+.cpu-core-number.cpu-usage-12 { background: rgba(50, 162, 227, 0.15); border-color: rgba(50, 162, 227, 0.3); }
+.cpu-core-number.cpu-usage-13 { background: rgba(50, 162, 227, 0.15); border-color: rgba(50, 162, 227, 0.3); }
+.cpu-core-number.cpu-usage-14 { background: rgba(50, 162, 227, 0.15); border-color: rgba(50, 162, 227, 0.3); }
+.cpu-core-number.cpu-usage-15 { background: rgba(58, 168, 219, 0.15); border-color: rgba(58, 168, 219, 0.3); }
+.cpu-core-number.cpu-usage-16 { background: rgba(58, 168, 219, 0.15); border-color: rgba(58, 168, 219, 0.3); }
+.cpu-core-number.cpu-usage-17 { background: rgba(58, 168, 219, 0.15); border-color: rgba(58, 168, 219, 0.3); }
+.cpu-core-number.cpu-usage-18 { background: rgba(58, 168, 219, 0.15); border-color: rgba(58, 168, 219, 0.3); }
+.cpu-core-number.cpu-usage-19 { background: rgba(58, 168, 219, 0.15); border-color: rgba(58, 168, 219, 0.3); }
+.cpu-core-number.cpu-usage-20 { background: rgba(66, 174, 211, 0.15); border-color: rgba(66, 174, 211, 0.3); }
+.cpu-core-number.cpu-usage-21 { background: rgba(66, 174, 211, 0.15); border-color: rgba(66, 174, 211, 0.3); }
+.cpu-core-number.cpu-usage-22 { background: rgba(66, 174, 211, 0.15); border-color: rgba(66, 174, 211, 0.3); }
+.cpu-core-number.cpu-usage-23 { background: rgba(66, 174, 211, 0.15); border-color: rgba(66, 174, 211, 0.3); }
+.cpu-core-number.cpu-usage-24 { background: rgba(66, 174, 211, 0.15); border-color: rgba(66, 174, 211, 0.3); }
+.cpu-core-number.cpu-usage-25 { background: rgba(75, 180, 186, 0.15); border-color: rgba(75, 180, 186, 0.3); }
+.cpu-core-number.cpu-usage-26 { background: rgba(75, 180, 186, 0.15); border-color: rgba(75, 180, 186, 0.3); }
+.cpu-core-number.cpu-usage-27 { background: rgba(75, 180, 186, 0.15); border-color: rgba(75, 180, 186, 0.3); }
+.cpu-core-number.cpu-usage-28 { background: rgba(75, 180, 186, 0.15); border-color: rgba(75, 180, 186, 0.3); }
+.cpu-core-number.cpu-usage-29 { background: rgba(75, 180, 186, 0.15); border-color: rgba(75, 180, 186, 0.3); }
+.cpu-core-number.cpu-usage-30 { background: rgba(84, 186, 160, 0.15); border-color: rgba(84, 186, 160, 0.3); }
+.cpu-core-number.cpu-usage-31 { background: rgba(84, 186, 160, 0.15); border-color: rgba(84, 186, 160, 0.3); }
+.cpu-core-number.cpu-usage-32 { background: rgba(84, 186, 160, 0.15); border-color: rgba(84, 186, 160, 0.3); }
+.cpu-core-number.cpu-usage-33 { background: rgba(84, 186, 160, 0.15); border-color: rgba(84, 186, 160, 0.3); }
+.cpu-core-number.cpu-usage-34 { background: rgba(84, 186, 160, 0.15); border-color: rgba(84, 186, 160, 0.3); }
+.cpu-core-number.cpu-usage-35 { background: rgba(92, 192, 134, 0.15); border-color: rgba(92, 192, 134, 0.3); }
+.cpu-core-number.cpu-usage-36 { background: rgba(92, 192, 134, 0.15); border-color: rgba(92, 192, 134, 0.3); }
+.cpu-core-number.cpu-usage-37 { background: rgba(92, 192, 134, 0.15); border-color: rgba(92, 192, 134, 0.3); }
+.cpu-core-number.cpu-usage-38 { background: rgba(92, 192, 134, 0.15); border-color: rgba(92, 192, 134, 0.3); }
+.cpu-core-number.cpu-usage-39 { background: rgba(92, 192, 134, 0.15); border-color: rgba(92, 192, 134, 0.3); }
+.cpu-core-number.cpu-usage-40 { background: rgba(101, 198, 108, 0.15); border-color: rgba(101, 198, 108, 0.3); }
+.cpu-core-number.cpu-usage-41 { background: rgba(101, 198, 108, 0.15); border-color: rgba(101, 198, 108, 0.3); }
+.cpu-core-number.cpu-usage-42 { background: rgba(101, 198, 108, 0.15); border-color: rgba(101, 198, 108, 0.3); }
+.cpu-core-number.cpu-usage-43 { background: rgba(101, 198, 108, 0.15); border-color: rgba(101, 198, 108, 0.3); }
+.cpu-core-number.cpu-usage-44 { background: rgba(101, 198, 108, 0.15); border-color: rgba(101, 198, 108, 0.3); }
+.cpu-core-number.cpu-usage-45 { background: rgba(139, 195, 74, 0.15); border-color: rgba(139, 195, 74, 0.3); }
+.cpu-core-number.cpu-usage-46 { background: rgba(139, 195, 74, 0.15); border-color: rgba(139, 195, 74, 0.3); }
+.cpu-core-number.cpu-usage-47 { background: rgba(139, 195, 74, 0.15); border-color: rgba(139, 195, 74, 0.3); }
+.cpu-core-number.cpu-usage-48 { background: rgba(139, 195, 74, 0.15); border-color: rgba(139, 195, 74, 0.3); }
+.cpu-core-number.cpu-usage-49 { background: rgba(139, 195, 74, 0.15); border-color: rgba(139, 195, 74, 0.3); }
+.cpu-core-number.cpu-usage-50 { background: rgba(178, 192, 40, 0.15); border-color: rgba(178, 192, 40, 0.3); }
+.cpu-core-number.cpu-usage-51 { background: rgba(178, 192, 40, 0.15); border-color: rgba(178, 192, 40, 0.3); }
+.cpu-core-number.cpu-usage-52 { background: rgba(178, 192, 40, 0.15); border-color: rgba(178, 192, 40, 0.3); }
+.cpu-core-number.cpu-usage-53 { background: rgba(178, 192, 40, 0.15); border-color: rgba(178, 192, 40, 0.3); }
+.cpu-core-number.cpu-usage-54 { background: rgba(178, 192, 40, 0.15); border-color: rgba(178, 192, 40, 0.3); }
+.cpu-core-number.cpu-usage-55 { background: rgba(216, 189, 6, 0.15); border-color: rgba(216, 189, 6, 0.3); }
+.cpu-core-number.cpu-usage-56 { background: rgba(216, 189, 6, 0.15); border-color: rgba(216, 189, 6, 0.3); }
+.cpu-core-number.cpu-usage-57 { background: rgba(216, 189, 6, 0.15); border-color: rgba(216, 189, 6, 0.3); }
+.cpu-core-number.cpu-usage-58 { background: rgba(216, 189, 6, 0.15); border-color: rgba(216, 189, 6, 0.3); }
+.cpu-core-number.cpu-usage-59 { background: rgba(216, 189, 6, 0.15); border-color: rgba(216, 189, 6, 0.3); }
+.cpu-core-number.cpu-usage-60 { background: rgba(255, 193, 7, 0.15); border-color: rgba(255, 193, 7, 0.3); }
+.cpu-core-number.cpu-usage-61 { background: rgba(255, 193, 7, 0.15); border-color: rgba(255, 193, 7, 0.3); }
+.cpu-core-number.cpu-usage-62 { background: rgba(255, 193, 7, 0.15); border-color: rgba(255, 193, 7, 0.3); }
+.cpu-core-number.cpu-usage-63 { background: rgba(255, 193, 7, 0.15); border-color: rgba(255, 193, 7, 0.3); }
+.cpu-core-number.cpu-usage-64 { background: rgba(255, 193, 7, 0.15); border-color: rgba(255, 193, 7, 0.3); }
+.cpu-core-number.cpu-usage-65 { background: rgba(255, 179, 0, 0.15); border-color: rgba(255, 179, 0, 0.3); }
+.cpu-core-number.cpu-usage-66 { background: rgba(255, 179, 0, 0.15); border-color: rgba(255, 179, 0, 0.3); }
+.cpu-core-number.cpu-usage-67 { background: rgba(255, 179, 0, 0.15); border-color: rgba(255, 179, 0, 0.3); }
+.cpu-core-number.cpu-usage-68 { background: rgba(255, 179, 0, 0.15); border-color: rgba(255, 179, 0, 0.3); }
+.cpu-core-number.cpu-usage-69 { background: rgba(255, 179, 0, 0.15); border-color: rgba(255, 179, 0, 0.3); }
+.cpu-core-number.cpu-usage-70 { background: rgba(255, 152, 0, 0.15); border-color: rgba(255, 152, 0, 0.3); }
+.cpu-core-number.cpu-usage-71 { background: rgba(255, 152, 0, 0.15); border-color: rgba(255, 152, 0, 0.3); }
+.cpu-core-number.cpu-usage-72 { background: rgba(255, 152, 0, 0.15); border-color: rgba(255, 152, 0, 0.3); }
+.cpu-core-number.cpu-usage-73 { background: rgba(255, 152, 0, 0.15); border-color: rgba(255, 152, 0, 0.3); }
+.cpu-core-number.cpu-usage-74 { background: rgba(255, 152, 0, 0.15); border-color: rgba(255, 152, 0, 0.3); }
+.cpu-core-number.cpu-usage-75 { background: rgba(255, 111, 0, 0.15); border-color: rgba(255, 111, 0, 0.3); }
+.cpu-core-number.cpu-usage-76 { background: rgba(255, 111, 0, 0.15); border-color: rgba(255, 111, 0, 0.3); }
+.cpu-core-number.cpu-usage-77 { background: rgba(255, 111, 0, 0.15); border-color: rgba(255, 111, 0, 0.3); }
+.cpu-core-number.cpu-usage-78 { background: rgba(255, 111, 0, 0.15); border-color: rgba(255, 111, 0, 0.3); }
+.cpu-core-number.cpu-usage-79 { background: rgba(255, 111, 0, 0.15); border-color: rgba(255, 111, 0, 0.3); }
+.cpu-core-number.cpu-usage-80 { background: rgba(255, 87, 34, 0.15); border-color: rgba(255, 87, 34, 0.3); }
+.cpu-core-number.cpu-usage-81 { background: rgba(255, 87, 34, 0.15); border-color: rgba(255, 87, 34, 0.3); }
+.cpu-core-number.cpu-usage-82 { background: rgba(255, 87, 34, 0.15); border-color: rgba(255, 87, 34, 0.3); }
+.cpu-core-number.cpu-usage-83 { background: rgba(255, 87, 34, 0.15); border-color: rgba(255, 87, 34, 0.3); }
+.cpu-core-number.cpu-usage-84 { background: rgba(255, 87, 34, 0.15); border-color: rgba(255, 87, 34, 0.3); }
+.cpu-core-number.cpu-usage-85 { background: rgba(244, 67, 54, 0.15); border-color: rgba(244, 67, 54, 0.3); }
+.cpu-core-number.cpu-usage-86 { background: rgba(244, 67, 54, 0.15); border-color: rgba(244, 67, 54, 0.3); }
+.cpu-core-number.cpu-usage-87 { background: rgba(244, 67, 54, 0.15); border-color: rgba(244, 67, 54, 0.3); }
+.cpu-core-number.cpu-usage-88 { background: rgba(244, 67, 54, 0.15); border-color: rgba(244, 67, 54, 0.3); }
+.cpu-core-number.cpu-usage-89 { background: rgba(244, 67, 54, 0.15); border-color: rgba(244, 67, 54, 0.3); }
+.cpu-core-number.cpu-usage-90 { background: rgba(239, 57, 66, 0.15); border-color: rgba(239, 57, 66, 0.3); }
+.cpu-core-number.cpu-usage-91 { background: rgba(239, 57, 66, 0.15); border-color: rgba(239, 57, 66, 0.3); }
+.cpu-core-number.cpu-usage-92 { background: rgba(239, 57, 66, 0.15); border-color: rgba(239, 57, 66, 0.3); }
+.cpu-core-number.cpu-usage-93 { background: rgba(239, 57, 66, 0.15); border-color: rgba(239, 57, 66, 0.3); }
+.cpu-core-number.cpu-usage-94 { background: rgba(239, 57, 66, 0.15); border-color: rgba(239, 57, 66, 0.3); }
+.cpu-core-number.cpu-usage-95 { background: rgba(229, 57, 53, 0.15); border-color: rgba(229, 57, 53, 0.3); }
+.cpu-core-number.cpu-usage-96 { background: rgba(229, 57, 53, 0.15); border-color: rgba(229, 57, 53, 0.3); }
+.cpu-core-number.cpu-usage-97 { background: rgba(229, 57, 53, 0.15); border-color: rgba(229, 57, 53, 0.3); }
+.cpu-core-number.cpu-usage-98 { background: rgba(229, 57, 53, 0.15); border-color: rgba(229, 57, 53, 0.3); }
+.cpu-core-number.cpu-usage-99 { background: rgba(229, 57, 53, 0.15); border-color: rgba(229, 57, 53, 0.3); }
+.cpu-core-number.cpu-usage-100 { background: rgba(229, 57, 53, 0.15); border-color: rgba(229, 57, 53, 0.3); }
+
+/* Temperature color gradients - smooth transition from blue to green to yellow to red */
+.progress-segment.filled.temp-1 { background: rgba(33, 150, 243, 0.8); border-color: rgba(33, 150, 243, 0.6); }
+.progress-segment.filled.temp-2 { background: rgba(41, 156, 235, 0.8); border-color: rgba(41, 156, 235, 0.6); }
+.progress-segment.filled.temp-3 { background: rgba(50, 162, 227, 0.8); border-color: rgba(50, 162, 227, 0.6); }
+.progress-segment.filled.temp-4 { background: rgba(58, 168, 219, 0.8); border-color: rgba(58, 168, 219, 0.6); }
+.progress-segment.filled.temp-5 { background: rgba(66, 174, 211, 0.8); border-color: rgba(66, 174, 211, 0.6); }
+.progress-segment.filled.temp-6 { background: rgba(75, 180, 186, 0.8); border-color: rgba(75, 180, 186, 0.6); }
+.progress-segment.filled.temp-7 { background: rgba(84, 186, 160, 0.8); border-color: rgba(84, 186, 160, 0.6); }
+.progress-segment.filled.temp-8 { background: rgba(92, 192, 134, 0.8); border-color: rgba(92, 192, 134, 0.6); }
+.progress-segment.filled.temp-9 { background: rgba(101, 198, 108, 0.8); border-color: rgba(101, 198, 108, 0.6); }
+.progress-segment.filled.temp-10 { background: rgba(139, 195, 74, 0.8); border-color: rgba(139, 195, 74, 0.6); }
+.progress-segment.filled.temp-11 { background: rgba(178, 192, 40, 0.8); border-color: rgba(178, 192, 40, 0.6); }
+.progress-segment.filled.temp-12 { background: rgba(216, 189, 6, 0.8); border-color: rgba(216, 189, 6, 0.6); }
+.progress-segment.filled.temp-13 { background: rgba(255, 193, 7, 0.8); border-color: rgba(255, 193, 7, 0.6); }
+.progress-segment.filled.temp-14 { background: rgba(255, 179, 0, 0.8); border-color: rgba(255, 179, 0, 0.6); }
+.progress-segment.filled.temp-15 { background: rgba(255, 152, 0, 0.8); border-color: rgba(255, 152, 0, 0.6); }
+.progress-segment.filled.temp-16 { background: rgba(255, 111, 0, 0.8); border-color: rgba(255, 111, 0, 0.6); }
+.progress-segment.filled.temp-17 { background: rgba(255, 87, 34, 0.8); border-color: rgba(255, 87, 34, 0.6); }
+.progress-segment.filled.temp-18 { background: rgba(244, 67, 54, 0.8); border-color: rgba(244, 67, 54, 0.6); }
+.progress-segment.filled.temp-19 { background: rgba(239, 57, 66, 0.8); border-color: rgba(239, 57, 66, 0.6); }
+.progress-segment.filled.temp-20 { background: rgba(229, 57, 53, 0.8); border-color: rgba(229, 57, 53, 0.6); }
+
+/* Memory color gradients - same blue to red */
+.progress-segment.filled.mem-1 { background: rgba(33, 150, 243, 0.8); border-color: rgba(33, 150, 243, 0.6); }
+.progress-segment.filled.mem-2 { background: rgba(41, 156, 235, 0.8); border-color: rgba(41, 156, 235, 0.6); }
+.progress-segment.filled.mem-3 { background: rgba(50, 162, 227, 0.8); border-color: rgba(50, 162, 227, 0.6); }
+.progress-segment.filled.mem-4 { background: rgba(58, 168, 219, 0.8); border-color: rgba(58, 168, 219, 0.6); }
+.progress-segment.filled.mem-5 { background: rgba(66, 174, 211, 0.8); border-color: rgba(66, 174, 211, 0.6); }
+.progress-segment.filled.mem-6 { background: rgba(75, 180, 186, 0.8); border-color: rgba(75, 180, 186, 0.6); }
+.progress-segment.filled.mem-7 { background: rgba(84, 186, 160, 0.8); border-color: rgba(84, 186, 160, 0.6); }
+.progress-segment.filled.mem-8 { background: rgba(92, 192, 134, 0.8); border-color: rgba(92, 192, 134, 0.6); }
+.progress-segment.filled.mem-9 { background: rgba(101, 198, 108, 0.8); border-color: rgba(101, 198, 108, 0.6); }
+.progress-segment.filled.mem-10 { background: rgba(139, 195, 74, 0.8); border-color: rgba(139, 195, 74, 0.6); }
+.progress-segment.filled.mem-11 { background: rgba(178, 192, 40, 0.8); border-color: rgba(178, 192, 40, 0.6); }
+.progress-segment.filled.mem-12 { background: rgba(216, 189, 6, 0.8); border-color: rgba(216, 189, 6, 0.6); }
+.progress-segment.filled.mem-13 { background: rgba(255, 193, 7, 0.8); border-color: rgba(255, 193, 7, 0.6); }
+.progress-segment.filled.mem-14 { background: rgba(255, 179, 0, 0.8); border-color: rgba(255, 179, 0, 0.6); }
+.progress-segment.filled.mem-15 { background: rgba(255, 152, 0, 0.8); border-color: rgba(255, 152, 0, 0.6); }
+.progress-segment.filled.mem-16 { background: rgba(255, 111, 0, 0.8); border-color: rgba(255, 111, 0, 0.6); }
+.progress-segment.filled.mem-17 { background: rgba(255, 87, 34, 0.8); border-color: rgba(255, 87, 34, 0.6); }
+.progress-segment.filled.mem-18 { background: rgba(244, 67, 54, 0.8); border-color: rgba(244, 67, 54, 0.6); }
+.progress-segment.filled.mem-19 { background: rgba(239, 57, 66, 0.8); border-color: rgba(239, 57, 66, 0.6); }
+.progress-segment.filled.mem-20 { background: rgba(229, 57, 53, 0.8); border-color: rgba(229, 57, 53, 0.6); }
+
+/* Disk color gradients - same blue to red */
+.progress-segment.filled.disk-1 { background: rgba(33, 150, 243, 0.8); border-color: rgba(33, 150, 243, 0.6); }
+.progress-segment.filled.disk-2 { background: rgba(41, 156, 235, 0.8); border-color: rgba(41, 156, 235, 0.6); }
+.progress-segment.filled.disk-3 { background: rgba(50, 162, 227, 0.8); border-color: rgba(50, 162, 227, 0.6); }
+.progress-segment.filled.disk-4 { background: rgba(58, 168, 219, 0.8); border-color: rgba(58, 168, 219, 0.6); }
+.progress-segment.filled.disk-5 { background: rgba(66, 174, 211, 0.8); border-color: rgba(66, 174, 211, 0.6); }
+.progress-segment.filled.disk-6 { background: rgba(75, 180, 186, 0.8); border-color: rgba(75, 180, 186, 0.6); }
+.progress-segment.filled.disk-7 { background: rgba(84, 186, 160, 0.8); border-color: rgba(84, 186, 160, 0.6); }
+.progress-segment.filled.disk-8 { background: rgba(92, 192, 134, 0.8); border-color: rgba(92, 192, 134, 0.6); }
+.progress-segment.filled.disk-9 { background: rgba(101, 198, 108, 0.8); border-color: rgba(101, 198, 108, 0.6); }
+.progress-segment.filled.disk-10 { background: rgba(139, 195, 74, 0.8); border-color: rgba(139, 195, 74, 0.6); }
+.progress-segment.filled.disk-11 { background: rgba(178, 192, 40, 0.8); border-color: rgba(178, 192, 40, 0.6); }
+.progress-segment.filled.disk-12 { background: rgba(216, 189, 6, 0.8); border-color: rgba(216, 189, 6, 0.6); }
+.progress-segment.filled.disk-13 { background: rgba(255, 193, 7, 0.8); border-color: rgba(255, 193, 7, 0.6); }
+.progress-segment.filled.disk-14 { background: rgba(255, 179, 0, 0.8); border-color: rgba(255, 179, 0, 0.6); }
+.progress-segment.filled.disk-15 { background: rgba(255, 152, 0, 0.8); border-color: rgba(255, 152, 0, 0.6); }
+.progress-segment.filled.disk-16 { background: rgba(255, 111, 0, 0.8); border-color: rgba(255, 111, 0, 0.6); }
+.progress-segment.filled.disk-17 { background: rgba(255, 87, 34, 0.8); border-color: rgba(255, 87, 34, 0.6); }
+.progress-segment.filled.disk-18 { background: rgba(244, 67, 54, 0.8); border-color: rgba(244, 67, 54, 0.6); }
+.progress-segment.filled.disk-19 { background: rgba(239, 57, 66, 0.8); border-color: rgba(239, 57, 66, 0.6); }
+.progress-segment.filled.disk-20 { background: rgba(229, 57, 53, 0.8); border-color: rgba(229, 57, 53, 0.6); }
+
+/* Volume color gradients - gradient spans all segments */
+.progress-segment.filled.vol-1 { background: rgba(122, 162, 247, 0.8); border-color: rgba(122, 162, 247, 0.6); }
+.progress-segment.filled.vol-4 { background: rgba(122, 162, 247, 0.8); border-color: rgba(122, 162, 247, 0.6); }
+.progress-segment.filled.vol-6 { background: rgba(129, 159, 246, 0.8); border-color: rgba(129, 159, 246, 0.6); }
+.progress-segment.filled.vol-8 { background: rgba(136, 156, 245, 0.8); border-color: rgba(136, 156, 245, 0.6); }
+.progress-segment.filled.vol-10 { background: rgba(143, 153, 244, 0.8); border-color: rgba(143, 153, 244, 0.6); }
+.progress-segment.filled.vol-12 { background: rgba(150, 150, 243, 0.8); border-color: rgba(150, 150, 243, 0.6); }
+.progress-segment.filled.vol-14 { background: rgba(157, 148, 242, 0.8); border-color: rgba(157, 148, 242, 0.6); }
+.progress-segment.filled.vol-16 { background: rgba(164, 147, 241, 0.8); border-color: rgba(164, 147, 241, 0.6); }
+.progress-segment.filled.vol-18 { background: rgba(171, 146, 240, 0.8); border-color: rgba(171, 146, 240, 0.6); }
+.progress-segment.filled.vol-20 { background: rgba(199, 146, 234, 0.8); border-color: rgba(199, 146, 234, 0.6); }
+
+/* Brightness color gradients - gradient spans all segments */
+.progress-segment.filled.bright-1 { background: rgba(122, 162, 247, 0.8); border-color: rgba(122, 162, 247, 0.6); }
+.progress-segment.filled.bright-4 { background: rgba(122, 162, 247, 0.8); border-color: rgba(122, 162, 247, 0.6); }
+.progress-segment.filled.bright-6 { background: rgba(129, 159, 246, 0.8); border-color: rgba(129, 159, 246, 0.6); }
+.progress-segment.filled.bright-8 { background: rgba(136, 156, 245, 0.8); border-color: rgba(136, 156, 245, 0.6); }
+.progress-segment.filled.bright-10 { background: rgba(143, 153, 244, 0.8); border-color: rgba(143, 153, 244, 0.6); }
+.progress-segment.filled.bright-12 { background: rgba(150, 150, 243, 0.8); border-color: rgba(150, 150, 243, 0.6); }
+.progress-segment.filled.bright-14 { background: rgba(157, 148, 242, 0.8); border-color: rgba(157, 148, 242, 0.6); }
+.progress-segment.filled.bright-16 { background: rgba(164, 147, 241, 0.8); border-color: rgba(164, 147, 241, 0.6); }
+.progress-segment.filled.bright-18 { background: rgba(171, 146, 240, 0.8); border-color: rgba(171, 146, 240, 0.6); }
+.progress-segment.filled.bright-20 { background: rgba(199, 146, 234, 0.8); border-color: rgba(199, 146, 234, 0.6); }
 
 /* Network Info */
 .network-info {

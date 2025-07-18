@@ -13,10 +13,14 @@
 (defpoll volume-muted :interval "100ms" `pactl get-sink-mute @DEFAULT_SINK@ | grep -q "yes" && echo "true" || echo "false"`)
 (defpoll brightness :interval "100ms" `if command -v brightnessctl >/dev/null 2>&1; then current=$(brightnessctl get); max=$(brightnessctl max); awk "BEGIN {print int($current * 100 / $max)}"; else current=$(cat /sys/class/backlight/*/brightness 2>/dev/null | head -n1); max=$(cat /sys/class/backlight/*/max_brightness 2>/dev/null | head -n1); if [ -n "$current" ] && [ -n "$max" ] && [ "$max" -gt 0 ]; then awk "BEGIN {print int($current * 100 / $max)}"; else echo "50"; fi; fi`)
 (defpoll cpu-usage :interval "1s" `top -bn1 | grep "Cpu(s)" | sed "s/.*, *\([0-9.]*\)%* id.*/\1/" | awk '{print int(100 - $1)}'`)
+(defpoll cpu-core-usage :interval "1s" :initial "[0,0,0,0,0,0,0,0,0,0,0,0,0,0]" 
+  "/home/jobe/git/dotfiles/eww/scripts/cpu-core-usage.sh")
 (defpoll memory-usage :interval "1s" `free | grep Mem | awk '{print int($3/$2 * 100)}'`)
 (defpoll memory-total :interval "10s" `free -h | grep Mem | awk '{print $2}'`)
 (defpoll memory-used :interval "1s" `free -h | grep Mem | awk '{print $3}'`)
-(defpoll temperature :interval "1s" `sensors 2>/dev/null | grep -oP 'Package id 0:\s+\+\K[0-9]+' | head -n1 || echo "0"`)
+(defpoll temperature :interval "1s" "/home/jobe/git/dotfiles/eww/scripts/temp-average.sh")
+(defpoll core-temps :interval "1s" :initial "[50,50,50,50,50,50,50,50,50,50,50,50,50,50]" 
+  "/home/jobe/git/dotfiles/eww/scripts/core-temps.sh")
 (defpoll battery-capacity :interval "10s" `cat /sys/class/power_supply/BAT*/capacity 2>/dev/null | head -n1 || echo "100"`)
 (defpoll battery-status :interval "10s" `cat /sys/class/power_supply/BAT*/status 2>/dev/null | head -n1 || echo "Unknown"`)
 (defpoll network-status :interval "1s" `if ping -c 1 8.8.8.8 &> /dev/null; then echo "connected"; else echo "disconnected"; fi`)

@@ -1,39 +1,100 @@
 ;; System info widget
 (defwidget system-info []
-  (box :class "system-info" :orientation "v" :space-evenly false :spacing 8
+  (box :class "system-info" :orientation "v" :space-evenly false :spacing 4
     
     ;; 2x2 grid layout for system stats
     (box :class "system-grid" :orientation "v" :space-evenly false :spacing 4
-      ;; Top row: CPU and RAM side by side
-      (box :class "system-row" :orientation "h" :space-evenly true :spacing 6
-        ;; CPU info
-        (box :class "info-item compact" :orientation "v" :spacing 3
-          (box :class "info-header" :orientation "h" :space-evenly false
-            (label :class "info-icon" :text "")
-            (label :class "info-label" :text "CPU")
-            (label :class "info-value" :text "${cpu-usage}%"))
-          (label :class "info-detail" :text "Load: ${load-average}"))
+      ;; CPU cores display
+      (box :class "cpu-cores-container" :orientation "v" :spacing 2
+        ;; Performance cores
+        (box :class "cpu-cores-row" :orientation "h" :space-evenly true :spacing 2
+          (for core in "[0,1,2,3,4,5,6,7,8,9]"
+            (box :class "cpu-core-number p-core cpu-usage-${cpu-core-usage[core] ?: 0}" :orientation "v" :space-evenly false
+              (label :class "cpu-usage-value" :text "${cpu-core-usage[core] ?: 0}%")
+              (label :class "cpu-temp-value" :text "${core-temps[core] ?: 50}°C"))))
         
-        ;; Memory info
-        (box :class "info-item compact" :orientation "v" :spacing 3
-          (box :class "info-header" :orientation "h" :space-evenly false
-            (label :class "info-icon" :text "")
-            (label :class "info-label" :text "RAM")
-            (label :class "info-value" :text "${memory-usage}%"))
-          (label :class "info-detail" :text "${memory-used} / ${memory-total}")))
+        ;; Efficiency cores
+        (box :class "cpu-cores-row" :orientation "h" :space-evenly true :spacing 2
+          (for core in "[10,11,12,13]"
+            (box :class "cpu-core-number e-core cpu-usage-${cpu-core-usage[core] ?: 0}" :orientation "v" :space-evenly false
+              (label :class "cpu-usage-value" :text "${cpu-core-usage[core] ?: 0}%")
+              (label :class "cpu-temp-value" :text "${core-temps[core] ?: 50}°C")))))
       
-      ;; Disk info - full width
-      (box :class "info-item compact" :orientation "v" :spacing 3
-        (box :class "info-header" :orientation "h" :space-evenly false
-          (label :class "info-icon" :text "")
-          (label :class "info-label" :text "DISK")
-          (label :class "info-value" :text "${disk-usage}%"))
-        (label :class "info-detail" :text "${disk-free} free"))
+      ;; Temperature - full width bar
+      (box :class "control-item" :orientation "v" :spacing 0
+        (box :class "control-header" :orientation "h" :space-evenly false
+          (label :class "control-label" :text "TEMP ${temperature}°C"))
+        (box :class "discrete-progress temp-progress" :orientation "h" :space-evenly true :spacing 1
+          (button :class "progress-segment temp-segment ${temperature >= 30 ? 'filled' : ''} temp-1")
+          (button :class "progress-segment temp-segment ${temperature >= 34 ? 'filled' : ''} temp-2")
+          (button :class "progress-segment temp-segment ${temperature >= 38 ? 'filled' : ''} temp-3")
+          (button :class "progress-segment temp-segment ${temperature >= 42 ? 'filled' : ''} temp-4")
+          (button :class "progress-segment temp-segment ${temperature >= 46 ? 'filled' : ''} temp-5")
+          (button :class "progress-segment temp-segment ${temperature >= 50 ? 'filled' : ''} temp-6")
+          (button :class "progress-segment temp-segment ${temperature >= 54 ? 'filled' : ''} temp-7")
+          (button :class "progress-segment temp-segment ${temperature >= 58 ? 'filled' : ''} temp-8")
+          (button :class "progress-segment temp-segment ${temperature >= 62 ? 'filled' : ''} temp-9")
+          (button :class "progress-segment temp-segment ${temperature >= 66 ? 'filled' : ''} temp-10")
+          (button :class "progress-segment temp-segment ${temperature >= 70 ? 'filled' : ''} temp-11")
+          (button :class "progress-segment temp-segment ${temperature >= 74 ? 'filled' : ''} temp-12")
+          (button :class "progress-segment temp-segment ${temperature >= 78 ? 'filled' : ''} temp-13")
+          (button :class "progress-segment temp-segment ${temperature >= 82 ? 'filled' : ''} temp-14")
+          (button :class "progress-segment temp-segment ${temperature >= 86 ? 'filled' : ''} temp-15")
+          (button :class "progress-segment temp-segment ${temperature >= 90 ? 'filled' : ''} temp-16")
+          (button :class "progress-segment temp-segment ${temperature >= 94 ? 'filled' : ''} temp-17")
+          (button :class "progress-segment temp-segment ${temperature >= 98 ? 'filled' : ''} temp-18")
+          (button :class "progress-segment temp-segment ${temperature >= 102 ? 'filled' : ''} temp-19")
+          (button :class "progress-segment temp-segment ${temperature >= 106 ? 'filled' : ''} temp-20")))
       
-      ;; Temperature - full width
-      (box :class "info-item compact" :orientation "v" :spacing 3
-        (box :class "info-header" :orientation "h" :space-evenly false
-          (label :class "info-icon" :text "")
-          (label :class "info-label" :text "TEMP")
-          (label :class "info-value ${temperature > 80 ? 'critical' : ''}" :text "${temperature}°C"))
-        (label :class "info-detail" :text "Core: ${cpu-temp}°C")))))
+      ;; Memory info - full width bar
+      (box :class "control-item" :orientation "v" :spacing 0
+        (box :class "control-header" :orientation "h" :space-evenly false
+          (label :class "control-label" :text "RAM ${memory-usage}%"))
+        (box :class "discrete-progress mem-progress" :orientation "h" :space-evenly true :spacing 1
+          (button :class "progress-segment mem-segment ${memory-usage >= 5 ? 'filled' : ''} mem-1")
+          (button :class "progress-segment mem-segment ${memory-usage >= 10 ? 'filled' : ''} mem-2")
+          (button :class "progress-segment mem-segment ${memory-usage >= 15 ? 'filled' : ''} mem-3")
+          (button :class "progress-segment mem-segment ${memory-usage >= 20 ? 'filled' : ''} mem-4")
+          (button :class "progress-segment mem-segment ${memory-usage >= 25 ? 'filled' : ''} mem-5")
+          (button :class "progress-segment mem-segment ${memory-usage >= 30 ? 'filled' : ''} mem-6")
+          (button :class "progress-segment mem-segment ${memory-usage >= 35 ? 'filled' : ''} mem-7")
+          (button :class "progress-segment mem-segment ${memory-usage >= 40 ? 'filled' : ''} mem-8")
+          (button :class "progress-segment mem-segment ${memory-usage >= 45 ? 'filled' : ''} mem-9")
+          (button :class "progress-segment mem-segment ${memory-usage >= 50 ? 'filled' : ''} mem-10")
+          (button :class "progress-segment mem-segment ${memory-usage >= 55 ? 'filled' : ''} mem-11")
+          (button :class "progress-segment mem-segment ${memory-usage >= 60 ? 'filled' : ''} mem-12")
+          (button :class "progress-segment mem-segment ${memory-usage >= 65 ? 'filled' : ''} mem-13")
+          (button :class "progress-segment mem-segment ${memory-usage >= 70 ? 'filled' : ''} mem-14")
+          (button :class "progress-segment mem-segment ${memory-usage >= 75 ? 'filled' : ''} mem-15")
+          (button :class "progress-segment mem-segment ${memory-usage >= 80 ? 'filled' : ''} mem-16")
+          (button :class "progress-segment mem-segment ${memory-usage >= 85 ? 'filled' : ''} mem-17")
+          (button :class "progress-segment mem-segment ${memory-usage >= 90 ? 'filled' : ''} mem-18")
+          (button :class "progress-segment mem-segment ${memory-usage >= 95 ? 'filled' : ''} mem-19")
+          (button :class "progress-segment mem-segment ${memory-usage >= 100 ? 'filled' : ''} mem-20")))
+      
+      ;; Disk info - full width bar
+      (box :class "control-item" :orientation "v" :spacing 0
+        (box :class "control-header" :orientation "h" :space-evenly false
+          (label :class "control-label" :text "DISK ${disk-usage}%"))
+        (box :class "discrete-progress disk-progress" :orientation "h" :space-evenly true :spacing 1
+          (button :class "progress-segment disk-segment ${disk-usage >= 5 ? 'filled' : ''} disk-1")
+          (button :class "progress-segment disk-segment ${disk-usage >= 10 ? 'filled' : ''} disk-2")
+          (button :class "progress-segment disk-segment ${disk-usage >= 15 ? 'filled' : ''} disk-3")
+          (button :class "progress-segment disk-segment ${disk-usage >= 20 ? 'filled' : ''} disk-4")
+          (button :class "progress-segment disk-segment ${disk-usage >= 25 ? 'filled' : ''} disk-5")
+          (button :class "progress-segment disk-segment ${disk-usage >= 30 ? 'filled' : ''} disk-6")
+          (button :class "progress-segment disk-segment ${disk-usage >= 35 ? 'filled' : ''} disk-7")
+          (button :class "progress-segment disk-segment ${disk-usage >= 40 ? 'filled' : ''} disk-8")
+          (button :class "progress-segment disk-segment ${disk-usage >= 45 ? 'filled' : ''} disk-9")
+          (button :class "progress-segment disk-segment ${disk-usage >= 50 ? 'filled' : ''} disk-10")
+          (button :class "progress-segment disk-segment ${disk-usage >= 55 ? 'filled' : ''} disk-11")
+          (button :class "progress-segment disk-segment ${disk-usage >= 60 ? 'filled' : ''} disk-12")
+          (button :class "progress-segment disk-segment ${disk-usage >= 65 ? 'filled' : ''} disk-13")
+          (button :class "progress-segment disk-segment ${disk-usage >= 70 ? 'filled' : ''} disk-14")
+          (button :class "progress-segment disk-segment ${disk-usage >= 75 ? 'filled' : ''} disk-15")
+          (button :class "progress-segment disk-segment ${disk-usage >= 80 ? 'filled' : ''} disk-16")
+          (button :class "progress-segment disk-segment ${disk-usage >= 85 ? 'filled' : ''} disk-17")
+          (button :class "progress-segment disk-segment ${disk-usage >= 90 ? 'filled' : ''} disk-18")
+          (button :class "progress-segment disk-segment ${disk-usage >= 95 ? 'filled' : ''} disk-19")
+          (button :class "progress-segment disk-segment ${disk-usage >= 100 ? 'filled' : ''} disk-20")))))
+)
