@@ -174,11 +174,11 @@
 }
 
 .info-detail {
-    font-size: 9px;
-    color: #565f89;
+    font-size: 13px;
+    color: #c0caf5;
     margin-right: 12px;
-    opacity: 0.7;
-    font-weight: 500;
+    opacity: 0.9;
+    font-weight: 600;
 }
 
 .info-details {
@@ -723,4 +723,32 @@ scrollbar.vertical slider {
 .delimiter {
     border-bottom: 1px solid rgba(122, 162, 247, 0.15);
     margin: 3px 0;
+}
+
+/* Battery bar styling */
+.battery-progress {
+    min-height: 6px;
+    padding: 1px;
+}
+
+.battery-segment {
+    min-width: 12px;
+    min-height: 6px;
+    margin: 0;
+}
+
+.battery-segment.filled.batt-1, .battery-segment.filled.batt-2, .battery-segment.filled.batt-3, .battery-segment.filled.batt-4, .battery-segment.filled.batt-5 {
+    background: linear-gradient(90deg, #f7768e 0%, #ff9e64 100%);
+}
+
+.battery-segment.filled.batt-6, .battery-segment.filled.batt-7, .battery-segment.filled.batt-8, .battery-segment.filled.batt-9, .battery-segment.filled.batt-10 {
+    background: linear-gradient(90deg, #ff9e64 0%, #e0af68 100%);
+}
+
+.battery-segment.filled.batt-11, .battery-segment.filled.batt-12, .battery-segment.filled.batt-13, .battery-segment.filled.batt-14, .battery-segment.filled.batt-15 {
+    background: linear-gradient(90deg, #e0af68 0%, #9ece6a 100%);
+}
+
+.battery-segment.filled.batt-16, .battery-segment.filled.batt-17, .battery-segment.filled.batt-18, .battery-segment.filled.batt-19, .battery-segment.filled.batt-20 {
+    background: linear-gradient(90deg, #9ece6a 0%, #73daca 100%);
 }

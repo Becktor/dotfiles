@@ -1,12 +1,28 @@
 ;; Battery info
 (defwidget battery-info []
   (box :class "battery-info" :orientation "v" :space-evenly false :spacing 8
-    (label :class "section-title" :text "BATTERY")
-    (box :class "info-item" :orientation "v" :spacing 3
-      (box :class "info-header" :orientation "h" :space-evenly false
-        (label :class "info-icon ${battery-status == 'Charging' ? 'charging' : ''} ${battery-capacity < 15 ? 'critical' : battery-capacity < 30 ? 'warning' : ''}" 
-               :text "${battery-status == 'Charging' ? '🔌' : battery-capacity < 15 ? '🪫' : battery-capacity < 30 ? '🔋' : '🔋'}")
-        (label :class "info-label" :text "POWER")
-        (label :class "info-value ${battery-status == 'Charging' ? 'charging' : ''} ${battery-capacity < 15 ? 'critical' : battery-capacity < 30 ? 'warning' : ''}" 
-               :text "${battery-capacity}%"))
-      (label :class "info-detail" :text "${battery-status}"))))
+    (box :class "control-item" :orientation "v" :spacing 0
+      (box :class "control-header" :orientation "h" :space-evenly false
+        (label :class "control-icon" :text "${battery-status == 'Charging' ? '🔌' : battery-capacity < 15 ? '🪫' : battery-capacity < 30 ? '🔋' : '🔋'}")
+        (label :class "control-label" :text "BATTERY ${battery-capacity}%"))
+      (box :class "discrete-progress battery-progress" :orientation "h" :space-evenly true :spacing 1
+        (button :class "progress-segment battery-segment ${battery-capacity >= 5 ? 'filled' : ''} batt-1")
+        (button :class "progress-segment battery-segment ${battery-capacity >= 10 ? 'filled' : ''} batt-2")
+        (button :class "progress-segment battery-segment ${battery-capacity >= 15 ? 'filled' : ''} batt-3")
+        (button :class "progress-segment battery-segment ${battery-capacity >= 20 ? 'filled' : ''} batt-4")
+        (button :class "progress-segment battery-segment ${battery-capacity >= 25 ? 'filled' : ''} batt-5")
+        (button :class "progress-segment battery-segment ${battery-capacity >= 30 ? 'filled' : ''} batt-6")
+        (button :class "progress-segment battery-segment ${battery-capacity >= 35 ? 'filled' : ''} batt-7")
+        (button :class "progress-segment battery-segment ${battery-capacity >= 40 ? 'filled' : ''} batt-8")
+        (button :class "progress-segment battery-segment ${battery-capacity >= 45 ? 'filled' : ''} batt-9")
+        (button :class "progress-segment battery-segment ${battery-capacity >= 50 ? 'filled' : ''} batt-10")
+        (button :class "progress-segment battery-segment ${battery-capacity >= 55 ? 'filled' : ''} batt-11")
+        (button :class "progress-segment battery-segment ${battery-capacity >= 60 ? 'filled' : ''} batt-12")
+        (button :class "progress-segment battery-segment ${battery-capacity >= 65 ? 'filled' : ''} batt-13")
+        (button :class "progress-segment battery-segment ${battery-capacity >= 70 ? 'filled' : ''} batt-14")
+        (button :class "progress-segment battery-segment ${battery-capacity >= 75 ? 'filled' : ''} batt-15")
+        (button :class "progress-segment battery-segment ${battery-capacity >= 80 ? 'filled' : ''} batt-16")
+        (button :class "progress-segment battery-segment ${battery-capacity >= 85 ? 'filled' : ''} batt-17")
+        (button :class "progress-segment battery-segment ${battery-capacity >= 90 ? 'filled' : ''} batt-18")
+        (button :class "progress-segment battery-segment ${battery-capacity >= 95 ? 'filled' : ''} batt-19")
+        (button :class "progress-segment battery-segment ${battery-capacity >= 100 ? 'filled' : ''} batt-20")))))
