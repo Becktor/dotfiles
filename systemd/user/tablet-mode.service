@@ -1,0 +1,16 @@
+[Unit]
+Description=ThinkPad Yoga Tablet Mode Monitor
+After=graphical-session.target hyprland-session.target
+
+[Service]
+Type=simple
+ExecStart=%h/.config/eww/scripts/tablet-mode-monitor-v2.sh start
+ExecStop=%h/.config/eww/scripts/tablet-mode-monitor-v2.sh stop
+Restart=on-failure
+RestartSec=5
+Environment=DISPLAY=:0
+Environment=WAYLAND_DISPLAY=wayland-0
+Environment=XDG_RUNTIME_DIR=%t
+
+[Install]
+WantedBy=default.target

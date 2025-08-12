@@ -1,0 +1,8 @@
+# Udev rule for ThinkPad Yoga tablet mode access
+# Place in /etc/udev/rules.d/99-tablet-mode.rules
+
+# Intel HID switches device for tablet mode detection
+SUBSYSTEM=="input", ATTRS{name}=="Intel HID switches", MODE="0664", GROUP="input", TAG+="uaccess"
+
+# Alternative: make all input event devices accessible to input group
+# KERNEL=="event*", SUBSYSTEM=="input", MODE="0664", GROUP="input"

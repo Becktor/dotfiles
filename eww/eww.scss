@@ -19,9 +19,9 @@
 
 /* Clock Section */
 .clock-section {
-    padding: 4px 0 8px 0;
+    padding: 8px 0;
     border-bottom: 1px solid rgba(122, 162, 247, 0.15);
-    margin-bottom: 3px;
+    margin-bottom: 8px;
 }
 
 .clock-time {
@@ -40,18 +40,18 @@
 
 /* Section Titles */
 .section-title {
-    font-size: 9px;
+    font-size: 13px;
     font-weight: 600;
-    color: #565f89;
-    margin-bottom: 6px;
-    opacity: 0.7;
+    color: #9aa5ce;
+    margin-bottom: 8px;
+    opacity: 0.8;
 }
 
 /* Workspaces */
 .workspaces {
     padding: 8px 0;
     border-bottom: 1px solid rgba(122, 162, 247, 0.15);
-    margin-bottom: 3px;
+    margin-bottom: 8px;
 }
 
 .workspace-buttons {
@@ -89,7 +89,7 @@
 .window-info {
     padding: 8px 0;
     border-bottom: 1px solid rgba(122, 162, 247, 0.15);
-    margin-bottom: 3px;
+    margin-bottom: 8px;
 }
 
 .window-title {
@@ -110,9 +110,9 @@
 
 /* System Info */
 .system-info {
-    padding: 4px 0;
+    padding: 8px 0;
     border-bottom: 1px solid rgba(122, 162, 247, 0.15);
-    margin-bottom: 3px;
+    margin-bottom: 8px;
 }
 
 .system-grid {
@@ -156,7 +156,7 @@
 }
 
 .info-label {
-    font-size: 10px;
+    font-size: 13px;
     font-weight: 600;
     color: #9aa5ce;
     opacity: 0.8;
@@ -181,6 +181,43 @@
     font-weight: 600;
 }
 
+.bluetooth-devices .info-detail {
+    margin-left: 0;
+    padding-left: 0;
+}
+
+/* Bluetooth table styling */
+.bluetooth-table {
+    margin-top: 8px;
+}
+
+.device-row {
+    padding: 4px 0;
+    border-bottom: 1px solid rgba(122, 162, 247, 0.1);
+}
+
+.device-row:last-child {
+    border-bottom: none;
+}
+
+.device-icon {
+    font-size: 16px;
+    min-width: 24px;
+}
+
+.device-name {
+    font-size: 12px;
+    color: #c0caf5;
+    font-weight: 500;
+}
+
+.device-battery {
+    font-size: 11px;
+    color: #9aa5ce;
+    font-weight: 600;
+    min-width: 40px;
+}
+
 .info-details {
     padding-left: 32px;
     margin-top: 4px;
@@ -190,7 +227,7 @@
 .hardware-controls {
     padding: 4px 0;
     border-bottom: 1px solid rgba(122, 162, 247, 0.15);
-    margin-bottom: 3px;
+    margin-bottom: 8px;
 }
 
 .control-item {
@@ -198,7 +235,7 @@
 }
 
 .control-button {
-    padding: 8px 12px;
+    padding: 4px 8px;
     background: linear-gradient(135deg, rgba(122, 162, 247, 0.05) 0%, rgba(199, 146, 234, 0.05) 100%);
     border: 1px solid rgba(122, 162, 247, 0.15);
     border-radius: 8px;
@@ -573,9 +610,9 @@
 
 /* Network Info */
 .network-info {
-    padding: 4px 0;
+    padding: 8px 0;
     border-bottom: 1px solid rgba(122, 162, 247, 0.15);
-    margin-bottom: 3px;
+    margin-bottom: 8px;
 }
 
 .network-grid {
@@ -624,7 +661,7 @@
 
 /* Battery Info */
 .battery-info {
-    padding: 4px 0;
+    padding: 8px 0;
 }
 
 .info-icon.charging {

@@ -1,6 +1,6 @@
 ;; Hardware controls
 (defwidget hardware-controls []
-  (box :class "hardware-controls" :orientation "v" :space-evenly false :spacing 8
+  (box :class "hardware-controls" :orientation "v" :space-evenly false :spacing 4
     
     ;; Audio control
     (box :class "control-item" :orientation "v" :spacing 0
@@ -56,4 +56,40 @@
         (button :class "progress-segment ${brightness >= 85 ? 'filled' : ''} bright-18"
                 :onclick "brightnessctl set 90%")
         (button :class "progress-segment ${brightness >= 95 ? 'filled' : ''} bright-20"
-                :onclick "brightnessctl set 100%"))))))
+                :onclick "brightnessctl set 100%"))))
+    
+    ;; Screen rotation and tablet mode controls
+    (box :class "control-item" :orientation "v" :spacing 0
+      (box :class "control-header" :orientation "h" :space-evenly false
+        (label :class "control-icon" :text "🔄")
+        (label :class "control-label" :text "ROTATION & TABLET"))
+      (box :class "rotation-controls" :orientation "h" :space-evenly true :spacing 2
+        (button :class "rotation-button normal"
+                :onclick "~/.config/eww/scripts/toggle-rotation.sh normal"
+                :tooltip "Normal (Landscape)"
+                :text "⬜")
+        (button :class "rotation-button right"
+                :onclick "~/.config/eww/scripts/toggle-rotation.sh right"
+                :tooltip "90° Right (Portrait)"
+                :text "⬅️")
+        (button :class "rotation-button inverted"
+                :onclick "~/.config/eww/scripts/toggle-rotation.sh inverted"
+                :tooltip "180° Inverted"
+                :text "⬛")
+        (button :class "rotation-button left"
+                :onclick "~/.config/eww/scripts/toggle-rotation.sh left"
+                :tooltip "270° Left (Portrait)"
+                :text "➡️"))
+      (box :class "tablet-controls" :orientation "h" :space-evenly true :spacing 2
+        (button :class "tablet-button laptop"
+                :onclick "~/.config/eww/scripts/tablet-mode-monitor.sh laptop"
+                :tooltip "Force Laptop Mode"
+                :text "💻")
+        (button :class "tablet-button tablet"
+                :onclick "~/.config/eww/scripts/tablet-mode-monitor.sh tablet"
+                :tooltip "Force Tablet Mode"
+                :text "📱")
+        (button :class "tablet-button toggle"
+                :onclick "~/.config/eww/scripts/tablet-mode-monitor.sh toggle"
+                :tooltip "Toggle Mode"
+                :text "🔄")))))

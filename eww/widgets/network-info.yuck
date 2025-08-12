@@ -13,11 +13,18 @@
     
     ;; Bluetooth info - full width
     (button :class "info-button ${bluetooth-status == 'off' ? 'disabled' : ''}"
-            :onclick "blueman-manager &"
-      (box :class "info-header" :orientation "h" :space-evenly false
-        (label :class "info-icon" :text "${bluetooth-status == 'on' ? '🔵' : '🔴'}")
-        (label :class "info-label" :text "Bluetooth")
-        (box :class "spacer" :hexpand true)
-        (label :class "info-value" :text "${bluetooth-status == 'on' ? 'ON' : 'OFF'}")))
-    
-    (label :class "info-detail" :text "${bluetooth-devices}")))
+            :onclick "if bluetoothctl show | grep -q 'Powered: yes'; then bluetoothctl power off; else bluetoothctl power on; fi"
+            :onrightclick "blueman-manager &"
+      (box :class "info-header" :orientation "v" :space-evenly false :spacing 10
+        (box :class "info-row" :orientation "h" :space-evenly false
+          (label :class "info-icon" :text "${bluetooth-status == 'on' ? '🔗' : '🚫'}")
+          (label :class "info-label" :text "Bluetooth")
+          (box :class "spacer" :hexpand true)
+          (label :class "info-value" :text "${bluetooth-status == 'on' ? 'ON' : 'OFF'}"))
+        (box :class "bluetooth-table" :orientation "v" :space-evenly false :spacing 4
+          (for device in bluetooth-devices-table
+            (box :class "device-row" :orientation "h" :space-evenly false :spacing 8
+              (label :class "device-icon" :text "${device.icon}")
+              (label :class "device-name" :text "${device.name}")
+              (box :class "spacer" :hexpand true)
+              (label :class "device-battery" :text "${device.battery != '' ? '${device.battery}%' : ''}"))))))))

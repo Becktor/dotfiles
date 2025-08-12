@@ -91,6 +91,48 @@ return {
         -- or a suggestion from your LSP for this to activate.
         map('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction', { 'n', 'x' })
 
+        -- Auto-import helper - shows import completions for word under cursor
+        map('<leader>cI', function()
+          -- First try standard code actions
+          vim.lsp.buf.code_action {
+            context = {
+              only = { 'source.organizeImports', 'quickfix' },
+              diagnostics = vim.lsp.diagnostic.get_line_diagnostics(),
+            },
+          }
+        end, '[C]ode [I]mport (Add missing)')
+
+        -- Alternative: Jump to import area and use completion
+        map('<leader>cA', function()
+          local word = vim.fn.expand '<cword>'
+          if word and word ~= '' then
+            vim.notify('Add import for: ' .. word .. '\nUse completion at top of file: from/import ' .. word, vim.log.levels.INFO)
+            -- Jump to top of file after imports
+            vim.cmd 'normal! gg'
+            -- Find last import line
+            local lines = vim.api.nvim_buf_get_lines(0, 0, 50, false)
+            local last_import_line = 0
+            for i, line in ipairs(lines) do
+              if line:match '^%s*import ' or line:match '^%s*from ' then
+                last_import_line = i
+              elseif line:match '^%s*$' and last_import_line > 0 then
+                -- Found empty line after imports
+                break
+              end
+            end
+            vim.api.nvim_win_set_cursor(0, { last_import_line + 1, 0 })
+          end
+        end, '[C]ode [A]dd import (manual)')
+
+        -- Organize imports (Python/TypeScript) - using conform.nvim
+        map('<leader>ci', function()
+          require('conform').format {
+            bufnr = vim.api.nvim_get_current_buf(),
+            async = false,
+            quiet = false,
+          }
+        end, '[C]ode [I]mports (Organize)')
+
         -- WARN: This is not Goto Definition, this is Goto Declaration.
         --  For example, in C this would take you to the header.
         map('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
@@ -197,16 +239,70 @@ return {
     local servers = {
       -- clangd = {},
       -- gopls = {},
-      -- pyright = {},
+      pyright = {
+        settings = {
+          python = {
+            analysis = {
+              autoImportCompletions = true,
+              autoSearchPaths = true,
+              useLibraryCodeForTypes = true,
+              typeCheckingMode = 'basic',
+              include = { '**/*.py' },
+              extraPaths = {},
+            },
+          },
+          pyright = {
+            -- Enable organize imports code action
+            disableOrganizeImports = false,
+          },
+        },
+        capabilities = {
+          textDocument = {
+            codeAction = {
+              dynamicRegistration = true,
+              codeActionLiteralSupport = {
+                codeActionKind = {
+                  valueSet = {
+                    '',
+                    'quickfix',
+                    'refactor',
+                    'refactor.extract',
+                    'refactor.inline',
+                    'refactor.rewrite',
+                    'source',
+                    'source.organizeImports',
+                    'source.fixAll',
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
       -- rust_analyzer = {},
       -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
       --
       -- Some languages (like typescript) have entire language plugins that can be useful:
       --    https://github.com/pmizio/typescript-tools.nvim
       --
-      -- But for many setups, the LSP (`ts_ls`) will work just fine
-      -- ts_ls = {},
-      --
+      -- Vue TypeScript Language Service
+      vtsls = {
+        init_options = {
+          plugins = {
+            {
+              name = '@vue/typescript-plugin',
+              location = '/usr/local/lib/node_modules/@vue/language-server',
+              languages = { 'vue' },
+            },
+          },
+        },
+        filetypes = { 'typescript', 'javascript', 'javascriptreact', 'typescriptreact', 'vue' },
+      },
+
+      -- Additional web dev servers
+      html = {},
+      cssls = {},
+      eslint = {},
 
       lua_ls = {
         -- cmd = { ... },
@@ -240,6 +336,14 @@ return {
     local ensure_installed = vim.tbl_keys(servers or {})
     vim.list_extend(ensure_installed, {
       'stylua', -- Used to format Lua code
+      'isort', -- Python import organizer
+      'black', -- Python formatter
+      'prettierd', -- Fast JavaScript/TypeScript formatter
+      'vue-language-server', -- Vue language server
+      'typescript-language-server', -- TypeScript language server
+      'html-lsp', -- HTML language server
+      'css-lsp', -- CSS language server
+      'eslint-lsp', -- ESLint language server
     })
     require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
@@ -257,5 +361,67 @@ return {
         end,
       },
     }
+
+    -- Vue.js official setup from their wiki
+    local vue_language_server_path = vim.fn.expand '$HOME/.local/share/nvim/mason/packages' .. '/vue-language-server' .. '/node_modules/@vue/language-server'
+
+    local vue_plugin = {
+      name = '@vue/typescript-plugin',
+      location = vue_language_server_path,
+      languages = { 'vue' },
+      configNamespace = 'typescript',
+    }
+
+    local vtsls_config = {
+      settings = {
+        vtsls = {
+          tsserver = {
+            globalPlugins = {
+              vue_plugin,
+            },
+          },
+        },
+      },
+      filetypes = { 'typescript', 'javascript', 'javascriptreact', 'typescriptreact', 'vue' },
+    }
+
+    local vue_ls_config = {
+      on_init = function(client)
+        client.handlers['tsserver/request'] = function(_, result, context)
+          local clients = vim.lsp.get_clients { bufnr = context.bufnr, name = 'vtsls' }
+          if #clients == 0 then
+            vim.notify('Could not find `vtsls` lsp client, `vue_ls` would not work without it.', vim.log.levels.ERROR)
+            return
+          end
+          local ts_client = clients[1]
+
+          local param = unpack(result)
+          local id, command, payload = unpack(param)
+          ts_client:exec_cmd({
+            title = 'vue_request_forward',
+            command = 'typescript.tsserverRequest',
+            arguments = {
+              command,
+              payload,
+            },
+          }, { bufnr = context.bufnr }, function(_, r)
+            local response = r and r.body
+            local response_data = { { id, response } }
+            client:notify('tsserver/response', response_data)
+          end)
+        end
+      end,
+    }
+
+    -- Setup Vue LSP (Neovim 0.11+ syntax)
+    if vim.fn.has 'nvim-0.11' == 1 then
+      vim.lsp.config('vtsls', vtsls_config)
+      vim.lsp.config('vue_ls', vue_ls_config)
+      vim.lsp.enable { 'vtsls', 'vue_ls' }
+    else
+      -- Fallback for older Neovim versions
+      require('lspconfig').vtsls.setup(vtsls_config)
+      require('lspconfig').vue_ls.setup(vue_ls_config)
+    end
   end,
 }
