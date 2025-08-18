@@ -41,5 +41,15 @@ return { -- Autoformat
       javascriptreact = { "prettierd", "prettier", stop_after_first = true },
       typescriptreact = { "prettierd", "prettier", stop_after_first = true },
     },
+    formatters = {
+      -- Configure isort to read from pyproject.toml
+      isort = {
+        args = { "--stdout", "--filename", "$FILENAME", "-" },
+      },
+      -- Configure black to read from pyproject.toml
+      black = {
+        args = { "--stdin-filename", "$FILENAME", "--quiet", "-" },
+      },
+    },
   },
 }

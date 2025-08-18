@@ -5,15 +5,16 @@ return {
     -- Automatically install LSPs and related tools to stdpath for Neovim
     -- Mason must be loaded before its dependents so we need to set it up here.
     -- NOTE: `opts = {}` is the same as calling `require('mason').setup({})`
-    { 'williamboman/mason.nvim', opts = {} },
-    'williamboman/mason-lspconfig.nvim',
+    { 'mason-org/mason.nvim', opts = {} },
+    { 'mason-org/mason-lspconfig.nvim', opts = {} },
+
     'WhoIsSethDaniel/mason-tool-installer.nvim',
 
     -- Useful status updates for LSP.
     { 'j-hui/fidget.nvim', opts = {} },
 
     -- Allows extra capabilities provided by nvim-cmp
-    'hrsh7th/cmp-nvim-lsp',
+    -- 'hrsh7th/cmp-nvim-lsp',
   },
   config = function()
     -- Brief aside: **What is LSP?**
@@ -222,10 +223,9 @@ return {
 
     -- LSP servers and clients are able to communicate to each other what features they support.
     --  By default, Neovim doesn't support everything that is in the LSP specification.
-    --  When you add nvim-cmp, luasnip, etc. Neovim now has *more* capabilities.
-    --  So, we create new capabilities with nvim cmp, and then broadcast that to the servers.
+    --  When you add completion plugins like Blink, they enhance these capabilities.
+    --  Blink handles LSP capabilities automatically, so we use the default capabilities.
     local capabilities = vim.lsp.protocol.make_client_capabilities()
-    capabilities = vim.tbl_deep_extend('force', capabilities, require('cmp_nvim_lsp').default_capabilities())
 
     -- Enable the following language servers
     --  Feel free to add/remove any LSPs that you want here. They will automatically be installed.
@@ -239,46 +239,7 @@ return {
     local servers = {
       -- clangd = {},
       -- gopls = {},
-      pyright = {
-        settings = {
-          python = {
-            analysis = {
-              autoImportCompletions = true,
-              autoSearchPaths = true,
-              useLibraryCodeForTypes = true,
-              typeCheckingMode = 'basic',
-              include = { '**/*.py' },
-              extraPaths = {},
-            },
-          },
-          pyright = {
-            -- Enable organize imports code action
-            disableOrganizeImports = false,
-          },
-        },
-        capabilities = {
-          textDocument = {
-            codeAction = {
-              dynamicRegistration = true,
-              codeActionLiteralSupport = {
-                codeActionKind = {
-                  valueSet = {
-                    '',
-                    'quickfix',
-                    'refactor',
-                    'refactor.extract',
-                    'refactor.inline',
-                    'refactor.rewrite',
-                    'source',
-                    'source.organizeImports',
-                    'source.fixAll',
-                  },
-                },
-              },
-            },
-          },
-        },
-      },
+      -- basedpyright handled automatically by nvim-lspconfig with overridden settings above
       -- rust_analyzer = {},
       -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
       --
@@ -338,6 +299,7 @@ return {
       'stylua', -- Used to format Lua code
       'isort', -- Python import organizer
       'black', -- Python formatter
+      'basedpyright', -- Enhanced Python type checker (fork of pyright)
       'prettierd', -- Fast JavaScript/TypeScript formatter
       'vue-language-server', -- Vue language server
       'typescript-language-server', -- TypeScript language server
@@ -347,11 +309,38 @@ return {
     })
     require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
+    -- Configure basedpyright using Neovim 0.11+ native vim.lsp.config() API
+    -- This bypasses nvim-lspconfig entirely for basedpyright
+    vim.lsp.config('basedpyright', {
+      cmd = { 'basedpyright-langserver', '--stdio' },
+      filetypes = { 'python' },
+      root_markers = { 'pyproject.toml', 'setup.py', 'setup.cfg', 'requirements.txt', 'Pipfile', 'pyrightconfig.json', '.git' },
+      settings = {
+        basedpyright = {
+          analysis = {
+            autoSearchPaths = true,
+            useLibraryCodeForTypes = true,
+            diagnosticMode = 'workspace', -- Enable workspace-wide analysis
+            typeCheckingMode = 'basic',
+            indexing = true,
+          },
+        },
+      },
+      capabilities = capabilities,
+    })
+
+    -- Enable basedpyright with the native API
+    vim.lsp.enable 'basedpyright'
+
     require('mason-lspconfig').setup {
-      ensure_installed = {}, -- explicitly set to an empty table (Kickstart populates installs via mason-tool-installer)
-      automatic_installation = false,
+      automatic_installation = false, -- Keep this disabled since we use mason-tool-installer
       handlers = {
         function(server_name)
+          -- Skip basedpyright since we're handling it with native vim.lsp.config()
+          if server_name == 'basedpyright' then
+            return
+          end
+
           local server = servers[server_name] or {}
           -- This handles overriding only values explicitly passed
           -- by the server configuration above. Useful when disabling
