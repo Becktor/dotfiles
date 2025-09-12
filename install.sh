@@ -68,11 +68,11 @@ install_packages() {
                     fi
 
                     echo "Installing prerequisites..."
-                    sudo apt-get install -y zsh ninja-build gettext cmake curl build-essential tmux unzip jq
+                    sudo apt-get install -y git zsh ninja-build gettext cmake curl build-essential tmux unzip jq ripgrep fd-find fzf tree htop python3-pip software-properties-common
                     ;;
                 arch)
                     echo "Detected Arch Linux. Installing prerequisites..."
-                    sudo pacman -Sy --needed --noconfirm zsh ninja gettext cmake curl base-devel tmux unzip jq
+                    sudo pacman -Sy --needed --noconfirm git zsh ninja gettext cmake curl base-devel tmux unzip jq ripgrep fd fzf tree htop python-pip
                     ;;
                 *)
                     echo "Unsupported Linux distribution: $DISTRO"
@@ -169,20 +169,31 @@ install_oh_my_zsh() {
         echo "Oh My Zsh already installed. Skipping."
     else
         echo "Installing Oh My Zsh..."
-        sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+        RUNZSH=no CHSH=no sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
     fi
 }
 
-set_zsh_as_default() {
+install_powerlevel10k() {
+    P10K_DIR="$HOME/powerlevel10k"
+    if [ -d "$P10K_DIR" ]; then
+        echo "Powerlevel10k already installed. Skipping."
+    else
+        echo "Installing Powerlevel10k theme..."
+        git clone --depth=1 https://github.com/romkatv/powerlevel10k.git "$P10K_DIR"
+    fi
+}
+
+setup_shell_info() {
     ZSH_PATH="$(command -v zsh)"
     if [ "$SHELL" != "$ZSH_PATH" ]; then
-        echo "Setting Zsh as the default shell..."
+        echo "ℹ️  To set Zsh as your default shell, run:"
+        echo "   chsh -s $ZSH_PATH"
+        echo "   Then log out and back in, or restart your terminal."
         if ! grep -qx "$ZSH_PATH" /etc/shells; then
-            echo "$ZSH_PATH" | sudo tee -a /etc/shells
+            echo "$ZSH_PATH" | sudo tee -a /etc/shells > /dev/null
         fi
-        chsh -s "$ZSH_PATH"
     else
-        echo "Zsh is already the default shell."
+        echo "✅ Zsh is already the default shell."
     fi
 }
 
@@ -334,17 +345,61 @@ symlink_dotfiles() {
     else
         echo "⚠️  Skipping: $DOTFILES_DIR/zshrc does not exist"
     fi
+
+    # Symlink git config
+    GITCONFIG_TARGET="$HOME/.gitconfig"
+    if [ -f "$DOTFILES_DIR/git/gitconfig" ]; then
+        if [ -L "$GITCONFIG_TARGET" ] || [ -f "$GITCONFIG_TARGET" ]; then
+            echo "Backing up existing $GITCONFIG_TARGET to $GITCONFIG_TARGET.backup"
+            mv "$GITCONFIG_TARGET" "$GITCONFIG_TARGET.backup"
+        fi
+        ln -s "$DOTFILES_DIR/git/gitconfig" "$GITCONFIG_TARGET"
+        echo "Symlinked git/gitconfig → $GITCONFIG_TARGET"
+    else
+        echo "⚠️  Skipping: $DOTFILES_DIR/git/gitconfig does not exist"
+    fi
+}
+
+setup_ssh_key() {
+    if [ ! -f "$HOME/.ssh/id_ed25519" ] && [ ! -f "$HOME/.ssh/id_rsa" ]; then
+        echo ""
+        echo "🔑 SSH Key Setup"
+        read -p "Would you like to generate a new SSH key? (y/n): " -n 1 -r
+        echo
+        if [[ $REPLY =~ ^[Yy]$ ]]; then
+            read -p "Enter your email for the SSH key: " email
+            if [ -n "$email" ]; then
+                ssh-keygen -t ed25519 -C "$email" -f "$HOME/.ssh/id_ed25519"
+                echo "✅ SSH key generated at ~/.ssh/id_ed25519"
+                echo "📋 Add this public key to your GitHub/GitLab account:"
+                echo "   cat ~/.ssh/id_ed25519.pub"
+            else
+                echo "⚠️  Email required for SSH key generation. Skipping."
+            fi
+        fi
+    else
+        echo "✅ SSH key already exists."
+    fi
 }
 
 # Execute
 install_packages
 install_neovim_from_github_release
 install_oh_my_zsh
-set_zsh_as_default
+install_powerlevel10k
+setup_shell_info
 install_nodejs
 install_tpm
 install_fonts
 create_api_config
 symlink_dotfiles
+setup_ssh_key
 
-echo "Installation and setup complete. Please restart your terminal or log out and back in."
+echo "✅ Installation and setup complete!"
+echo ""
+echo "📋 Next steps:"
+echo "   1. Run 'chsh -s \$(which zsh)' to set Zsh as default shell (if not already done)"
+echo "   2. Restart your terminal or log out and back in"
+echo "   3. Edit ~/.api_keys to add your API keys"
+echo "   4. Run 'p10k configure' to configure Powerlevel10k theme"
+echo "   5. In tmux, press <prefix>I to install tmux plugins"

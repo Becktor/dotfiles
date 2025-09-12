@@ -1,5 +1,6 @@
 return {
   'greggh/claude-code.nvim',
+  enabled = false, -- Disable the Claude plugin
   dependencies = {
     'nvim-lua/plenary.nvim', -- Required for git operations
     'folke/which-key.nvim',

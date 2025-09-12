@@ -309,23 +309,118 @@ return {
     })
     require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
-    -- Configure basedpyright using Neovim 0.11+ native vim.lsp.config() API
-    -- This bypasses nvim-lspconfig entirely for basedpyright
-    vim.lsp.config('basedpyright', {
-      cmd = { 'basedpyright-langserver', '--stdio' },
-      filetypes = { 'python' },
-      root_markers = { 'pyproject.toml', 'setup.py', 'setup.cfg', 'requirements.txt', 'Pipfile', 'pyrightconfig.json', '.git' },
-      settings = {
+    -- Function to read basedpyright settings from pyproject.toml
+    local function get_basedpyright_settings(root_dir)
+      local default_settings = {
         basedpyright = {
           analysis = {
             autoSearchPaths = true,
             useLibraryCodeForTypes = true,
-            diagnosticMode = 'workspace', -- Enable workspace-wide analysis
+            diagnosticMode = 'openFilesOnly',
             typeCheckingMode = 'basic',
             indexing = true,
+            -- include = { 'src' },
+            -- exclude = { '**/__pycache__' },
+            -- executionEnvironments = { { root = 'src' } },
+            autoImportCompletions = true,
+            completeFunctionParens = true,
           },
         },
-      },
+      }
+
+      -- Try to read pyproject.toml
+      if root_dir then
+        local pyproject_path = root_dir .. '/pyproject.toml'
+
+        local file = io.open(pyproject_path, 'r')
+        if file then
+          local content = file:read '*all'
+          file:close()
+
+          -- Simple parsing for [tool.basedpyright] section
+          local basedpyright_section = content:match '%[tool%.basedpyright%](.-)%['
+          if not basedpyright_section then
+            basedpyright_section = content:match '%[tool%.basedpyright%](.*)$'
+          end
+
+          if basedpyright_section then
+            -- Parse all settings from pyproject.toml and apply them directly
+            -- Match string values (quoted)
+            for key, value in basedpyright_section:gmatch '([%w_]+)%s*=%s*["\']([^"\']+)["\']' do
+              -- Map pyproject.toml keys to basedpyright LSP config structure
+              if key == 'diagnosticMode' or key == 'typeCheckingMode' then
+                default_settings.basedpyright.analysis[key] = value
+              elseif key:match '^report%w+' then
+                -- All diagnostic settings go into diagnosticSeverityOverrides
+                if not default_settings.basedpyright.analysis.diagnosticSeverityOverrides then
+                  default_settings.basedpyright.analysis.diagnosticSeverityOverrides = {}
+                end
+                default_settings.basedpyright.analysis.diagnosticSeverityOverrides[key] = value
+              end
+            end
+
+            -- Match boolean values
+            for key, value in basedpyright_section:gmatch '([%w_]+)%s*=%s*(true|false)' do
+              if
+                key == 'autoSearchPaths'
+                or key == 'useLibraryCodeForTypes'
+                or key == 'indexing'
+                or key == 'autoImportCompletions'
+                or key == 'completeFunctionParens'
+              then
+                default_settings.basedpyright.analysis[key] = value == 'true'
+              end
+            end
+
+            -- Match arrays for include/exclude
+            for key, array_content in basedpyright_section:gmatch '([%w_]+)%s*=%s*%[([^%]]+)%]' do
+              if key == 'include' or key == 'exclude' then
+                local items = {}
+                for item in array_content:gmatch '["\']([^"\']+)["\']' do
+                  table.insert(items, item)
+                end
+                default_settings.basedpyright.analysis[key] = items
+              end
+            end
+          end
+
+          -- Auto-detect virtual environment
+          local venv_paths = {
+            root_dir .. '/.venv', -- Same level as pyproject.toml
+            root_dir .. '/../.venv', -- One level up
+            root_dir .. '/venv', -- Alternative naming
+            root_dir .. '/../venv', -- Alternative naming one level up
+          }
+
+          for _, venv_path in ipairs(venv_paths) do
+            local python_exe = venv_path .. (vim.fn.has 'win32' == 1 and '/Scripts/python.exe' or '/bin/python')
+            if vim.fn.executable(python_exe) == 1 then
+              -- Set python path at top level (legacy)
+              default_settings.python = { pythonPath = python_exe }
+
+              -- Also set in basedpyright analysis settings (recommended)
+              default_settings.basedpyright.analysis.pythonPath = python_exe
+              default_settings.basedpyright.analysis.venvPath = venv_path:match '(.+)/.+$' -- Parent directory of venv
+
+              -- Update execution environment with python path
+              if default_settings.basedpyright.analysis.executionEnvironments and default_settings.basedpyright.analysis.executionEnvironments[1] then
+                default_settings.basedpyright.analysis.executionEnvironments[1].pythonPath = python_exe
+              end
+              break
+            end
+          end
+        end
+      end
+
+      return default_settings
+    end
+
+    -- Configure basedpyright using Neovim 0.11+ native vim.lsp.config() API
+    vim.lsp.config('basedpyright', {
+      cmd = { 'basedpyright-langserver', '--stdio' },
+      filetypes = { 'python' },
+      root_markers = { 'pyproject.toml', 'setup.py', 'setup.cfg', 'requirements.txt', 'Pipfile', 'pyrightconfig.json', '.git' },
+      settings = get_basedpyright_settings(vim.fs.root(0, { 'pyproject.toml', 'setup.py', '.git' })),
       capabilities = capabilities,
     })
 
