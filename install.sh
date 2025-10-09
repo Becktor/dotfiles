@@ -317,7 +317,7 @@ EOF
 symlink_dotfiles() {
     echo "Symlinking configuration files..."
     DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-    CONFIG_FILES=("nvim" "tmux" "wezterm" "ncspot" "hypr" "waybar" "rofi")
+    CONFIG_FILES=("nvim" "tmux" "wezterm" "kitty" "ncspot" "hypr" "waybar" "rofi")
 
     for dir in "${CONFIG_FILES[@]}"; do
         TARGET="$HOME/.config/$dir"
@@ -357,6 +357,32 @@ symlink_dotfiles() {
         echo "Symlinked git/gitconfig → $GITCONFIG_TARGET"
     else
         echo "⚠️  Skipping: $DOTFILES_DIR/git/gitconfig does not exist"
+    fi
+
+    # Symlink pyrightconfig.json
+    PYRIGHT_TARGET="$HOME/pyrightconfig.json"
+    if [ -f "$DOTFILES_DIR/pyrightconfig.json" ]; then
+        if [ -L "$PYRIGHT_TARGET" ] || [ -f "$PYRIGHT_TARGET" ]; then
+            echo "Backing up existing $PYRIGHT_TARGET to $PYRIGHT_TARGET.backup"
+            mv "$PYRIGHT_TARGET" "$PYRIGHT_TARGET.backup"
+        fi
+        ln -s "$DOTFILES_DIR/pyrightconfig.json" "$PYRIGHT_TARGET"
+        echo "Symlinked pyrightconfig.json → $PYRIGHT_TARGET"
+    else
+        echo "⚠️  Skipping: $DOTFILES_DIR/pyrightconfig.json does not exist"
+    fi
+
+    # Symlink markdownlint config
+    MARKDOWNLINT_TARGET="$HOME/.markdownlint-cli2.jsonc"
+    if [ -f "$DOTFILES_DIR/.markdownlint-cli2.jsonc" ]; then
+        if [ -L "$MARKDOWNLINT_TARGET" ] || [ -f "$MARKDOWNLINT_TARGET" ]; then
+            echo "Backing up existing $MARKDOWNLINT_TARGET to $MARKDOWNLINT_TARGET.backup"
+            mv "$MARKDOWNLINT_TARGET" "$MARKDOWNLINT_TARGET.backup"
+        fi
+        ln -s "$DOTFILES_DIR/.markdownlint-cli2.jsonc" "$MARKDOWNLINT_TARGET"
+        echo "Symlinked .markdownlint-cli2.jsonc → $MARKDOWNLINT_TARGET"
+    else
+        echo "⚠️  Skipping: $DOTFILES_DIR/.markdownlint-cli2.jsonc does not exist"
     fi
 }
 

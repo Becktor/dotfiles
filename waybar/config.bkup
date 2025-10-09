@@ -54,23 +54,23 @@
 
     "hyprland/language": {
         "format": "  {short}",
-        "on-click": "hyprctl switchxkblayout pfu-limited-hhkb-hybrid next"
+        "on-click": "hyprctl switchxkblayout at-translated-set-2-keyboard next"
     },
 
     "cpu": {
         "format": "  {usage}%",
         "tooltip": false,
-        "on-click": "kitty -e htop"
+        "on-click": "wezterm -e htop"
     },
 
     "memory": {
         "format": " {}%",
-        "on-click": "kitty -e htop"
+        "on-click": "wezterm -e htop"
     },
 
     "temperature": {
         "thermal-zone": 2,
-        "hwmon-path": "/sys/class/hwmon/hwmon5/temp1_input",
+        "hwmon-path": "/sys/class/hwmon/hwmon2/temp1_input",
         "critical-threshold": 80,
         "format-critical": " {temperatureC}°C",
         "format": " {temperatureC}°C"
@@ -97,7 +97,7 @@
 
     "network": {
         "format-wifi": " ",
-        "format-ethernet": "󰈀 {ipaddr}/{cidr}",
+        "format-ethernet": " {ipaddr}/{cidr}",
         "tooltip-format": "{ifname} via {gwaddr}",
         "format-linked": " {ifname} (No IP)",
         "format-disconnected": " DISC",
