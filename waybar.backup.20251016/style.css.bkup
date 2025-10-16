@@ -1,0 +1,201 @@
+/* Tokyo Night Theme for Waybar */
+* {
+    border: none;
+    border-radius: 0;
+    font-family: "JetBrainsMono Nerd Font", "JetBrains Mono Nerd Font", monospace;
+    font-size: 14px;
+    min-height: 0;
+}
+
+/* Center text vertically in all modules */
+#language, #bluetooth, #pulseaudio, #backlight, #battery, #network, #cpu, #memory, #temperature {
+    padding-top: 2px;
+    padding-bottom: 2px;
+}
+
+window#waybar {
+    background-color: rgba(26, 27, 38, 0.7);
+    color: #c0caf5;
+    transition-property: background-color;
+    transition-duration: 0.5s;
+    border: 2px solid #414868;
+    border-radius: 4px;
+}
+
+window#waybar.hidden {
+    opacity: 0.2;
+}
+
+/* Workspaces */
+#workspaces {
+    margin: 0;
+    padding: 0;
+    padding-left: 6px;
+}
+
+#workspaces button {
+    padding: 0 6px;
+    background-color: transparent;
+    color: #565f89;
+    transition: all 0.3s ease;
+    min-width: 0;
+}
+
+#workspaces button:hover {
+    background-color: rgba(116, 199, 236, 0.1);
+    color: #7aa2f7;
+}
+
+#workspaces button.active {
+    background-color: transparent;
+    color: #7aa2f7;
+}
+
+#workspaces button.urgent {
+    background-color: transparent;
+    color: #f7768e;
+}
+
+/* Hyprland Mode */
+#mode {
+    margin: 0;
+    padding: 0 8px;
+    color: #f7768e;
+    background-color: transparent;
+}
+
+/* Window title */
+#window {
+    margin: 0;
+    padding: 0 8px;
+    color: #c0caf5;
+    font-weight: normal;
+    background-color: transparent;
+}
+
+/* System tray */
+#tray {
+    margin: 0;
+    padding: 0 4px;
+    background-color: transparent;
+}
+
+#tray > .passive {
+    -gtk-icon-effect: dim;
+}
+
+#tray > .needs-attention {
+    -gtk-icon-effect: highlight;
+    background-color: #f7768e;
+}
+
+/* Individual modules */
+#language {
+    margin: 0;
+    padding: 0 8px;
+    color: #c0caf5;
+    background-color: transparent;
+}
+
+#bluetooth {
+    margin: 0;
+    padding: 0 8px;
+    color: #c0caf5;
+    background-color: transparent;
+}
+
+#bluetooth.disabled {
+    color: #565f89;
+}
+
+#clock {
+    margin: 0;
+    padding: 0 12px 0 8px;
+    color: #c0caf5;
+    background-color: transparent;
+}
+
+#battery {
+    margin: 0;
+    padding: 0 8px;
+    color: #c0caf5;
+    background-color: transparent;
+}
+
+#battery.charging {
+    color: #e0af68;
+}
+
+#battery.warning:not(.charging) {
+    color: #ff9e64;
+}
+
+#battery.critical:not(.charging) {
+    color: #f7768e;
+}
+
+#cpu {
+    margin: 0;
+    padding: 0 8px;
+    color: #c0caf5;
+    background-color: transparent;
+}
+
+#memory {
+    margin: 0;
+    padding: 0 8px;
+    color: #c0caf5;
+    background-color: transparent;
+}
+
+#temperature {
+    margin: 0;
+    padding: 0 8px;
+    color: #c0caf5;
+    background-color: transparent;
+}
+
+#temperature.critical {
+    color: #f7768e;
+}
+
+#network {
+    margin: 0;
+    padding: 0 8px;
+    color: #c0caf5;
+    background-color: transparent;
+}
+
+#network.disconnected {
+    color: #f7768e;
+}
+
+#pulseaudio {
+    margin: 0;
+    padding: 0 8px;
+    color: #c0caf5;
+    background-color: transparent;
+}
+
+#pulseaudio.muted {
+    color: #565f89;
+}
+
+#backlight {
+    margin: 0;
+    padding: 0 8px;
+    color: #c0caf5;
+    background-color: transparent;
+}
+
+/* Tooltips */
+tooltip {
+    background-color: #1a1b26;
+    border: 1px solid #414868;
+    border-radius: 4px;
+    color: #c0caf5;
+}
+
+tooltip label {
+    color: #c0caf5;
+}

@@ -317,7 +317,7 @@ EOF
 symlink_dotfiles() {
     echo "Symlinking configuration files..."
     DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-    CONFIG_FILES=("nvim" "tmux" "wezterm" "kitty" "ncspot" "hypr" "waybar" "rofi")
+    CONFIG_FILES=("nvim" "tmux" "wezterm" "kitty" "ncspot" "hypr" "waybar")
 
     for dir in "${CONFIG_FILES[@]}"; do
         TARGET="$HOME/.config/$dir"
@@ -344,6 +344,32 @@ symlink_dotfiles() {
         echo "Symlinked zshrc → $ZSHRC_TARGET"
     else
         echo "⚠️  Skipping: $DOTFILES_DIR/zshrc does not exist"
+    fi
+
+    # Symlink bashrc
+    BASHRC_TARGET="$HOME/.bashrc"
+    if [ -f "$DOTFILES_DIR/bash/bashrc" ]; then
+        if [ -L "$BASHRC_TARGET" ] || [ -f "$BASHRC_TARGET" ]; then
+            echo "Backing up existing $BASHRC_TARGET to $BASHRC_TARGET.backup"
+            mv "$BASHRC_TARGET" "$BASHRC_TARGET.backup"
+        fi
+        ln -s "$DOTFILES_DIR/bash/bashrc" "$BASHRC_TARGET"
+        echo "Symlinked bash/bashrc → $BASHRC_TARGET"
+    else
+        echo "⚠️  Skipping: $DOTFILES_DIR/bash/bashrc does not exist"
+    fi
+
+    # Symlink bash_profile
+    BASH_PROFILE_TARGET="$HOME/.bash_profile"
+    if [ -f "$DOTFILES_DIR/bash/bash_profile" ]; then
+        if [ -L "$BASH_PROFILE_TARGET" ] || [ -f "$BASH_PROFILE_TARGET" ]; then
+            echo "Backing up existing $BASH_PROFILE_TARGET to $BASH_PROFILE_TARGET.backup"
+            mv "$BASH_PROFILE_TARGET" "$BASH_PROFILE_TARGET.backup"
+        fi
+        ln -s "$DOTFILES_DIR/bash/bash_profile" "$BASH_PROFILE_TARGET"
+        echo "Symlinked bash/bash_profile → $BASH_PROFILE_TARGET"
+    else
+        echo "⚠️  Skipping: $DOTFILES_DIR/bash/bash_profile does not exist"
     fi
 
     # Symlink git config

@@ -1,0 +1,36 @@
+# Omarchy defaults (don't mess with these directly, just overwrite them here!)
+source ~/.local/share/omarchy/default/bash/rc
+
+# ============================================================================
+# Custom Configuration
+# ============================================================================
+
+# Environment Variables
+# export EDITOR=nvim
+# export VISUAL=nvim
+
+# Custom Aliases
+# alias p='python3'
+# alias v='nvim'
+# alias g='git'
+# alias d='docker'
+# alias dc='docker-compose'
+
+# Terminal aliases for large font
+alias tl='alacritty-large'
+alias term-large='alacritty-large'
+
+# Custom Functions
+# mcd() {
+#     mkdir -p "$1" && cd "$1"
+# }
+
+# Source API keys if they exist
+[ -f "$HOME/.api_keys" ] && source "$HOME/.api_keys"
+
+# Add any local bin directories to PATH
+export PATH="$HOME/.local/bin:$PATH"
+export PATH="$HOME/bin:$PATH"
+
+# Custom prompt additions (if not using omarchy's prompt)
+# PS1='[\u@\h \W]\$ '
