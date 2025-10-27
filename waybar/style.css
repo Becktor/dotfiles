@@ -1,16 +1,10 @@
-/* Tokyo Night Theme for Waybar */
+/* Tokyo Night Theme for Waybar - Omarchy-inspired layout */
 * {
     border: none;
     border-radius: 0;
     font-family: "JetBrainsMono Nerd Font", "JetBrains Mono Nerd Font", monospace;
     font-size: 14px;
     min-height: 0;
-}
-
-/* Center text vertically in all modules */
-#language, #bluetooth, #pulseaudio, #backlight, #battery, #network, #cpu, #memory, #temperature {
-    padding-top: 2px;
-    padding-bottom: 2px;
 }
 
 window#waybar {
@@ -26,19 +20,34 @@ window#waybar.hidden {
     opacity: 0.2;
 }
 
+/* Module spacing */
+.modules-left {
+    margin-left: 2px;
+}
+
+.modules-right {
+    margin-right: 8px;
+}
+
 /* Workspaces */
 #workspaces {
     margin: 0;
     padding: 0;
-    padding-left: 6px;
+    padding-left: 2px;
 }
 
 #workspaces button {
+    all: initial;
     padding: 0 6px;
+    margin: 0 1.5px;
+    min-width: 9px;
     background-color: transparent;
     color: #565f89;
     transition: all 0.3s ease;
-    min-width: 0;
+}
+
+#workspaces button.empty {
+    opacity: 0.5;
 }
 
 #workspaces button:hover {
@@ -56,27 +65,37 @@ window#waybar.hidden {
     color: #f7768e;
 }
 
-/* Hyprland Mode */
-#mode {
-    margin: 0;
-    padding: 0 8px;
-    color: #f7768e;
-    background-color: transparent;
-}
-
-/* Window title */
-#window {
-    margin: 0;
-    padding: 0 8px;
+/* Clock */
+#clock {
+    margin: 0 8.75px;
+    padding: 0;
     color: #c0caf5;
-    font-weight: normal;
-    background-color: transparent;
 }
 
-/* System tray */
+/* System modules with consistent spacing */
+#tray,
+#cpu,
+#battery,
+#network,
+#bluetooth,
+#pulseaudio,
+#custom-expand-icon {
+    min-width: 12px;
+    margin: 0 7.5px;
+    padding: 0;
+}
+
+#custom-expand-icon {
+    margin-right: 7px;
+}
+
+/* Hidden state */
+.hidden {
+    opacity: 0;
+}
+
+/* Tray */
 #tray {
-    margin: 0;
-    padding: 0 4px;
     background-color: transparent;
 }
 
@@ -89,35 +108,14 @@ window#waybar.hidden {
     background-color: #f7768e;
 }
 
-/* Individual modules */
-#language {
-    margin: 0;
-    padding: 0 8px;
+/* CPU */
+#cpu {
     color: #c0caf5;
     background-color: transparent;
 }
 
-#bluetooth {
-    margin: 0;
-    padding: 0 8px;
-    color: #c0caf5;
-    background-color: transparent;
-}
-
-#bluetooth.disabled {
-    color: #565f89;
-}
-
-#clock {
-    margin: 0;
-    padding: 0 12px 0 8px;
-    color: #c0caf5;
-    background-color: transparent;
-}
-
+/* Battery */
 #battery {
-    margin: 0;
-    padding: 0 8px;
     color: #c0caf5;
     background-color: transparent;
 }
@@ -134,34 +132,8 @@ window#waybar.hidden {
     color: #f7768e;
 }
 
-#cpu {
-    margin: 0;
-    padding: 0 8px;
-    color: #c0caf5;
-    background-color: transparent;
-}
-
-#memory {
-    margin: 0;
-    padding: 0 8px;
-    color: #c0caf5;
-    background-color: transparent;
-}
-
-#temperature {
-    margin: 0;
-    padding: 0 8px;
-    color: #c0caf5;
-    background-color: transparent;
-}
-
-#temperature.critical {
-    color: #f7768e;
-}
-
+/* Network */
 #network {
-    margin: 0;
-    padding: 0 8px;
     color: #c0caf5;
     background-color: transparent;
 }
@@ -170,9 +142,18 @@ window#waybar.hidden {
     color: #f7768e;
 }
 
+/* Bluetooth */
+#bluetooth {
+    color: #c0caf5;
+    background-color: transparent;
+}
+
+#bluetooth.disabled {
+    color: #565f89;
+}
+
+/* Pulseaudio */
 #pulseaudio {
-    margin: 0;
-    padding: 0 8px;
     color: #c0caf5;
     background-color: transparent;
 }
@@ -181,19 +162,13 @@ window#waybar.hidden {
     color: #565f89;
 }
 
-#backlight {
-    margin: 0;
-    padding: 0 8px;
-    color: #c0caf5;
-    background-color: transparent;
-}
-
 /* Tooltips */
 tooltip {
     background-color: #1a1b26;
     border: 1px solid #414868;
     border-radius: 4px;
     color: #c0caf5;
+    padding: 2px;
 }
 
 tooltip label {

@@ -301,6 +301,7 @@ return {
       'black', -- Python formatter
       'basedpyright', -- Enhanced Python type checker (fork of pyright)
       'prettierd', -- Fast JavaScript/TypeScript formatter
+      'markdownlint-cli2', -- Markdown linter
       'vue-language-server', -- Vue language server
       'typescript-language-server', -- TypeScript language server
       'html-lsp', -- HTML language server

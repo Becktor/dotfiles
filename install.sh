@@ -384,6 +384,19 @@ symlink_dotfiles() {
     else
         echo "⚠️  Skipping: $DOTFILES_DIR/.markdownlint-cli2.jsonc does not exist"
     fi
+
+    # Symlink prettier config
+    PRETTIER_TARGET="$HOME/.prettierrc"
+    if [ -f "$DOTFILES_DIR/.prettierrc" ]; then
+        if [ -L "$PRETTIER_TARGET" ] || [ -f "$PRETTIER_TARGET" ]; then
+            echo "Backing up existing $PRETTIER_TARGET to $PRETTIER_TARGET.backup"
+            mv "$PRETTIER_TARGET" "$PRETTIER_TARGET.backup"
+        fi
+        ln -s "$DOTFILES_DIR/.prettierrc" "$PRETTIER_TARGET"
+        echo "Symlinked .prettierrc → $PRETTIER_TARGET"
+    else
+        echo "⚠️  Skipping: $DOTFILES_DIR/.prettierrc does not exist"
+    fi
 }
 
 setup_ssh_key() {
