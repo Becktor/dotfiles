@@ -31,7 +31,6 @@ require('lazy').setup({
     -- Import plugin groups
     { import = 'kickstart.plugins' },
     { import = 'plugins.editor' },
-    'minuet-ai/minuet-ai.nvim',
     { import = 'plugins.ui' },
     { import = 'plugins.coding' },
     { import = 'plugins.ai' },
