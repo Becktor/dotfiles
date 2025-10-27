@@ -3,7 +3,7 @@ return { -- Highlight, edit, and navigate code
   build = ':TSUpdate',
   -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
   config = function()
-    require('nvim-treesitter.configs').setup({
+    require('nvim-treesitter.configs').setup {
       ensure_installed = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' },
       -- Autoinstall languages that are not installed
       auto_install = true,
@@ -15,7 +15,7 @@ return { -- Highlight, edit, and navigate code
         additional_vim_regex_highlighting = { 'ruby' },
       },
       indent = { enable = true, disable = { 'ruby' } },
-    })
+    }
   end,
   -- There are additional nvim-treesitter modules that you can use to interact
   -- with nvim-treesitter. You should go explore a few and see what interests you:
