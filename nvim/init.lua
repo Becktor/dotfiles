@@ -1,6 +1,11 @@
 -- Bootstrap Neovim configuration
 -- This is a minimal init.lua that loads the modular configuration
 
+-- Compatibility shim for old nvim-treesitter API (telescope uses ft_to_lang)
+if not vim.treesitter.language.ft_to_lang then
+  vim.treesitter.language.ft_to_lang = vim.treesitter.language.get_lang
+end
+
 -- Load core settings
 require 'config.options'
 require 'config.keymaps'
