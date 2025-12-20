@@ -34,3 +34,5 @@ export PATH="$HOME/bin:$PATH"
 
 # Custom prompt additions (if not using omarchy's prompt)
 # PS1='[\u@\h \W]\$ '
+
+. "$HOME/.local/share/../bin/env"
