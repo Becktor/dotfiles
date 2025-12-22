@@ -2,7 +2,7 @@ max-visible=5
 max-history=100
 
 [app-name="Claude Code"]
-invisible=true
+on-notify=dismiss
 
 [grouped]
-invisible=true
+invisible=1
