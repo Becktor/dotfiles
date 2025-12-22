@@ -62,14 +62,17 @@ return {
         -- Jump to the definition of the word under your cursor.
         --  This is where a variable was first declared, or where a function is defined, etc.
         --  To jump back, press <C-t>.
-        map('gd', require('telescope.builtin').lsp_definitions, '[G]oto [D]efinition')
+        map('gd', vim.lsp.buf.definition, '[G]oto [D]efinition')
 
         -- Find references for the word under your cursor.
-        map('gr', require('telescope.builtin').lsp_references, '[G]oto [R]eferences')
+        map('gr', vim.lsp.buf.references, '[G]oto [R]eferences')
 
         -- Jump to the implementation of the word under your cursor.
         --  Useful when your language has ways of declaring types without an actual implementation.
-        map('gI', require('telescope.builtin').lsp_implementations, '[G]oto [I]mplementation')
+        --  Note: Not all LSPs support this (e.g., ty doesn't)
+        if client and client.server_capabilities.implementationProvider then
+          map('gI', vim.lsp.buf.implementation, '[G]oto [I]mplementation')
+        end
 
         -- Jump to the type of the word under your cursor.
         --  Useful when you're not sure what type a variable is and you want to see
@@ -239,7 +242,7 @@ return {
     local servers = {
       -- clangd = {},
       -- gopls = {},
-      -- basedpyright handled automatically by nvim-lspconfig with overridden settings above
+      -- Python: using ty (Astral) instead of basedpyright - configured separately below
       -- rust_analyzer = {},
       -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
       --
@@ -299,9 +302,7 @@ return {
       'stylua', -- Used to format Lua code
       'isort', -- Python import organizer
       'black', -- Python formatter
-      'basedpyright', -- Enhanced Python type checker (fork of pyright)
       'prettierd', -- Fast JavaScript/TypeScript formatter
-      'markdownlint-cli2', -- Markdown linter
       'vue-language-server', -- Vue language server
       'typescript-language-server', -- TypeScript language server
       'html-lsp', -- HTML language server
@@ -310,130 +311,25 @@ return {
     })
     require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
-    -- Function to read basedpyright settings from pyproject.toml
-    local function get_basedpyright_settings(root_dir)
-      local default_settings = {
-        basedpyright = {
-          analysis = {
-            autoSearchPaths = true,
-            useLibraryCodeForTypes = true,
-            diagnosticMode = 'openFilesOnly',
-            typeCheckingMode = 'basic',
-            indexing = true,
-            -- include = { 'src' },
-            -- exclude = { '**/__pycache__' },
-            -- executionEnvironments = { { root = 'src' } },
-            autoImportCompletions = true,
-            completeFunctionParens = true,
-          },
-        },
-      }
-
-      -- Try to read pyproject.toml
-      if root_dir then
-        local pyproject_path = root_dir .. '/pyproject.toml'
-
-        local file = io.open(pyproject_path, 'r')
-        if file then
-          local content = file:read '*all'
-          file:close()
-
-          -- Simple parsing for [tool.basedpyright] section
-          local basedpyright_section = content:match '%[tool%.basedpyright%](.-)%['
-          if not basedpyright_section then
-            basedpyright_section = content:match '%[tool%.basedpyright%](.*)$'
-          end
-
-          if basedpyright_section then
-            -- Parse all settings from pyproject.toml and apply them directly
-            -- Match string values (quoted)
-            for key, value in basedpyright_section:gmatch '([%w_]+)%s*=%s*["\']([^"\']+)["\']' do
-              -- Map pyproject.toml keys to basedpyright LSP config structure
-              if key == 'diagnosticMode' or key == 'typeCheckingMode' then
-                default_settings.basedpyright.analysis[key] = value
-              elseif key:match '^report%w+' then
-                -- All diagnostic settings go into diagnosticSeverityOverrides
-                if not default_settings.basedpyright.analysis.diagnosticSeverityOverrides then
-                  default_settings.basedpyright.analysis.diagnosticSeverityOverrides = {}
-                end
-                default_settings.basedpyright.analysis.diagnosticSeverityOverrides[key] = value
-              end
-            end
-
-            -- Match boolean values
-            for key, value in basedpyright_section:gmatch '([%w_]+)%s*=%s*(true|false)' do
-              if
-                key == 'autoSearchPaths'
-                or key == 'useLibraryCodeForTypes'
-                or key == 'indexing'
-                or key == 'autoImportCompletions'
-                or key == 'completeFunctionParens'
-              then
-                default_settings.basedpyright.analysis[key] = value == 'true'
-              end
-            end
-
-            -- Match arrays for include/exclude
-            for key, array_content in basedpyright_section:gmatch '([%w_]+)%s*=%s*%[([^%]]+)%]' do
-              if key == 'include' or key == 'exclude' then
-                local items = {}
-                for item in array_content:gmatch '["\']([^"\']+)["\']' do
-                  table.insert(items, item)
-                end
-                default_settings.basedpyright.analysis[key] = items
-              end
-            end
-          end
-
-          -- Auto-detect virtual environment
-          local venv_paths = {
-            root_dir .. '/.venv', -- Same level as pyproject.toml
-            root_dir .. '/../.venv', -- One level up
-            root_dir .. '/venv', -- Alternative naming
-            root_dir .. '/../venv', -- Alternative naming one level up
-          }
-
-          for _, venv_path in ipairs(venv_paths) do
-            local python_exe = venv_path .. (vim.fn.has 'win32' == 1 and '/Scripts/python.exe' or '/bin/python')
-            if vim.fn.executable(python_exe) == 1 then
-              -- Set python path at top level (legacy)
-              default_settings.python = { pythonPath = python_exe }
-
-              -- Also set in basedpyright analysis settings (recommended)
-              default_settings.basedpyright.analysis.pythonPath = python_exe
-              default_settings.basedpyright.analysis.venvPath = venv_path:match '(.+)/.+$' -- Parent directory of venv
-
-              -- Update execution environment with python path
-              if default_settings.basedpyright.analysis.executionEnvironments and default_settings.basedpyright.analysis.executionEnvironments[1] then
-                default_settings.basedpyright.analysis.executionEnvironments[1].pythonPath = python_exe
-              end
-              break
-            end
-          end
-        end
-      end
-
-      return default_settings
-    end
-
-    -- Configure basedpyright using Neovim 0.11+ native vim.lsp.config() API
-    vim.lsp.config('basedpyright', {
-      cmd = { 'basedpyright-langserver', '--stdio' },
+    -- Configure ty (Astral's Python type checker/LSP) using Neovim 0.11+ native vim.lsp.config() API
+    vim.lsp.config('ty', {
+      cmd = { 'ty', 'server' },
       filetypes = { 'python' },
-      root_markers = { 'pyproject.toml', 'setup.py', 'setup.cfg', 'requirements.txt', 'Pipfile', 'pyrightconfig.json', '.git' },
-      settings = get_basedpyright_settings(vim.fs.root(0, { 'pyproject.toml', 'setup.py', '.git' })),
-      capabilities = capabilities,
+      root_markers = { 'pyproject.toml', 'ty.toml', 'setup.py', 'setup.cfg', 'requirements.txt', '.git' },
+      settings = {
+        ty = {},
+      },
     })
 
-    -- Enable basedpyright with the native API
-    vim.lsp.enable 'basedpyright'
+    -- Enable ty with the native API
+    vim.lsp.enable 'ty'
 
     require('mason-lspconfig').setup {
       automatic_installation = false, -- Keep this disabled since we use mason-tool-installer
       handlers = {
         function(server_name)
-          -- Skip basedpyright since we're handling it with native vim.lsp.config()
-          if server_name == 'basedpyright' then
+          -- Skip ty (installed via uv, not Mason) and basedpyright (replaced by ty)
+          if server_name == 'ty' or server_name == 'basedpyright' then
             return
           end
 

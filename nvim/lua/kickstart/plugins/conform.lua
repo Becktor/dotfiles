@@ -40,7 +40,6 @@ return { -- Autoformat
       typescript = { "prettierd", "prettier", stop_after_first = true },
       javascriptreact = { "prettierd", "prettier", stop_after_first = true },
       typescriptreact = { "prettierd", "prettier", stop_after_first = true },
-      markdown = { "prettierd", "prettier", stop_after_first = true },
     },
     formatters = {
       -- Configure isort to read from pyproject.toml
@@ -50,13 +49,6 @@ return { -- Autoformat
       -- Configure black to read from pyproject.toml
       black = {
         args = { "--stdin-filename", "$FILENAME", "--quiet", "-" },
-      },
-      -- Configure prettier to use Mason installation
-      prettier = {
-        command = vim.fn.stdpath("data") .. "/mason/bin/prettier",
-      },
-      prettierd = {
-        command = vim.fn.stdpath("data") .. "/mason/bin/prettierd",
       },
     },
   },
