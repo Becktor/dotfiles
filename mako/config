@@ -1,8 +1,8 @@
-max-visible=0
-max-history=0
+max-visible=5
+max-history=100
 
-[hidden]
-invisible=1
+[app-name="Claude Code"]
+invisible=true
 
 [grouped]
-invisible=1
+invisible=true

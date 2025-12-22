@@ -317,8 +317,28 @@ EOF
 symlink_dotfiles() {
     echo "Symlinking configuration files..."
     DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-    CONFIG_FILES=("nvim" "tmux" "wezterm" "kitty" "ncspot" "hypr" "waybar" "rofi" "mako")
 
+    # Files in dev-env submodule
+    DEVENV_FILES=("nvim" "tmux")
+    # Files directly in dotfiles root
+    CONFIG_FILES=("wezterm" "kitty" "ncspot" "hypr" "waybar" "rofi" "mako")
+
+    # Symlink dev-env submodule files
+    for dir in "${DEVENV_FILES[@]}"; do
+        TARGET="$HOME/.config/$dir"
+        if [ -L "$TARGET" ] || [ -d "$TARGET" ]; then
+            echo "Removing existing $TARGET"
+            rm -rf "$TARGET"
+        fi
+        if [ -d "$DOTFILES_DIR/dev-env/$dir" ]; then
+            ln -s "$DOTFILES_DIR/dev-env/$dir" "$TARGET"
+            echo "Symlinked dev-env/$dir → $TARGET"
+        else
+            echo "⚠️  Skipping: $DOTFILES_DIR/dev-env/$dir does not exist"
+        fi
+    done
+
+    # Symlink root config files
     for dir in "${CONFIG_FILES[@]}"; do
         TARGET="$HOME/.config/$dir"
         if [ -L "$TARGET" ] || [ -d "$TARGET" ]; then
@@ -421,7 +441,14 @@ setup_ssh_key() {
     fi
 }
 
+init_submodules() {
+    echo "Initializing git submodules..."
+    DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+    git -C "$DOTFILES_DIR" submodule update --init --recursive
+}
+
 # Execute
+init_submodules
 install_packages
 install_neovim_from_github_release
 install_oh_my_zsh
