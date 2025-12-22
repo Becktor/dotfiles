@@ -28,7 +28,34 @@ done
 
 OS="$(uname -s)"
 
+# Helper to check if a command exists
+command_exists() {
+    command -v "$1" &>/dev/null
+}
+
 install_packages() {
+    # Check which tools are missing
+    MISSING=()
+    command_exists git || MISSING+=(git)
+    command_exists ninja || MISSING+=(ninja)
+    command_exists cmake || MISSING+=(cmake)
+    command_exists curl || MISSING+=(curl)
+    command_exists tmux || MISSING+=(tmux)
+    command_exists unzip || MISSING+=(unzip)
+    command_exists jq || MISSING+=(jq)
+    command_exists rg || MISSING+=(rg)
+    command_exists fd || MISSING+=(fd)
+    command_exists fzf || MISSING+=(fzf)
+    command_exists tree || MISSING+=(tree)
+    command_exists htop || MISSING+=(htop)
+
+    if [ ${#MISSING[@]} -eq 0 ]; then
+        echo "All required packages already installed. Skipping."
+        return
+    fi
+
+    echo "Missing tools: ${MISSING[*]}"
+
     case "$OS" in
         Linux)
             # Detect Linux distribution
@@ -46,7 +73,7 @@ install_packages() {
 
             case "$DISTRO" in
                 debian|ubuntu)
-                    echo "Detected Debian/Ubuntu. Checking for recent apt update..."
+                    echo "Detected Debian/Ubuntu."
 
                     # Only update if last update was more than 6 hours ago
                     UPDATE_STAMP="/var/lib/apt/periodic/update-success-stamp"
@@ -55,7 +82,6 @@ install_packages() {
                         LAST_UPDATE=$(stat -c %Y "$UPDATE_STAMP")
                         NOW=$(date +%s)
                         SIX_HOURS_AGO=$((NOW - 6 * 3600))
-
                         if [ "$LAST_UPDATE" -gt "$SIX_HOURS_AGO" ]; then
                             echo "apt-get update was run recently. Skipping."
                             NEED_UPDATE=false
@@ -67,12 +93,52 @@ install_packages() {
                         sudo apt-get update
                     fi
 
-                    echo "Installing prerequisites..."
-                    sudo apt-get install -y git zsh ninja-build gettext cmake curl build-essential tmux unzip jq ripgrep fd-find fzf tree htop python3-pip software-properties-common
+                    # Build package list from missing tools
+                    PKGS=()
+                    for m in "${MISSING[@]}"; do
+                        case "$m" in
+                            git) PKGS+=(git) ;;
+                            ninja) PKGS+=(ninja-build) ;;
+                            cmake) PKGS+=(cmake) ;;
+                            curl) PKGS+=(curl) ;;
+                            tmux) PKGS+=(tmux) ;;
+                            unzip) PKGS+=(unzip) ;;
+                            jq) PKGS+=(jq) ;;
+                            rg) PKGS+=(ripgrep) ;;
+                            fd) PKGS+=(fd-find) ;;
+                            fzf) PKGS+=(fzf) ;;
+                            tree) PKGS+=(tree) ;;
+                            htop) PKGS+=(htop) ;;
+                        esac
+                    done
+
+                    echo "Installing: ${PKGS[*]}"
+                    sudo apt-get install -y "${PKGS[@]}"
                     ;;
                 arch)
-                    echo "Detected Arch Linux. Installing prerequisites..."
-                    sudo pacman -Sy --needed --noconfirm git zsh ninja gettext cmake curl base-devel tmux unzip jq ripgrep fd fzf tree htop python-pip
+                    echo "Detected Arch Linux."
+
+                    # Build package list from missing tools
+                    PKGS=()
+                    for m in "${MISSING[@]}"; do
+                        case "$m" in
+                            git) PKGS+=(git) ;;
+                            ninja) PKGS+=(ninja) ;;
+                            cmake) PKGS+=(cmake) ;;
+                            curl) PKGS+=(curl) ;;
+                            tmux) PKGS+=(tmux) ;;
+                            unzip) PKGS+=(unzip) ;;
+                            jq) PKGS+=(jq) ;;
+                            rg) PKGS+=(ripgrep) ;;
+                            fd) PKGS+=(fd) ;;
+                            fzf) PKGS+=(fzf) ;;
+                            tree) PKGS+=(tree) ;;
+                            htop) PKGS+=(htop) ;;
+                        esac
+                    done
+
+                    echo "Installing: ${PKGS[*]}"
+                    sudo pacman -Sy --needed --noconfirm "${PKGS[@]}"
                     ;;
                 *)
                     echo "Unsupported Linux distribution: $DISTRO"
@@ -81,12 +147,33 @@ install_packages() {
             esac
             ;;
         Darwin)
-            echo "Detected macOS. Installing prerequisites..."
-            if ! command -v brew &>/dev/null; then
+            echo "Detected macOS."
+            if ! command_exists brew; then
                 echo "Homebrew not found. Installing Homebrew..."
                 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
             fi
-            brew install zsh ninja gettext cmake curl tmux unzip jq
+
+            # Build package list from missing tools
+            PKGS=()
+            for m in "${MISSING[@]}"; do
+                case "$m" in
+                    git) PKGS+=(git) ;;
+                    ninja) PKGS+=(ninja) ;;
+                    cmake) PKGS+=(cmake) ;;
+                    curl) PKGS+=(curl) ;;
+                    tmux) PKGS+=(tmux) ;;
+                    unzip) PKGS+=(unzip) ;;
+                    jq) PKGS+=(jq) ;;
+                    rg) PKGS+=(ripgrep) ;;
+                    fd) PKGS+=(fd) ;;
+                    fzf) PKGS+=(fzf) ;;
+                    tree) PKGS+=(tree) ;;
+                    htop) PKGS+=(htop) ;;
+                esac
+            done
+
+            echo "Installing: ${PKGS[*]}"
+            brew install "${PKGS[@]}"
             ;;
         *)
             echo "Unsupported OS: $OS"
@@ -162,39 +249,6 @@ install_neovim_from_github_release() {
     sudo cp -r ./* /usr/local/nvim/
     cd ..
     sudo ln -sf /usr/local/nvim/bin/nvim /usr/local/bin/nvim
-}
-
-install_oh_my_zsh() {
-    if [ -d "$HOME/.oh-my-zsh" ]; then
-        echo "Oh My Zsh already installed. Skipping."
-    else
-        echo "Installing Oh My Zsh..."
-        RUNZSH=no CHSH=no sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-    fi
-}
-
-install_powerlevel10k() {
-    P10K_DIR="$HOME/powerlevel10k"
-    if [ -d "$P10K_DIR" ]; then
-        echo "Powerlevel10k already installed. Skipping."
-    else
-        echo "Installing Powerlevel10k theme..."
-        git clone --depth=1 https://github.com/romkatv/powerlevel10k.git "$P10K_DIR"
-    fi
-}
-
-setup_shell_info() {
-    ZSH_PATH="$(command -v zsh)"
-    if [ "$SHELL" != "$ZSH_PATH" ]; then
-        echo "ℹ️  To set Zsh as your default shell, run:"
-        echo "   chsh -s $ZSH_PATH"
-        echo "   Then log out and back in, or restart your terminal."
-        if ! grep -qx "$ZSH_PATH" /etc/shells; then
-            echo "$ZSH_PATH" | sudo tee -a /etc/shells > /dev/null
-        fi
-    else
-        echo "✅ Zsh is already the default shell."
-    fi
 }
 
 install_nodejs() {
@@ -284,36 +338,6 @@ install_fonts() {
     fi
 }
 
-create_api_config() {
-    CONFIG_FILE="$HOME/.api_keys"
-    ZSHRC="$HOME/.zshrc"
-
-    echo "Creating API key config file at $CONFIG_FILE..."
-
-    # Create file if it doesn't exist
-    if [ ! -f "$CONFIG_FILE" ]; then
-        cat <<EOF > "$CONFIG_FILE"
-# API keys (edit these)
-export OPENAI_API_KEY=""
-export GEMINI_API_KEY=""
-export ANTHROPIC_API_KEY=""
-EOF
-        chmod 600 "$CONFIG_FILE"
-        echo "Created template API key file at $CONFIG_FILE."
-    else
-        echo "API key config file already exists. Skipping creation."
-    fi
-
-    # Ensure it's sourced in .zshrc
-    if ! grep -q "source \$HOME/.api_keys" "$ZSHRC"; then
-        echo "source \$HOME/.api_keys" >> "$ZSHRC"
-        echo "Added API config sourcing to .zshrc."
-    else
-        echo "API config already sourced in .zshrc."
-    fi
-}
-
-
 symlink_dotfiles() {
     echo "Symlinking configuration files..."
     DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -352,19 +376,6 @@ symlink_dotfiles() {
             echo "⚠️  Skipping: $DOTFILES_DIR/$dir does not exist"
         fi
     done
-
-    # Symlink zshrc
-    ZSHRC_TARGET="$HOME/.zshrc"
-    if [ -f "$DOTFILES_DIR/zshrc" ]; then
-        if [ -L "$ZSHRC_TARGET" ] || [ -f "$ZSHRC_TARGET" ]; then
-            echo "Backing up existing $ZSHRC_TARGET to $ZSHRC_TARGET.backup"
-            mv "$ZSHRC_TARGET" "$ZSHRC_TARGET.backup"
-        fi
-        ln -s "$DOTFILES_DIR/zshrc" "$ZSHRC_TARGET"
-        echo "Symlinked zshrc → $ZSHRC_TARGET"
-    else
-        echo "⚠️  Skipping: $DOTFILES_DIR/zshrc does not exist"
-    fi
 
     # Symlink bashrc
     BASHRC_TARGET="$HOME/.bashrc"
@@ -464,21 +475,14 @@ init_submodules() {
 init_submodules
 install_packages
 install_neovim_from_github_release
-install_oh_my_zsh
-install_powerlevel10k
-setup_shell_info
 install_nodejs
 install_tpm
 install_fonts
-create_api_config
 symlink_dotfiles
 setup_ssh_key
 
 echo "✅ Installation and setup complete!"
 echo ""
 echo "📋 Next steps:"
-echo "   1. Run 'chsh -s \$(which zsh)' to set Zsh as default shell (if not already done)"
-echo "   2. Restart your terminal or log out and back in"
-echo "   3. Edit ~/.api_keys to add your API keys"
-echo "   4. Run 'p10k configure' to configure Powerlevel10k theme"
-echo "   5. In tmux, press <prefix>I to install tmux plugins"
+echo "   1. Restart your terminal or log out and back in"
+echo "   2. In tmux, press <prefix>I to install tmux plugins"
