@@ -7,7 +7,8 @@
   "modules-left": ["hyprland/workspaces"],
   "modules-center": ["clock"],
   "modules-right": [
-    "group/tray-expander",
+    "tray",
+    "hyprland/language",
     "bluetooth",
     "network",
     "pulseaudio",
@@ -108,22 +109,13 @@
     "scroll-step": 5
   },
 
-  "group/tray-expander": {
-    "orientation": "inherit",
-    "drawer": {
-      "transition-duration": 600,
-      "children-class": "tray-group-item"
-    },
-    "modules": ["custom/expand-icon", "tray"]
-  },
-
-  "custom/expand-icon": {
-    "format": " ",
-    "tooltip": false
-  },
-
   "tray": {
-    "icon-size": 12,
-    "spacing": 12
+    "icon-size": 16,
+    "spacing": 8
+  },
+
+  "hyprland/language": {
+    "format": "{short}",
+    "on-click": "hyprctl switchxkblayout all next"
   }
 }

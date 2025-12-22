@@ -317,7 +317,7 @@ EOF
 symlink_dotfiles() {
     echo "Symlinking configuration files..."
     DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-    CONFIG_FILES=("nvim" "tmux" "wezterm" "kitty" "ncspot" "hypr" "waybar" "rofi")
+    CONFIG_FILES=("nvim" "tmux" "wezterm" "kitty" "ncspot" "hypr" "waybar" "rofi" "mako")
 
     for dir in "${CONFIG_FILES[@]}"; do
         TARGET="$HOME/.config/$dir"
