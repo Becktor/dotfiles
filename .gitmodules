@@ -1,0 +1,3 @@
+[submodule "dev-env"]
+	path = dev-env
+	url = git@github.com:Becktor/dev-env.git

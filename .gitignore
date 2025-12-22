@@ -1,4 +1,2 @@
 .DS_Store
-tmux/plugins
 *.cbor
-nvim/lazy-lock.json
