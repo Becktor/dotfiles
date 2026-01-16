@@ -135,6 +135,17 @@ alias ....="cd ../../.."
 export PATH=$HOME/.local/bin:$PATH
 alias dt="zsh $HOME/.config/tmux/scripts/default-session.sh"
 
+# Wrap claude to show "bro" in tmux window name
+claude() {
+    if [[ -n "$TMUX" ]]; then
+        tmux rename-window "bro"
+        command claude "$@"
+        tmux set-window-option automatic-rename on
+    else
+        command claude "$@"
+    fi
+}
+
 # Source powerlevel10k theme if it exists
 if [[ -f ~/powerlevel10k/powerlevel10k.zsh-theme ]]; then
     source ~/powerlevel10k/powerlevel10k.zsh-theme
@@ -157,3 +168,6 @@ unsetopt BEEP
 export PATH=$PATH:/home/jobe/.local/bin/npm/bin
 source $HOME/.api_keys
 source ~/.venv/bin/activate
+
+# opencode
+export PATH=/home/jobe/.opencode/bin:$PATH

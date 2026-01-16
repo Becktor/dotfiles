@@ -321,7 +321,7 @@ symlink_dotfiles() {
     # Files in dev-env submodule
     DEVENV_FILES=("nvim" "tmux")
     # Files directly in dotfiles root
-    CONFIG_FILES=("wezterm" "kitty" "ncspot" "hypr" "waybar" "rofi" "mako")
+    CONFIG_FILES=("wezterm" "kitty" "ncspot" "hypr" "waybar" "rofi" "mako" "btop")
 
     # Symlink dev-env submodule files
     for dir in "${DEVENV_FILES[@]}"; do

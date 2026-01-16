@@ -1,7 +1,7 @@
 max-visible=5
 max-history=100
 
-[app-name="Claude Code"]
+[summary="Claude Code"]
 on-notify=dismiss
 
 [grouped]

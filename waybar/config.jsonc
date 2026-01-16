@@ -116,6 +116,6 @@
 
   "hyprland/language": {
     "format": "{short}",
-    "on-click": "hyprctl switchxkblayout all next"
+    "on-click": "hyprctl switchxkblayout all next && hyprctl dispatch focuscurrentorlast"
   }
 }
