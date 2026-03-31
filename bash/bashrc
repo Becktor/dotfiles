@@ -36,3 +36,9 @@ export PATH="$HOME/bin:$PATH"
 # PS1='[\u@\h \W]\$ '
 
 . "$HOME/.local/share/../bin/env"
+
+# opencode
+export PATH=/home/jobe/.opencode/bin:$PATH
+
+# Nx completion
+source "/home/jobe/git/fai/fieldai-monorepo/tools/nx-completion/nx-completion.bash"
