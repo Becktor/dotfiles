@@ -183,6 +183,11 @@ install_packages() {
 }
 
 install_neovim_from_github_release() {
+    if [ -d "$HOME/.local/share/omarchy" ] && [ "$UPDATE_NVIM" = false ]; then
+        echo "Omarchy manages Neovim. Skipping binary install. Use --update-neovim to force."
+        return
+    fi
+
     if command -v nvim &>/dev/null && [ "$UPDATE_ALL" = false ] && [ "$UPDATE_NVIM" = false ]; then
         echo "Neovim already installed. Skipping."
         return
@@ -321,6 +326,11 @@ install_fonts() {
     FONT_DIR="$HOME/.local/share/fonts"
     mkdir -p "$FONT_DIR"
 
+    if [ -d "$HOME/.local/share/omarchy" ] && [ "$UPDATE_ALL" = false ] && [ "$UPDATE_FONTS" = false ]; then
+        echo "Omarchy manages fonts. Skipping font install. Use --update-fonts to force."
+        return
+    fi
+
     if [ "$UPDATE_ALL" = false ] && [ "$UPDATE_FONTS" = false ] && [ -f "$FONT_DIR/0xProto Nerd Font Complete.ttf" ]; then
         echo "Fonts already installed. Skipping."
         return
@@ -338,6 +348,15 @@ install_fonts() {
     fi
 }
 
+backup_existing_path() {
+    local target="$1"
+    if [ -L "$target" ] || [ -e "$target" ]; then
+        local backup="${target}.backup.$(date +%Y%m%d%H%M%S)"
+        echo "Backing up existing $target to $backup"
+        mv "$target" "$backup"
+    fi
+}
+
 symlink_dotfiles() {
     echo "Symlinking configuration files..."
     DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -345,15 +364,12 @@ symlink_dotfiles() {
     # Files in dev-env submodule
     DEVENV_FILES=("nvim" "tmux")
     # Files directly in dotfiles root
-    CONFIG_FILES=("wezterm" "kitty" "ncspot" "hypr" "waybar")
+    CONFIG_FILES=("alacritty" "ncspot" "hypr" "waybar")
 
     # Symlink dev-env submodule files
     for dir in "${DEVENV_FILES[@]}"; do
         TARGET="$HOME/.config/$dir"
-        if [ -L "$TARGET" ] || [ -d "$TARGET" ]; then
-            echo "Removing existing $TARGET"
-            rm -rf "$TARGET"
-        fi
+        backup_existing_path "$TARGET"
         if [ -d "$DOTFILES_DIR/dev-env/$dir" ]; then
             ln -s "$DOTFILES_DIR/dev-env/$dir" "$TARGET"
             echo "Symlinked dev-env/$dir → $TARGET"
@@ -365,10 +381,7 @@ symlink_dotfiles() {
     # Symlink root config files
     for dir in "${CONFIG_FILES[@]}"; do
         TARGET="$HOME/.config/$dir"
-        if [ -L "$TARGET" ] || [ -d "$TARGET" ]; then
-            echo "Removing existing $TARGET"
-            rm -rf "$TARGET"
-        fi
+        backup_existing_path "$TARGET"
         if [ -d "$DOTFILES_DIR/$dir" ]; then
             ln -s "$DOTFILES_DIR/$dir" "$TARGET"
             echo "Symlinked $dir → $TARGET"
@@ -380,10 +393,7 @@ symlink_dotfiles() {
     # Symlink bashrc
     BASHRC_TARGET="$HOME/.bashrc"
     if [ -f "$DOTFILES_DIR/bash/bashrc" ]; then
-        if [ -L "$BASHRC_TARGET" ] || [ -f "$BASHRC_TARGET" ]; then
-            echo "Backing up existing $BASHRC_TARGET to $BASHRC_TARGET.backup"
-            mv "$BASHRC_TARGET" "$BASHRC_TARGET.backup"
-        fi
+        backup_existing_path "$BASHRC_TARGET"
         ln -s "$DOTFILES_DIR/bash/bashrc" "$BASHRC_TARGET"
         echo "Symlinked bash/bashrc → $BASHRC_TARGET"
     else
@@ -393,10 +403,7 @@ symlink_dotfiles() {
     # Symlink bash_profile
     BASH_PROFILE_TARGET="$HOME/.bash_profile"
     if [ -f "$DOTFILES_DIR/bash/bash_profile" ]; then
-        if [ -L "$BASH_PROFILE_TARGET" ] || [ -f "$BASH_PROFILE_TARGET" ]; then
-            echo "Backing up existing $BASH_PROFILE_TARGET to $BASH_PROFILE_TARGET.backup"
-            mv "$BASH_PROFILE_TARGET" "$BASH_PROFILE_TARGET.backup"
-        fi
+        backup_existing_path "$BASH_PROFILE_TARGET"
         ln -s "$DOTFILES_DIR/bash/bash_profile" "$BASH_PROFILE_TARGET"
         echo "Symlinked bash/bash_profile → $BASH_PROFILE_TARGET"
     else
@@ -406,10 +413,7 @@ symlink_dotfiles() {
     # Symlink git config
     GITCONFIG_TARGET="$HOME/.gitconfig"
     if [ -f "$DOTFILES_DIR/git/gitconfig" ]; then
-        if [ -L "$GITCONFIG_TARGET" ] || [ -f "$GITCONFIG_TARGET" ]; then
-            echo "Backing up existing $GITCONFIG_TARGET to $GITCONFIG_TARGET.backup"
-            mv "$GITCONFIG_TARGET" "$GITCONFIG_TARGET.backup"
-        fi
+        backup_existing_path "$GITCONFIG_TARGET"
         ln -s "$DOTFILES_DIR/git/gitconfig" "$GITCONFIG_TARGET"
         echo "Symlinked git/gitconfig → $GITCONFIG_TARGET"
     else
@@ -419,27 +423,59 @@ symlink_dotfiles() {
     # Symlink pyrightconfig.json
     PYRIGHT_TARGET="$HOME/pyrightconfig.json"
     if [ -f "$DOTFILES_DIR/pyrightconfig.json" ]; then
-        if [ -L "$PYRIGHT_TARGET" ] || [ -f "$PYRIGHT_TARGET" ]; then
-            echo "Backing up existing $PYRIGHT_TARGET to $PYRIGHT_TARGET.backup"
-            mv "$PYRIGHT_TARGET" "$PYRIGHT_TARGET.backup"
-        fi
+        backup_existing_path "$PYRIGHT_TARGET"
         ln -s "$DOTFILES_DIR/pyrightconfig.json" "$PYRIGHT_TARGET"
         echo "Symlinked pyrightconfig.json → $PYRIGHT_TARGET"
     else
         echo "⚠️  Skipping: $DOTFILES_DIR/pyrightconfig.json does not exist"
     fi
 
+    # Symlink xdg-terminal-exec preference list
+    XDG_TERMINALS_TARGET="$HOME/.config/xdg-terminals.list"
+    if [ -f "$DOTFILES_DIR/xdg-terminals.list" ]; then
+        backup_existing_path "$XDG_TERMINALS_TARGET"
+        ln -s "$DOTFILES_DIR/xdg-terminals.list" "$XDG_TERMINALS_TARGET"
+        echo "Symlinked xdg-terminals.list → $XDG_TERMINALS_TARGET"
+    else
+        echo "⚠️  Skipping: $DOTFILES_DIR/xdg-terminals.list does not exist"
+    fi
+
     # Symlink markdownlint config
     MARKDOWNLINT_TARGET="$HOME/.markdownlint-cli2.jsonc"
     if [ -f "$DOTFILES_DIR/.markdownlint-cli2.jsonc" ]; then
-        if [ -L "$MARKDOWNLINT_TARGET" ] || [ -f "$MARKDOWNLINT_TARGET" ]; then
-            echo "Backing up existing $MARKDOWNLINT_TARGET to $MARKDOWNLINT_TARGET.backup"
-            mv "$MARKDOWNLINT_TARGET" "$MARKDOWNLINT_TARGET.backup"
-        fi
+        backup_existing_path "$MARKDOWNLINT_TARGET"
         ln -s "$DOTFILES_DIR/.markdownlint-cli2.jsonc" "$MARKDOWNLINT_TARGET"
         echo "Symlinked .markdownlint-cli2.jsonc → $MARKDOWNLINT_TARGET"
     else
         echo "⚠️  Skipping: $DOTFILES_DIR/.markdownlint-cli2.jsonc does not exist"
+    fi
+}
+
+install_omarchy_themes() {
+    DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+    if [ ! -d "$HOME/.local/share/omarchy" ] || [ ! -d "$DOTFILES_DIR/omarchy/themes" ]; then
+        return
+    fi
+
+    echo "Installing Omarchy theme overlays..."
+    mkdir -p "$HOME/.config/omarchy/themes"
+    cp -a "$DOTFILES_DIR/omarchy/themes/." "$HOME/.config/omarchy/themes/"
+
+    if command_exists omarchy && [ -f "$HOME/.config/omarchy/current/theme.name" ]; then
+        CURRENT_THEME=$(cat "$HOME/.config/omarchy/current/theme.name")
+        if [ -d "$DOTFILES_DIR/omarchy/themes/$CURRENT_THEME" ]; then
+            echo "Reapplying Omarchy theme overlay: $CURRENT_THEME"
+            omarchy theme set "$CURRENT_THEME"
+        fi
+    fi
+}
+
+reload_hyprland() {
+    if command_exists hyprctl; then
+        echo "Reloading Hyprland config..."
+        hyprctl reload || true
+        hyprctl configerrors || true
     fi
 }
 
@@ -479,6 +515,8 @@ install_nodejs
 install_tpm
 install_fonts
 symlink_dotfiles
+install_omarchy_themes
+reload_hyprland
 setup_ssh_key
 
 echo "✅ Installation and setup complete!"

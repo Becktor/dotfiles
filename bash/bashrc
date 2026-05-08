@@ -35,10 +35,18 @@ export PATH="$HOME/bin:$PATH"
 # Custom prompt additions (if not using omarchy's prompt)
 # PS1='[\u@\h \W]\$ '
 
-. "$HOME/.local/share/../bin/env"
+# Source user-local tool environment if present
+[ -f "$HOME/.local/bin/env" ] && . "$HOME/.local/bin/env"
 
 # opencode
-export PATH=/home/jobe/.opencode/bin:$PATH
+[ -d "$HOME/.opencode/bin" ] && export PATH="$HOME/.opencode/bin:$PATH"
 
-# Nx completion
-source "/home/jobe/git/fai/fieldai-monorepo/tools/nx-completion/nx-completion.bash"
+# Nx completion (only available on machines with the FieldAI checkout)
+NX_COMPLETION="$HOME/git/fai/fieldai-monorepo/tools/nx-completion/nx-completion.bash"
+[ -f "$NX_COMPLETION" ] && source "$NX_COMPLETION"
+unset NX_COMPLETION
+
+. "$HOME/.local/share/../bin/env"
+
+# Added by sonarqube-cli installer
+export PATH="$HOME/.local/share/sonarqube-cli/bin:$PATH"

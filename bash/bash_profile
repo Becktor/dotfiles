@@ -4,4 +4,7 @@
 
 [[ -f ~/.bashrc ]] && . ~/.bashrc
 
+# Source user-local tool environment if present
+[ -f "$HOME/.local/bin/env" ] && . "$HOME/.local/bin/env"
+
 . "$HOME/.local/share/../bin/env"

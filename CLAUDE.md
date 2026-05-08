@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Repository Overview
 
-This is a personal dotfiles repository containing configuration files for a development environment centered around Neovim, tmux, and terminal tools. The setup is cross-platform (Linux/macOS) with automated installation and symlink management.
+This is a personal dotfiles repository containing configuration files for a development environment centered around Neovim, tmux, Hyprland/Omarchy, Waybar, and terminal tools. The active `chonk` setup targets Arch Linux + Omarchy; the installer still has fallback support for Debian/Ubuntu and macOS.
 
 ## Installation and Setup
 
@@ -27,17 +27,15 @@ This is a personal dotfiles repository containing configuration files for a deve
 ## Architecture and Key Components
 
 ### Configuration Structure
-- **nvim/**: Neovim configuration based on kickstart.nvim
-  - `init.lua` - Main configuration entry point
-  - `lua/kickstart/` - Base kickstart plugins
-  - `lua/custom/` - Custom plugins and configurations
-- **tmux/**: tmux configuration with plugin management
-  - `tmux.conf` - Main tmux configuration
-  - `default-session.sh` - Creates default development session
-  - `plugins/` - TPM-managed plugins (git submodules)
-- **wezterm/**: Terminal emulator configuration
+- **dev-env/nvim/**: Neovim configuration based on kickstart.nvim (submodule)
+- **dev-env/tmux/**: tmux configuration with plugin management (submodule)
+- **hypr/**: Chonk Hyprland overrides layered on top of Omarchy defaults
+- **waybar/**: Omarchy Waybar config maintained here from Omarchy's base
+- **bash/**: Omarchy/bash shell configuration
+- **alacritty/**: Omarchy default terminal config, maintained here from Omarchy's base
+- **wezterm/**, **kitty/**: Legacy terminal emulator configs; not symlinked on Chonk
 - **git/**: Git configuration and aliases
-- **zshrc**: Shell configuration with Oh My Zsh integration
+- **zshrc**: Legacy shell configuration kept for non-Omarchy machines
 
 ### Neovim Plugin Architecture
 The Neovim setup uses lazy.nvim for plugin management with a modular structure:
@@ -92,23 +90,27 @@ sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/too
 
 ### Symlinking Strategy
 The install script creates symlinks from `~/.config/` to this repository:
-- `~/.config/nvim` → `./nvim`
-- `~/.config/tmux` → `./tmux`  
-- `~/.config/wezterm` → `./wezterm`
+- `~/.config/nvim` → `./dev-env/nvim`
+- `~/.config/tmux` → `./dev-env/tmux`
+- `~/.config/hypr` → `./hypr`
+- `~/.config/waybar` → `./waybar`
+- `~/.config/alacritty` → `./alacritty`
 - `~/.config/ncspot` → `./ncspot`
+- `~/.config/xdg-terminals.list` → `./xdg-terminals.list`
 
 ### Key File Locations
-- Neovim lazy-lock.json: `nvim/lazy-lock.json`
-- tmux plugins: `tmux/plugins/` (managed by TPM)
+- Neovim lazy-lock.json: `dev-env/nvim/lazy-lock.json`
+- tmux plugins: `~/.tmux/plugins/` (managed by TPM)
 - API keys: `~/.api_keys` (not in repo)
-- Shell config: `zshrc` (symlinked to `~/.zshrc`)
+- Shell config on Chonk/Omarchy: `bash/bashrc` (symlinked to `~/.bashrc`)
 
 ## Platform-Specific Notes
 
 ### Dependencies
-- **Linux**: apt packages (zsh, ninja-build, gettext, cmake, curl, build-essential, tmux, unzip, jq)
-- **macOS**: Homebrew packages (zsh, ninja, gettext, cmake, curl, tmux, unzip, jq)
-- **Both**: Node.js, Nerd Fonts, Oh My Zsh
+- **Chonk / Arch + Omarchy**: pacman packages (`git`, `ninja`, `cmake`, `curl`, `tmux`, `unzip`, `jq`, `ripgrep`, `fd`, `fzf`, `tree`, `htop`) plus Omarchy-provided Hyprland tooling
+- **Debian/Ubuntu fallback**: apt packages (`git`, `ninja-build`, `cmake`, `curl`, `tmux`, `unzip`, `jq`, `ripgrep`, `fd-find`, `fzf`, `tree`, `htop`)
+- **macOS fallback**: Homebrew packages (`git`, `ninja`, `cmake`, `curl`, `tmux`, `unzip`, `jq`, `ripgrep`, `fd`, `fzf`, `tree`, `htop`)
+- **All platforms**: Node.js. On Omarchy, fonts are managed by Omarchy; `./install.sh --update-fonts` can still force the repo font install.
 
 ### Neovim Installation
-Latest stable Neovim is installed from GitHub releases to `/usr/local/nvim/` with symlink to `/usr/local/bin/nvim`.
+On Chonk/Omarchy, use Omarchy's installed Neovim binary (`/usr/bin/nvim`) and only manage `~/.config/nvim` via the `dev-env/nvim` symlink. `./install.sh --update-neovim` can still force the legacy GitHub-release install path when needed.
