@@ -20,6 +20,16 @@ source ~/.local/share/omarchy/default/bash/rc
 alias tl='alacritty-large'
 alias term-large='alacritty-large'
 
+# Bootstrap tmux sessions from the first interactive Alacritty shell without attaching.
+# This starts tmux after the desktop/Wayland environment exists, instead of via login systemd.
+if [[ $- == *i* && -z ${TMUX:-} && -z ${SSH_CONNECTION:-} && -z ${NO_AUTO_TMUX_BOOTSTRAP:-} ]]; then
+  parent_comm=$(ps -o comm= -p "$PPID" 2>/dev/null | tr -d ' ')
+  if [[ -n ${ALACRITTY_WINDOW_ID:-} || $parent_comm == alacritty ]]; then
+    "$HOME/.config/tmux/scripts/bootstrap-sessions.sh" >/dev/null 2>&1 &
+  fi
+  unset parent_comm
+fi
+
 # Custom Functions
 # mcd() {
 #     mkdir -p "$1" && cd "$1"

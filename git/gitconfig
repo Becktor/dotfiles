@@ -13,3 +13,8 @@
 	unstage = reset HEAD --
         myb = for-each-ref --format=' %(authorname) %09 %(refname)' --sort=authorname
 	lb = for-each-ref --sort=-committerdate refs/heads/
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true

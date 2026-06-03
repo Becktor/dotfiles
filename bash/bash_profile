@@ -8,3 +8,11 @@
 [ -f "$HOME/.local/bin/env" ] && . "$HOME/.local/bin/env"
 
 . "$HOME/.local/share/../bin/env"
+
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
+
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
