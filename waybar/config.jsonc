@@ -10,7 +10,7 @@
     "tray",
     "hyprland/language",
     "bluetooth",
-    "network",
+    "custom/network",
     "pulseaudio",
     "cpu",
     "battery"
@@ -46,18 +46,11 @@
     "on-click": "gnome-calendar"
   },
 
-  "network": {
-    "format-icons": ["󰤯", "󰤟", "󰤢", "󰤥", "󰤨"],
-    "format": "{icon}",
-    "format-wifi": "{icon}",
-    "format-ethernet": "󰈀",
-    "format-disconnected": " ",
-    "tooltip-format-wifi": "{essid} ({frequency} GHz)\n⇣{bandwidthDownBytes}  ⇡{bandwidthUpBytes}",
-    "tooltip-format-ethernet": "⇣{bandwidthDownBytes}  ⇡{bandwidthUpBytes}",
-    "tooltip-format-disconnected": "Disconnected",
+  "custom/network": {
+    "exec": "~/.config/waybar/scripts/network-status.sh",
+    "return-type": "json",
     "interval": 3,
-    "spacing": 1,
-    "on-click": "nm-connection-editor"
+    "on-click": "~/.config/waybar/scripts/wifi-menu.sh"
   },
 
   "battery": {

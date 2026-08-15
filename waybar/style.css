@@ -77,6 +77,7 @@ window#waybar.hidden {
 #cpu,
 #battery,
 #network,
+#custom-network,
 #bluetooth,
 #pulseaudio,
 #custom-expand-icon {
@@ -133,12 +134,14 @@ window#waybar.hidden {
 }
 
 /* Network */
-#network {
+#network,
+#custom-network {
     color: #c0caf5;
     background-color: transparent;
 }
 
-#network.disconnected {
+#network.disconnected,
+#custom-network.disconnected {
     color: #f7768e;
 }
 

@@ -317,106 +317,71 @@ EOF
 symlink_dotfiles() {
     echo "Symlinking configuration files..."
     DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+    BACKUP_SUFFIX="backup.$(date +%Y%m%d-%H%M%S)"
+
+    mkdir -p "$HOME/.config"
+
+    backup_target() {
+        local target="$1"
+        if [ -L "$target" ]; then
+            echo "Removing existing symlink $target"
+            rm "$target"
+        elif [ -e "$target" ]; then
+            echo "Backing up existing $target to $target.$BACKUP_SUFFIX"
+            mv "$target" "$target.$BACKUP_SUFFIX"
+        fi
+    }
+
+    link_dir() {
+        local source="$1"
+        local target="$2"
+        local label="$3"
+
+        if [ ! -d "$source" ]; then
+            echo "⚠️  Skipping: $source does not exist"
+            return
+        fi
+
+        # Remove or back up the target before linking. This prevents nested links
+        # like ~/.config/hypr/hypr and guarantees ~/.config/hypr points at the repo.
+        backup_target "$target"
+        ln -s "$source" "$target"
+        echo "Symlinked $label → $target"
+    }
+
+    link_file() {
+        local source="$1"
+        local target="$2"
+        local label="$3"
+
+        if [ ! -f "$source" ]; then
+            echo "⚠️  Skipping: $source does not exist"
+            return
+        fi
+
+        backup_target "$target"
+        ln -s "$source" "$target"
+        echo "Symlinked $label → $target"
+    }
 
     # Files in dev-env submodule
     DEVENV_FILES=("nvim" "tmux")
     # Files directly in dotfiles root
-    CONFIG_FILES=("wezterm" "kitty" "ncspot" "hypr" "waybar" "rofi" "mako" "btop")
+    CONFIG_FILES=("wezterm" "kitty" "alacritty" "ncspot" "hypr" "waybar" "rofi" "mako" "btop" "eww")
 
-    # Symlink dev-env submodule files
     for dir in "${DEVENV_FILES[@]}"; do
-        TARGET="$HOME/.config/$dir"
-        if [ -L "$TARGET" ] || [ -d "$TARGET" ]; then
-            echo "Removing existing $TARGET"
-            rm -rf "$TARGET"
-        fi
-        if [ -d "$DOTFILES_DIR/dev-env/$dir" ]; then
-            ln -s "$DOTFILES_DIR/dev-env/$dir" "$TARGET"
-            echo "Symlinked dev-env/$dir → $TARGET"
-        else
-            echo "⚠️  Skipping: $DOTFILES_DIR/dev-env/$dir does not exist"
-        fi
+        link_dir "$DOTFILES_DIR/dev-env/$dir" "$HOME/.config/$dir" "dev-env/$dir"
     done
 
-    # Symlink root config files
     for dir in "${CONFIG_FILES[@]}"; do
-        TARGET="$HOME/.config/$dir"
-        if [ -L "$TARGET" ] || [ -d "$TARGET" ]; then
-            echo "Removing existing $TARGET"
-            rm -rf "$TARGET"
-        fi
-        if [ -d "$DOTFILES_DIR/$dir" ]; then
-            ln -s "$DOTFILES_DIR/$dir" "$TARGET"
-            echo "Symlinked $dir → $TARGET"
-        else
-            echo "⚠️  Skipping: $DOTFILES_DIR/$dir does not exist"
-        fi
+        link_dir "$DOTFILES_DIR/$dir" "$HOME/.config/$dir" "$dir"
     done
 
-    # Symlink zshrc
-    ZSHRC_TARGET="$HOME/.zshrc"
-    if [ -f "$DOTFILES_DIR/zshrc" ]; then
-        if [ -L "$ZSHRC_TARGET" ] || [ -f "$ZSHRC_TARGET" ]; then
-            echo "Backing up existing $ZSHRC_TARGET to $ZSHRC_TARGET.backup"
-            mv "$ZSHRC_TARGET" "$ZSHRC_TARGET.backup"
-        fi
-        ln -s "$DOTFILES_DIR/zshrc" "$ZSHRC_TARGET"
-        echo "Symlinked zshrc → $ZSHRC_TARGET"
-    else
-        echo "⚠️  Skipping: $DOTFILES_DIR/zshrc does not exist"
-    fi
-
-    # Symlink git config
-    GITCONFIG_TARGET="$HOME/.gitconfig"
-    if [ -f "$DOTFILES_DIR/git/gitconfig" ]; then
-        if [ -L "$GITCONFIG_TARGET" ] || [ -f "$GITCONFIG_TARGET" ]; then
-            echo "Backing up existing $GITCONFIG_TARGET to $GITCONFIG_TARGET.backup"
-            mv "$GITCONFIG_TARGET" "$GITCONFIG_TARGET.backup"
-        fi
-        ln -s "$DOTFILES_DIR/git/gitconfig" "$GITCONFIG_TARGET"
-        echo "Symlinked git/gitconfig → $GITCONFIG_TARGET"
-    else
-        echo "⚠️  Skipping: $DOTFILES_DIR/git/gitconfig does not exist"
-    fi
-
-    # Symlink pyrightconfig.json
-    PYRIGHT_TARGET="$HOME/pyrightconfig.json"
-    if [ -f "$DOTFILES_DIR/pyrightconfig.json" ]; then
-        if [ -L "$PYRIGHT_TARGET" ] || [ -f "$PYRIGHT_TARGET" ]; then
-            echo "Backing up existing $PYRIGHT_TARGET to $PYRIGHT_TARGET.backup"
-            mv "$PYRIGHT_TARGET" "$PYRIGHT_TARGET.backup"
-        fi
-        ln -s "$DOTFILES_DIR/pyrightconfig.json" "$PYRIGHT_TARGET"
-        echo "Symlinked pyrightconfig.json → $PYRIGHT_TARGET"
-    else
-        echo "⚠️  Skipping: $DOTFILES_DIR/pyrightconfig.json does not exist"
-    fi
-
-    # Symlink markdownlint config
-    MARKDOWNLINT_TARGET="$HOME/.markdownlint-cli2.jsonc"
-    if [ -f "$DOTFILES_DIR/.markdownlint-cli2.jsonc" ]; then
-        if [ -L "$MARKDOWNLINT_TARGET" ] || [ -f "$MARKDOWNLINT_TARGET" ]; then
-            echo "Backing up existing $MARKDOWNLINT_TARGET to $MARKDOWNLINT_TARGET.backup"
-            mv "$MARKDOWNLINT_TARGET" "$MARKDOWNLINT_TARGET.backup"
-        fi
-        ln -s "$DOTFILES_DIR/.markdownlint-cli2.jsonc" "$MARKDOWNLINT_TARGET"
-        echo "Symlinked .markdownlint-cli2.jsonc → $MARKDOWNLINT_TARGET"
-    else
-        echo "⚠️  Skipping: $DOTFILES_DIR/.markdownlint-cli2.jsonc does not exist"
-    fi
-
-    # Symlink prettier config
-    PRETTIER_TARGET="$HOME/.prettierrc"
-    if [ -f "$DOTFILES_DIR/.prettierrc" ]; then
-        if [ -L "$PRETTIER_TARGET" ] || [ -f "$PRETTIER_TARGET" ]; then
-            echo "Backing up existing $PRETTIER_TARGET to $PRETTIER_TARGET.backup"
-            mv "$PRETTIER_TARGET" "$PRETTIER_TARGET.backup"
-        fi
-        ln -s "$DOTFILES_DIR/.prettierrc" "$PRETTIER_TARGET"
-        echo "Symlinked .prettierrc → $PRETTIER_TARGET"
-    else
-        echo "⚠️  Skipping: $DOTFILES_DIR/.prettierrc does not exist"
-    fi
+    link_file "$DOTFILES_DIR/zshrc" "$HOME/.zshrc" "zshrc"
+    link_file "$DOTFILES_DIR/git/gitconfig" "$HOME/.gitconfig" "git/gitconfig"
+    link_file "$DOTFILES_DIR/pyrightconfig.json" "$HOME/pyrightconfig.json" "pyrightconfig.json"
+    link_file "$DOTFILES_DIR/.markdownlint-cli2.jsonc" "$HOME/.markdownlint-cli2.jsonc" ".markdownlint-cli2.jsonc"
+    link_file "$DOTFILES_DIR/.prettierrc" "$HOME/.prettierrc" ".prettierrc"
 }
 
 setup_ssh_key() {

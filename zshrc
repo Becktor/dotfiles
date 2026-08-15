@@ -125,6 +125,10 @@ setopt HIST_BEEP
 
 # Development aliases
 alias python=python3
+alias vim=nvim
+alias vi=nvim
+export EDITOR=nvim
+export VISUAL=nvim
 alias ll="ls -la"
 alias la="ls -A"
 alias l="ls -CF"
@@ -171,3 +175,19 @@ source ~/.venv/bin/activate
 
 # opencode
 export PATH=/home/jobe/.opencode/bin:$PATH
+
+# Pi
+export PATH="/home/jobe/.local/share/pi-node/node-v22.22.3-linux-x64/bin:$PATH"
+
+# bun completions
+[ -s "/home/jobe/.bun/_bun" ] && source "/home/jobe/.bun/_bun"
+
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
+
+# Nx completion
+source "/home/jobe/git/fai/fieldai-monorepo/tools/nx-completion/nx-completion.zsh"
+
+# Added by sonarqube-cli installer
+export PATH="$HOME/.local/share/sonarqube-cli/bin:$PATH"
