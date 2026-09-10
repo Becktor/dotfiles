@@ -66,22 +66,22 @@ color = "#db4b4b"
 [[keyboard.bindings]]
 key = "H"
 mods = "Control|Shift"
-action = "ReceiveChar"
+chars = "\u001b[104;6u"
 
 [[keyboard.bindings]]
 key = "L"
 mods = "Control|Shift"
-action = "ReceiveChar"
+chars = "\u001b[108;6u"
 
 [[keyboard.bindings]]
 key = "K"
 mods = "Control|Shift"
-action = "ReceiveChar"
+chars = "\u001b[107;6u"
 
 [[keyboard.bindings]]
 key = "J"
 mods = "Control|Shift"
-action = "ReceiveChar"
+chars = "\u001b[106;6u"
 
 [[keyboard.bindings]]
 key = "Return"
